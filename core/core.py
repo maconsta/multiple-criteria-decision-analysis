@@ -1,5 +1,6 @@
 import numpy as np
 
+
 # ---------------------------------------------CLASS_CRITERION_START----------------------------------------------------
 class Criterion:
 
@@ -35,3 +36,28 @@ class DecisionMatrix:
         norm = np.linalg.norm(self.matrix, axis=0)
         self.normalized_matrix = self.matrix / norm
 # ---------------------------------------------CLASS_DECISION_MATRIX_END-----------------------------------------------
+
+
+# ---------------------------------------------CLASS_PAIRWISE_START-----------------------------------------------------
+class Pairwise:
+    def __init__(self, crit):
+        self.criteria = crit
+        self.P = np.ones((crit, crit))
+        np.fill_diagonal(self.P, 1)
+
+    def setComparson(self, crit1, crit2, val):
+        if crit1 <= self.criteria and crit2 <= self.criteria:
+            self.P[crit1][crit2] = val
+            self.P[crit2][crit1] = 1 / val
+
+    def Eigen(self):
+        result = np.ones(self.criteria)
+        total = 0
+        for j in range(self.criteria):
+            for i in range(self.criteria):
+                result[j] *= self.P[j][i]
+            result[j] = np.power(result[j], 1 / self.criteria)
+            total += result[j]
+        result /= total
+        return result
+# ---------------------------------------------CLASS_PAIRWISE_END-------------------------------------------------------

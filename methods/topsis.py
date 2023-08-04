@@ -57,4 +57,3 @@ class Topsis:
 # print(closeness)
 
 # print("Best Alternative Index:", best_alternative_index + 1)
-
