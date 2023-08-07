@@ -36,7 +36,7 @@ class Topsis:
         closeness = self.calculate_closeness(positive_distances, negative_distances)
         best_alternative_index = np.argmax(closeness)
         best_alternative_closeness = closeness[best_alternative_index]
-        return closeness, best_alternative_index, best_alternative_closeness
+        return closeness, best_alternative_closeness, best_alternative_index
 
  
 # Run the file from the console: python -m methods.topsis

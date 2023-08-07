@@ -4,9 +4,10 @@ from core.core import DecisionMatrix, Pairwise
 from methods.topsis import Topsis
 
 
-class TopsisPairwise(Topsis):
+class TopsisPairwise():
     def __init__(self, decision_matrix: DecisionMatrix, weights: list):
-        super().__init__(decision_matrix, weights)
+        self.decision_matrix = decision_matrix
+        self.weights = weights
         self.pairwise = Pairwise(decision_matrix.crit_count)
 
     def calculate_pairwise_comparisons(self):

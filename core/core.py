@@ -10,27 +10,37 @@ class Criterion:
         self.min_max = min_max
 # ---------------------------------------------CLASS_CRITERION_END------------------------------------------------------
 
+# ---------------------------------------------CLASS_ALTERNATIVE_START------------------------------------------------------
+class Alternative:
+    def __init__(self, name: str, criteria: list, values: list):
+        self.name = name
+        self.criteria = criteria
+        self.values = values
+# ---------------------------------------------CLASS_ALTERNATIVE_END------------------------------------------------------
 
 # ---------------------------------------------CLASS_DECISION_MATRIX_START----------------------------------------------
 class DecisionMatrix:
-    def __init__(self, crit_count, alt_count):
-        self.crit_count = crit_count
-        self.alt_count = alt_count
-        self.matrix = np.zeros((alt_count, crit_count))
-        self.normalized_matrix = np.zeros((alt_count, crit_count))
+    def __init__(self, criteria: list, alternatives: list):
+        self.criteria = criteria
+        self.alternatives = alternatives
+        self.crit_count = len(criteria)
+        self.alt_count = len(alternatives)
+        self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
+        self.matrix = np.zeros((self.alt_count, self.crit_count))
 
-    def set_alternative(self, row_index, alt_list):
-        if row_index <= self.alt_count and len(alt_list) == self.crit_count:
-            self.matrix[row_index] = alt_list
-
-    def set_criteria(self, col_index, crit_list):
-        if col_index <= self.crit_count and len(crit_list) == self.alt_count:
-            for i in range(self.alt_count):
-                self.matrix[i][col_index] = crit_list[i]
+        for alt_index in range(self.alt_count):
+            self.matrix[alt_index] = alternatives[alt_index].values
 
     def normalize(self):
         max_values = np.max(self.matrix, axis=0)
-        self.normalized_matrix = self.matrix / max_values
+        min_values = np.min(self.matrix, axis=0)
+        
+        for i in range(self.alt_count):
+            for j in range(self.crit_count):
+                if (self.criteria[j].min_max == "max"):
+                    self.normalized_matrix[i][j] = self.matrix[i][j]/max_values[j]
+                elif (self.criteria[j].min_max == "min"):
+                    self.normalized_matrix[i][j] = min_values[j]/self.matrix[i][j] # is this valid?
 
     def normalize_l2(self):
         norm = np.linalg.norm(self.matrix, axis=0)
