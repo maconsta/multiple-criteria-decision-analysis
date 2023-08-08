@@ -42,9 +42,33 @@ class DecisionMatrix:
                 elif (self.criteria[j].min_max == "min"):
                     self.normalized_matrix[i][j] = min_values[j]/self.matrix[i][j] # is this valid?
 
+
+    # updated version of normalize method where the chance of error when we need min method is minimal or none.
+    # Please check this method again and test it too!!!
+    def normalize_updated(self):
+        max_values = np.max(self.matrix, axis=0)
+        min_values = np.min(self.matrix, axis=0)
+
+        for i in range(self.alt_count):
+            for j in range(self.crit_count):
+                if (self.criteria[j].min_max == "max"):
+                    self.normalized_matrix[i][j] = self.matrix[i][j] / max_values[j]
+                elif (self.criteria[j].min_max == "min"):
+                    if max_values[j] - min_values[j] != 0: # ensures that zero range does not lead to a division by zero error.
+                        self.normalized_matrix[i][j] = 1 - ((self.matrix[i][j] - min_values[j]) / (max_values[j] - min_values[j]))
+                    else: 
+                        self.normalized_matrix[i][j] = 1 # not sure if this is good idea to force the value to 1, but you will write your comment here.
+
+
     def normalize_l2(self):
         norm = np.linalg.norm(self.matrix, axis=0)
         self.normalized_matrix = self.matrix / norm
+
+        for j in range(self.crit_count):
+            if self.criteria[j].min_max == 'min':
+                self.normalized_matrix[:, j] *= -1
+        
+        self.normalized_matrix = self.normalized_matrix
 # ---------------------------------------------CLASS_DECISION_MATRIX_END-----------------------------------------------
 
 

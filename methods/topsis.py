@@ -37,6 +37,7 @@ class Topsis:
         best_alternative_index = np.argmax(closeness)
         best_alternative_closeness = closeness[best_alternative_index]
         return closeness, best_alternative_closeness, best_alternative_index
+    
 
  
 # Run the file from the console: python -m methods.topsis
