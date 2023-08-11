@@ -12,7 +12,10 @@ class WeightedSum:
     def calculate_weighted_sum(self):
         self.decision_matrix.normalize()
         normalized_matrix = self.decision_matrix.normalized_matrix
-        weighted_sum = np.dot(normalized_matrix, self.weights)
+        weighted_sum = np.matmul(normalized_matrix, np.array(self.weights))
         self.best_alternative_index = np.argmax(weighted_sum)
         self.best_alternative = weighted_sum[self.best_alternative_index]
-        return weighted_sum, self.best_alternative, self.best_alternative_index
+        return weighted_sum#, self.best_alternative, self.best_alternative_index
+
+
+
