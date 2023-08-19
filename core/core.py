@@ -3,22 +3,49 @@ import numpy as np
 
 # ---------------------------------------------CLASS_CRITERION_START----------------------------------------------------
 class Criterion:
+    """
+    Class Criterion, represents a single criterion
 
-    def __init__(self, name, crit_type, min_max):
+    Attributes
+    ==========
+
+    name : str
+        name of the criterion
+
+    min_max : str 
+        minimize or maximise the criterion; accepted values are "min" or "max"
+    """
+
+    def __init__(self, name: str, min_max: str):
         self.name = name
-        self.crit_type = crit_type
         self.min_max = min_max
 # ---------------------------------------------CLASS_CRITERION_END------------------------------------------------------
 
 # ---------------------------------------------CLASS_ALTERNATIVE_START------------------------------------------------------
+
+
 class Alternative:
-    def __init__(self, name: str, criteria: list, values: list):
+    """
+    Class Alternative, represents a single alternative
+
+    Attributes
+    ==========
+
+    name : str
+        name of the alternative
+
+    values : list 
+        a list of values
+    """
+
+    def __init__(self, name: str, values: list):
         self.name = name
-        self.criteria = criteria
         self.values = values
 # ---------------------------------------------CLASS_ALTERNATIVE_END------------------------------------------------------
 
 # ---------------------------------------------CLASS_DECISION_MATRIX_START----------------------------------------------
+
+
 class DecisionMatrix:
     def __init__(self, criteria: list, alternatives: list):
         self.criteria = criteria
@@ -32,43 +59,44 @@ class DecisionMatrix:
             self.matrix[alt_index] = alternatives[alt_index].values
 
     def normalize(self):
+        '''
+        Normalize the decision matrix using the linear norm
+
+        Returns:
+        --------
+            None
+        '''
         max_values = np.max(self.matrix, axis=0)
-        min_values = np.min(self.matrix, axis=0)
-        
+        absolute_max_values = np.max(np.absolute(self.matrix), axis=0)
+
+        for i in range(len(absolute_max_values)):
+            if absolute_max_values[i] == 0:
+                # set values to 0.1 to avoid division by zero
+                absolute_max_values[i] = 0.1
+
         for i in range(self.alt_count):
             for j in range(self.crit_count):
                 if (self.criteria[j].min_max == "max"):
-                    self.normalized_matrix[i][j] = self.matrix[i][j]/max_values[j]
+                    self.normalized_matrix[i][j] = self.matrix[i][j] / \
+                        max_values[j]
                 elif (self.criteria[j].min_max == "min"):
-                    self.normalized_matrix[i][j] = min_values[j]/self.matrix[i][j] # is this valid?
-
-
-    # updated version of normalize method where the chance of error when we need min method is minimal or none.
-    # Please check this method again and test it too!!!
-    def normalize_updated(self):
-        max_values = np.max(self.matrix, axis=0)
-        min_values = np.min(self.matrix, axis=0)
-
-        for i in range(self.alt_count):
-            for j in range(self.crit_count):
-                if (self.criteria[j].min_max == "max"):
-                    self.normalized_matrix[i][j] = self.matrix[i][j] / max_values[j]
-                elif (self.criteria[j].min_max == "min"):
-                    if max_values[j] - min_values[j] != 0: # ensures that zero range does not lead to a division by zero error.
-                        self.normalized_matrix[i][j] = 1 - ((self.matrix[i][j] - min_values[j]) / (max_values[j] - min_values[j]))
-                    else: 
-                        self.normalized_matrix[i][j] = 1 # not sure if this is good idea to force the value to 1, but you will write your comment here.
-
+                    self.normalized_matrix[i][j] = (
+                        self.matrix[i][j] * -1) / absolute_max_values[j]
 
     def normalize_l2(self):
+        '''
+        Normalize the decision matrix using the L2 (Frobenius) norm
+
+        Returns:
+        --------
+            None
+        '''
         norm = np.linalg.norm(self.matrix, axis=0)
         self.normalized_matrix = self.matrix / norm
 
         for j in range(self.crit_count):
             if self.criteria[j].min_max == 'min':
                 self.normalized_matrix[:, j] *= -1
-        
-        self.normalized_matrix = self.normalized_matrix
 # ---------------------------------------------CLASS_DECISION_MATRIX_END-----------------------------------------------
 
 
