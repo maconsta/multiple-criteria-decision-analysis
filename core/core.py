@@ -82,10 +82,25 @@ class DecisionMatrix:
                 elif (self.criteria[j].min_max == "min"):
                     self.normalized_matrix[i][j] = (
                         self.matrix[i][j] * -1) / absolute_max_values[j]
+                    
+    def normalize_l1(self):
+        '''
+        Normalize the decision matrix using L1 normalization
+
+        Returns:
+        --------
+            None
+        '''
+        column_sums = np.sum(np.abs(self.matrix), axis=0) #calculate the sum of absolute values in each column
+        self.normalized_matrix = self.matrix / column_sums #divide each element in the matrix by the corresponding column sum 
+
+        for j in range(self.crit_count):
+            if self.criteria[j].min_max == 'min':
+                self.normalized_matrix[:, j] *= -1
 
     def normalize_l2(self):
         '''
-        Normalize the decision matrix using the L2 (Frobenius) norm
+        Normalize the decision matrix using the L2 vector norm
 
         Returns:
         --------
