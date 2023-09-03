@@ -117,23 +117,23 @@ class DecisionMatrix:
 
 # ---------------------------------------------CLASS_PAIRWISE_START-----------------------------------------------------
 class Pairwise:
-    def __init__(self, crit):
-        self.criteria = crit
-        self.P = np.ones((crit, crit))
+    def __init__(self, crit_count):
+        self.crit_count = crit_count
+        self.P = np.ones((crit_count, crit_count))
         np.fill_diagonal(self.P, 1)
 
     def setComparson(self, crit1, crit2, val):
-        if crit1 <= self.criteria and crit2 <= self.criteria:
+        if crit1 <= self.crit_count and crit2 <= self.crit_count:
             self.P[crit1][crit2] = val
             self.P[crit2][crit1] = 1 / val
 
     def Eigen(self):
-        result = np.ones(self.criteria)
+        result = np.ones(self.crit_count)
         total = 0
-        for j in range(self.criteria):
-            for i in range(self.criteria):
+        for j in range(self.crit_count):
+            for i in range(self.crit_count):
                 result[j] *= self.P[j][i]
-            result[j] = np.power(result[j], 1 / self.criteria)
+            result[j] = np.power(result[j], 1 / self.crit_count)
             total += result[j]
         result /= total
         return result
