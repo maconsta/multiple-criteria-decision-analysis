@@ -5,35 +5,45 @@ from core.core import Criterion, Alternative, DecisionMatrix
 
 class AHPTest(unittest.TestCase):
     def runTest(self):
-        c1 = Criterion("style", "max")
-        c2 = Criterion("reliability", "max")
-        c3 = Criterion("economy", "max")
-        c4 = Criterion("price", "min")
-        criteria2 = [c1, c2, c3, c4]
+        #Create sub-criteria for reliability
+        sub_c1 = Criterion("Mechanical", "max")
+        sub_criteria_reliability = [sub_c1]
+        
+        #Create main criteria with sub-criteria for reliability
+        c1 = Criterion("Reliability", "max", sub_criteria_reliability)
+        c2 = Criterion("Style", "max")
+        c3 = Criterion("Economy", "max")
+
+        criteria2 = [c1, c2, c3]
+        
         
         a1 = Alternative("Honda", [7, 9, 9, 8])
         a2 = Alternative("Saturn", [8, 7, 8, 7])
         a3 = Alternative("Ford", [9, 6, 8, 9])
         a4 = Alternative("Mazda", [6, 7, 8, 6])
+
         alternatives2 = [a1, a2, a3, a4]
         
+ 
+        decisionmatrix = DecisionMatrix(criteria2, alternatives2)
         
-        decision_matrix = DecisionMatrix(criteria2, alternatives2)
+       # Create main pairwise matrix
+        pairwise_matrix = np.array([[1, 2, 0.5],
+                                    [0.5, 1, 1/3],
+                                    [2, 3, 1]])
         
-        # Pairwise comparison matrix based on user judgment
-        pairwise_matrix = np.array([[1, 0.5, 2, 0.7], [2, 1, 3, 1.5], [0.5, 1/3, 1, 0.4], [1.4, 0.67, 2.5, 1]])
-        
-        ahp = AHP(decision_matrix, pairwise_matrix)
-        
-        # Check if criteria_weights were calculated correctly
-        # expected_criteria_weights = np.array([x, x, x])  # Replace with actual expected values
-        # np.testing.assert_array_almost_equal(ahp.criteria_weights, expected_criteria_weights, decimal=1)
+       # Create sub pairwise matrix for "Reliability"
+        sub_pairwise_matrix_reliability = np.array([[1, 2], [0.5, 1]])
+
+        # Dictionary for sub pairwise matrices
+        sub_pairwise_matrices = {'Reliability': sub_pairwise_matrix_reliability}
         
         
+        ahp = AHP(decisionmatrix, pairwise_matrix, sub_pairwise_matrices)
         scores = ahp.calculate_ahp()
-        print(scores)
-        # expected_scores = np.array([x, x, x])  # Replace with actual expected values
-        # np.testing.assert_array_almost_equal(scores, expected_scores, decimal=1)
+        print("AHP Scores:", scores)
+        
+
 
 def suite():
     suite = unittest.TestSuite()
