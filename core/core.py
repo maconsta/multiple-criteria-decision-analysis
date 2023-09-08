@@ -14,15 +14,11 @@ class Criterion:
 
     min_max : str 
         minimize or maximise the criterion; accepted values are "min" or "max"
-        
-    sub_criteria
-        adding sub criteria for AHP method
     """
-    
-    def __init__(self, name: str, min_max: str,sub_criteria = None):
+
+    def __init__(self, name: str, min_max: str):
         self.name = name
         self.min_max = min_max
-        self.sub_criteria = sub_criteria if sub_criteria else []
 # ---------------------------------------------CLASS_CRITERION_END------------------------------------------------------
 
 # ---------------------------------------------CLASS_ALTERNATIVE_START------------------------------------------------------
@@ -52,19 +48,9 @@ class Alternative:
 
 class DecisionMatrix:
     def __init__(self, criteria: list, alternatives: list):
-        '''self.criteria = criteria #this is the old one
+        self.criteria = criteria
         self.alternatives = alternatives
         self.crit_count = len(criteria)
-        self.alt_count = len(alternatives)
-        self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
-        self.matrix = np.zeros((self.alt_count, self.crit_count))
-
-        for alt_index in range(self.alt_count):
-            self.matrix[alt_index] = alternatives[alt_index].values
-        '''
-        self.criteria = criteria #this is new one made for both topsis and ahp.
-        self.alternatives = alternatives
-        self.crit_count = sum([1 + len(crit.sub_criteria) for crit in self.criteria])
         self.alt_count = len(alternatives)
         self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
         self.matrix = np.zeros((self.alt_count, self.crit_count))
@@ -151,27 +137,4 @@ class Pairwise:
             total += result[j]
         result /= total
         return result
-    
-    def Eigen_normalized(self):
-        '''
-        Returns the normalized Eigenvector as the weight vector.
-        
-        Returns:
-        --------
-            ndarray: Normalized Eigenvector
-        '''
-        
-        #Calculate the Eigenvalue and Eigenvector
-        eigenvalues, eigenvectors = np.linalg.eig(self.P)
-        
-        #Take the real part of the Eigenvectors
-        real_eigenvectors = np.real(eigenvectors)
-        
-        #Use the first column of the Eigenvectors for the Eigenvector normalization
-        first_eigenvector = real_eigenvectors[:, 0]
-        
-        #Normalize so that the sum becomes 1
-        normalized_eigenvector = first_eigenvector / np.sum(first_eigenvector)
-        
-        return normalized_eigenvector
 # ---------------------------------------------CLASS_PAIRWISE_END-------------------------------------------------------

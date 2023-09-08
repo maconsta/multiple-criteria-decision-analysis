@@ -116,7 +116,7 @@ class TopsisCarTest (unittest.TestCase):
             neg_dist[3]), 0.0544976, 2, "Distance from negative ideal solution[3] is wrong")
 
         closeness = topsis.calculate_closeness(pos_dist, neg_dist)
-    
+        print(closeness)
         self.assertAlmostEqual(
             abs(closeness[0]), 0.82, 1, "relative closeness to ideal solution[0] is wrong")
         self.assertAlmostEqual(
@@ -205,7 +205,7 @@ class TopsisCarTest (unittest.TestCase):
         #     neg_dist[3]), 0.02, 2, "Distance from negative ideal solution[3] is wrong")
 
         # closeness = topsis.calculate_closeness(pos_dist, neg_dist)
-
+        # print(closeness)
         # self.assertAlmostEqual(
         #     abs(closeness[0]), 0.82, 1, "relative closeness to ideal solution[0] is wrong")
         # self.assertAlmostEqual(
@@ -262,15 +262,12 @@ class TopsisCarTest (unittest.TestCase):
         # self.assertAlmostEqual(abs(neg_dist[3]),0.047,2,"Distance from negative ideal solution[3] is wrong")
 
         # closeness = topsis.calculate_closeness(pos_dist, neg_dist)
-
+        # print(closeness)
         # self.assertAlmostEqual(abs(closeness[0]),0.74,1,"relative closeness to ideal solution[0] is wrong")
         # self.assertAlmostEqual(abs(closeness[1]),0.41,1,"relative closeness to ideal solution[0] is wrong")
         # self.assertAlmostEqual(abs(closeness[2]),0.17,1,"relative closeness to ideal solution[0] is wrong")
         # self.assertAlmostEqual(abs(closeness[3]),0.45,1,"relative closeness to ideal solution[0] is wrong")
 
-
-        # uncomment for testing
-        # test = topsis.calculate_topsis()
 
 def suite():
     suite = unittest.TestSuite()

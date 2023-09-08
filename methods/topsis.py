@@ -38,12 +38,6 @@ class Topsis:
         positive_distances, negative_distances = self.calculate_distances()
         closeness = self.calculate_closeness(
             positive_distances, negative_distances)
-
-        result = []
-        for i in range(len(closeness)):
-            name = self.decision_matrix.alternatives[i].name
-            result.append({"name": name, "score": closeness[i]})
-
-        result = sorted(result, key=lambda d: d['score'], reverse=True)
-
-        return result
+        # ~ best_alternative_index = np.argmax(closeness)
+        # ~ best_alternative_closeness = closeness[best_alternative_index]
+        return closeness  # , best_alternative_closeness, best_alternative_index
