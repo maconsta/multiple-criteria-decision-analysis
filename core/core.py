@@ -14,11 +14,15 @@ class Criterion:
 
     min_max : str 
         minimize or maximise the criterion; accepted values are "min" or "max"
+        
+    sub_criteria
+        adding sub criteria for AHP method
     """
-
-    def __init__(self, name: str, min_max: str):
+    
+    def __init__(self, name: str, min_max: str,sub_criteria = None):
         self.name = name
         self.min_max = min_max
+        self.sub_criteria = sub_criteria if sub_criteria else []
 # ---------------------------------------------CLASS_CRITERION_END------------------------------------------------------
 
 # ---------------------------------------------CLASS_ALTERNATIVE_START------------------------------------------------------
@@ -48,9 +52,19 @@ class Alternative:
 
 class DecisionMatrix:
     def __init__(self, criteria: list, alternatives: list):
-        self.criteria = criteria
+        '''self.criteria = criteria #this is the old one
         self.alternatives = alternatives
         self.crit_count = len(criteria)
+        self.alt_count = len(alternatives)
+        self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
+        self.matrix = np.zeros((self.alt_count, self.crit_count))
+
+        for alt_index in range(self.alt_count):
+            self.matrix[alt_index] = alternatives[alt_index].values
+        '''
+        self.criteria = criteria #this is new one made for both topsis and ahp.
+        self.alternatives = alternatives
+        self.crit_count = sum([1 + len(crit.sub_criteria) for crit in self.criteria])
         self.alt_count = len(alternatives)
         self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
         self.matrix = np.zeros((self.alt_count, self.crit_count))
@@ -98,6 +112,7 @@ class DecisionMatrix:
             if self.criteria[j].min_max == 'min':
                 self.normalized_matrix[:, j] *= -1
 
+    
     def normalize_l2(self):
         '''
         Normalize the decision matrix using the L2 vector norm
@@ -106,12 +121,22 @@ class DecisionMatrix:
         --------
             None
         '''
+        
+        if self.crit_count != self.matrix.shape[1]:
+            raise ValueError("Dimension mismatch: number of criteria must match the number of columns in the decision matrix")
+        
         norm = np.linalg.norm(self.matrix, axis=0)
         self.normalized_matrix = self.matrix / norm
 
         for j in range(self.crit_count):
-            if self.criteria[j].min_max == 'min':
-                self.normalized_matrix[:, j] *= -1
+            try:
+                if self.criteria[j].min_max == 'min':
+                    self.normalized_matrix[:, j] *= -1
+            except IndexError:
+                raise IndexError(f"Criteria index {j} is out of range. Length of criteria list: {len(self.criteria)}")
+    
+
+    
 # ---------------------------------------------CLASS_DECISION_MATRIX_END-----------------------------------------------
 
 
@@ -137,4 +162,27 @@ class Pairwise:
             total += result[j]
         result /= total
         return result
+    
+    def Eigen_normalized(self):
+        '''
+        Returns the normalized Eigenvector as the weight vector.
+        
+        Returns:
+        --------
+            ndarray: Normalized Eigenvector
+        '''
+        
+        #Calculate the Eigenvalue and Eigenvector
+        eigenvalues, eigenvectors = np.linalg.eig(self.P)
+        
+        #Take the real part of the Eigenvectors
+        real_eigenvectors = np.real(eigenvectors)
+        
+        #Use the first column of the Eigenvectors for the Eigenvector normalization
+        first_eigenvector = real_eigenvectors[:, 0]
+        
+        #Normalize so that the sum becomes 1
+        normalized_eigenvector = first_eigenvector / np.sum(first_eigenvector)
+        
+        return normalized_eigenvector
 # ---------------------------------------------CLASS_PAIRWISE_END-------------------------------------------------------
