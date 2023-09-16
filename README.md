@@ -5,12 +5,14 @@
 * Да се разгледа и тества Topsis Pairwise метода дали работи правилно.
 * Да се добавят unit tests за AHP метода.
 * Да се допълни weighted_sum unit test-a.
+* Да се добавят тестове за метода Electre
 
 
 ## Done 
 
 * Добавен е методa AHP.
 * Оправена е стойността, която връщат методите topsis и WSM.
+* Добавен е метода Electre
 
 
 ## Return Values of All Methods
