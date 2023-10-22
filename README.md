@@ -5,7 +5,6 @@
 * Да се разгледа и тества Topsis Pairwise метода дали работи правилно.
 * Да се добавят unit tests за AHP метода.
 * Да се допълни weighted_sum unit test-a.
-* Да се добавят тестове за метода Electre
 
 
 ## Done 
