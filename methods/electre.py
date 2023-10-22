@@ -32,8 +32,6 @@ class Electre:
         c_threshold = np.sum(col_sums) / (
             self.decision_matrix.alt_count * (self.decision_matrix.alt_count - 1))
 
-        # print(col_sums)
-        # print(c_threshold)
         for i in range(self.decision_matrix.alt_count):
             for j in range(self.decision_matrix.alt_count):
                 if self.concordance_interval_matrix[i][j] >= c_threshold:
@@ -85,38 +83,38 @@ class Electre:
 
         self.net_inferior_vector = row_sums - col_sums
 
-    def calc(self):
+    def calculate_electre(self):
         self.decision_matrix.normalize_l2()
-        print("\nNormalized DM")
-        print(self.decision_matrix.normalized_matrix)
+        # print("\nNormalized DM")
+        # print(self.decision_matrix.normalized_matrix)
 
         self.decision_matrix.normalized_matrix *= self.weights
-        print("\nNormalized Weighted DM")
-        print(self.decision_matrix.normalized_matrix)
+        # print("\nNormalized Weighted DM")
+        # print(self.decision_matrix.normalized_matrix)
 
         self.calculate_concordance_interval_matrix()
-        print("\nConcordance Interval Matrix")
-        print(self.concordance_interval_matrix)
+        # print("\nConcordance Interval Matrix")
+        # print(self.concordance_interval_matrix)
 
         self.calculate_concordance_index_matrix()
-        print("\nConcordance Index Matrix")
-        print(self.concordance_index_matrix)
+        # print("\nConcordance Index Matrix")
+        # print(self.concordance_index_matrix)
 
         self.calculate_discordance_interval_matrix()
-        print("\nDiscordance Interval Matrix")
-        print(self.discordance_interval_matrix)
+        # print("\nDiscordance Interval Matrix")
+        # print(self.discordance_interval_matrix)
 
         self.calculate_discordance_index_matrix()
-        print("\nDiscordance Index Matrix")
-        print(self.discordance_index_matrix)
+        # print("\nDiscordance Index Matrix")
+        # print(self.discordance_index_matrix)
 
         self.calculate_net_superior_vector()
-        print("\nNet Superior Vector")
-        print(self.net_superior_vector)
+        # print("\nNet Superior Vector")
+        # print(self.net_superior_vector)
 
         self.calculate_net_inferior_vector()
-        print("\nNet Inferior Vector")
-        print(self.net_inferior_vector)
+        # print("\nNet Inferior Vector")
+        # print(self.net_inferior_vector)
 
         # по кой вектор ранкираме резултата? 
         # >= или > при сравненията за доминантност? 
@@ -124,22 +122,22 @@ class Electre:
 
 
 
-c1 = Criterion("c1", "max")
-c2 = Criterion("c2", "max")
-c3 = Criterion("c3", "max")
-c4 = Criterion("c4", "max")
-c5 = Criterion("c5", "max")
-c6 = Criterion("c6", "max")
-criteria = [c1, c2, c3, c4, c5, c6]
+# c1 = Criterion("c1", "max")
+# c2 = Criterion("c2", "max")
+# c3 = Criterion("c3", "max")
+# c4 = Criterion("c4", "max")
+# c5 = Criterion("c5", "max")
+# c6 = Criterion("c6", "max")
+# criteria = [c1, c2, c3, c4, c5, c6]
 
-a1 = Alternative("a1", [1350, 1850, 7.5, 2.58, 93.5, 0.045])
-a2 = Alternative("a2", [1680, 1650, 8.5, 3.75, 95.3, 0.068])
-a3 = Alternative("a3", [1560, 1950, 6.5, 4.86, 88.6, 0.095])
-a4 = Alternative("a4", [1470, 1850, 9.5, 3.16, 98.4, 0.072])
-alternatives = [a1, a2, a3, a4]
+# a1 = Alternative("a1", [1350, 1850, 7.5, 2.58, 93.5, 0.045])
+# a2 = Alternative("a2", [1680, 1650, 8.5, 3.75, 95.3, 0.068])
+# a3 = Alternative("a3", [1560, 1950, 6.5, 4.86, 88.6, 0.095])
+# a4 = Alternative("a4", [1470, 1850, 9.5, 3.16, 98.4, 0.072])
+# alternatives = [a1, a2, a3, a4]
 
-dm = DecisionMatrix(criteria, alternatives)
-weights = [0.2336, 0.1652, 0.3355, 0.1021, 0.0424, 0.1212]
+# dm = DecisionMatrix(criteria, alternatives)
+# weights = [0.2336, 0.1652, 0.3355, 0.1021, 0.0424, 0.1212]
 
-el = Electre(dm, weights)
-el.calc()
+# el = Electre(dm, weights)
+# el.calc()
