@@ -52,7 +52,8 @@ class Alternative:
 
 class DecisionMatrix:
     def __init__(self, criteria: list, alternatives: list):
-        '''self.criteria = criteria #this is the old one
+        
+        self.criteria = criteria #this is the old one
         self.alternatives = alternatives
         self.crit_count = len(criteria)
         self.alt_count = len(alternatives)
@@ -61,16 +62,16 @@ class DecisionMatrix:
 
         for alt_index in range(self.alt_count):
             self.matrix[alt_index] = alternatives[alt_index].values
-        '''
-        self.criteria = criteria #this is new one made for both topsis and ahp.
-        self.alternatives = alternatives
-        self.crit_count = sum([1 + len(crit.sub_criteria) for crit in self.criteria])
-        self.alt_count = len(alternatives)
-        self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
-        self.matrix = np.zeros((self.alt_count, self.crit_count))
+        
+        # self.criteria = criteria #this is new one made for both topsis and ahp.
+        # self.alternatives = alternatives
+        # self.crit_count = sum([1 + len(crit.sub_criteria) for crit in self.criteria])
+        # self.alt_count = len(alternatives)
+        # self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
+        # self.matrix = np.zeros((self.alt_count, self.crit_count))
 
-        for alt_index in range(self.alt_count):
-            self.matrix[alt_index] = alternatives[alt_index].values
+        # for alt_index in range(self.alt_count):
+        #     self.matrix[alt_index] = alternatives[alt_index].values
 
     def normalize(self):
         '''
