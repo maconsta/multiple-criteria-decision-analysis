@@ -3,15 +3,15 @@
 ## Todo:
 
 * Да се разгледа и тества Topsis Pairwise метода дали работи правилно.
-* Да се добавят unit tests за AHP метода.
+* Да се реализира правилно AHP метода, като се ползва основата, която е в проекта.
 * Да се допълни weighted_sum unit test-a.
 
 
 ## Done 
 
-* Добавен е методa AHP.
 * Оправена е стойността, която връщат методите topsis и WSM.
-* Добавен е метода Electre
+* Добавен е метода Electre и unit tests към него.
+* Добавен е метода SMART и unit tests към него.
 
 
 ## Return Values of All Methods
