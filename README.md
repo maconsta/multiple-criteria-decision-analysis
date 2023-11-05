@@ -5,13 +5,14 @@
 * Да се разгледа и тества Topsis Pairwise метода дали работи правилно.
 * Да се реализира правилно AHP метода, като се ползва основата, която е в проекта.
 * Да се допълни weighted_sum unit test-a.
+* Да се добави Promethee Unit Test
+* Да се допълни Promethee (return value, more preference functions)
 
 
 ## Done 
 
-* Оправена е стойността, която връщат методите topsis и WSM.
-* Добавен е метода Electre и unit tests към него.
 * Добавен е метода SMART и unit tests към него.
+* Добавен е метода Promethee
 
 
 ## Return Values of All Methods
