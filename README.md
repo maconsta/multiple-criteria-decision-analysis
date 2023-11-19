@@ -13,6 +13,7 @@
 
 * Добавен е метода SMART и unit tests към него.
 * Добавен е метода Promethee
+* Добавен е Pairwise метод за намиране на тегла.
 
 
 ## Return Values of All Methods
