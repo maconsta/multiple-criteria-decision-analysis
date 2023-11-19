@@ -142,53 +142,6 @@ class DecisionMatrix:
 
 
 # ---------------------------------------------CLASS_PAIRWISE_START-----------------------------------------------------
-# class Pairwise:
-#     def __init__(self, crit):
-#         self.criteria = crit
-#         self.P = np.ones((crit, crit))
-#         np.fill_diagonal(self.P, 1)
-
-#     def setComparson(self, crit1, crit2, val):
-#         if crit1 <= self.criteria and crit2 <= self.criteria:
-#             self.P[crit1][crit2] = val
-#             self.P[crit2][crit1] = 1 / val
-
-#     def Eigen(self):
-#         result = np.ones(self.criteria)
-#         total = 0
-#         for j in range(self.criteria):
-#             for i in range(self.criteria):
-#                 result[j] *= self.P[j][i]
-#             result[j] = np.power(result[j], 1 / self.criteria)
-#             total += result[j]
-#         result /= total
-#         return result
-    
-#     def Eigen_normalized(self):
-#         '''
-#         Returns the normalized Eigenvector as the weight vector.
-        
-#         Returns:
-#         --------
-#             ndarray: Normalized Eigenvector
-#         '''
-        
-#         #Calculate the Eigenvalue and Eigenvector
-#         eigenvalues, eigenvectors = np.linalg.eig(self.P)
-        
-#         #Take the real part of the Eigenvectors
-#         real_eigenvectors = np.real(eigenvectors)
-        
-#         #Use the first column of the Eigenvectors for the Eigenvector normalization
-#         first_eigenvector = real_eigenvectors[:, 0]
-        
-#         #Normalize so that the sum becomes 1
-#         normalized_eigenvector = first_eigenvector / np.sum(first_eigenvector)
-        
-#         return normalized_eigenvector
-# ---------------------------------------------CLASS_PAIRWISE_END-------------------------------------------------------
-
-# ---------------------------------------------CLASS_PAIRWISE_START-----------------------------------------------------
 
 class Pairwise:
     """
