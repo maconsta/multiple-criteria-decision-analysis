@@ -142,48 +142,110 @@ class DecisionMatrix:
 
 
 # ---------------------------------------------CLASS_PAIRWISE_START-----------------------------------------------------
-class Pairwise:
-    def __init__(self, crit):
-        self.criteria = crit
-        self.P = np.ones((crit, crit))
-        np.fill_diagonal(self.P, 1)
+# class Pairwise:
+#     def __init__(self, crit):
+#         self.criteria = crit
+#         self.P = np.ones((crit, crit))
+#         np.fill_diagonal(self.P, 1)
 
-    def setComparson(self, crit1, crit2, val):
-        if crit1 <= self.criteria and crit2 <= self.criteria:
-            self.P[crit1][crit2] = val
-            self.P[crit2][crit1] = 1 / val
+#     def setComparson(self, crit1, crit2, val):
+#         if crit1 <= self.criteria and crit2 <= self.criteria:
+#             self.P[crit1][crit2] = val
+#             self.P[crit2][crit1] = 1 / val
 
-    def Eigen(self):
-        result = np.ones(self.criteria)
-        total = 0
-        for j in range(self.criteria):
-            for i in range(self.criteria):
-                result[j] *= self.P[j][i]
-            result[j] = np.power(result[j], 1 / self.criteria)
-            total += result[j]
-        result /= total
-        return result
+#     def Eigen(self):
+#         result = np.ones(self.criteria)
+#         total = 0
+#         for j in range(self.criteria):
+#             for i in range(self.criteria):
+#                 result[j] *= self.P[j][i]
+#             result[j] = np.power(result[j], 1 / self.criteria)
+#             total += result[j]
+#         result /= total
+#         return result
     
-    def Eigen_normalized(self):
-        '''
-        Returns the normalized Eigenvector as the weight vector.
+#     def Eigen_normalized(self):
+#         '''
+#         Returns the normalized Eigenvector as the weight vector.
         
-        Returns:
-        --------
-            ndarray: Normalized Eigenvector
-        '''
+#         Returns:
+#         --------
+#             ndarray: Normalized Eigenvector
+#         '''
         
-        #Calculate the Eigenvalue and Eigenvector
-        eigenvalues, eigenvectors = np.linalg.eig(self.P)
+#         #Calculate the Eigenvalue and Eigenvector
+#         eigenvalues, eigenvectors = np.linalg.eig(self.P)
         
-        #Take the real part of the Eigenvectors
-        real_eigenvectors = np.real(eigenvectors)
+#         #Take the real part of the Eigenvectors
+#         real_eigenvectors = np.real(eigenvectors)
         
-        #Use the first column of the Eigenvectors for the Eigenvector normalization
-        first_eigenvector = real_eigenvectors[:, 0]
+#         #Use the first column of the Eigenvectors for the Eigenvector normalization
+#         first_eigenvector = real_eigenvectors[:, 0]
         
-        #Normalize so that the sum becomes 1
-        normalized_eigenvector = first_eigenvector / np.sum(first_eigenvector)
+#         #Normalize so that the sum becomes 1
+#         normalized_eigenvector = first_eigenvector / np.sum(first_eigenvector)
         
-        return normalized_eigenvector
+#         return normalized_eigenvector
 # ---------------------------------------------CLASS_PAIRWISE_END-------------------------------------------------------
+
+# ---------------------------------------------CLASS_PAIRWISE_START-----------------------------------------------------
+
+class Pairwise:
+    """
+    Class Pairwise, contains the pairwise matrix and a procedure to return the eigenvector
+
+    Attributes
+    ==========
+
+    criteria : list 
+        a list of Criterion objects
+
+    pairwise_matrix: numpy 2d array (list of lists)
+        the pairwise matrix
+    """
+    
+    def __init__(self, criteria: list):
+        self.criteria = criteria
+        self.crit_count = len(criteria)
+        self.pairwise_matrix = np.zeros((self.crit_count, self.crit_count))
+    
+    def fill_matrix(self):
+        # would be a good idea to move the input to another class, responsible only for the input of data 
+        for row in range(self.crit_count):
+            for col in range(self.crit_count):
+                if row == col:
+                    self.pairwise_matrix[row][col] = 1
+                    continue
+
+                if self.pairwise_matrix[row][col] == 0:
+                    print("How important is", self.criteria[row].name, "with respect to", self.criteria[col].name)
+                    user_input = float(input("Enter: "))
+                    self.pairwise_matrix[row][col] = user_input
+                    self.pairwise_matrix[col][row] = 1 / user_input
+
+    def calculate_eigenvector(self):
+        eigenvector = np.zeros(self.crit_count)
+        temp_matrix = self.pairwise_matrix
+        while(True):
+            temp_matrix = np.matmul(temp_matrix, temp_matrix)
+            row_sums = np.sum(temp_matrix, axis=1)
+            row_sum_totals = np.sum(row_sums)
+            new_eigenvector = row_sums / row_sum_totals
+            if np.all(np.isclose(eigenvector, new_eigenvector)):
+                return eigenvector
+            
+            eigenvector = new_eigenvector
+
+        
+                
+
+# c1 = Criterion("c1", "max")
+# c2 = Criterion("c2", "max")
+# c3 = Criterion("c3", "max")
+# criteria = [c1, c2, c3]
+
+# pw = Pairwise(criteria)
+# pw.fill_matrix()
+# weights = pw.calculate_eigenvector()
+
+# ---------------------------------------------CLASS_PAIRWISE_END-----------------------------------------------------
