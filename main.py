@@ -1,3 +1,4 @@
+from methods.ahp import AHP
 from methods.electre import Electre
 from methods.promethee import Promethee
 from methods.smart import SMART
@@ -31,7 +32,7 @@ if __name__ == "__main__":
     weights = pairwise.calculate_eigenvector()
 
     while (True):
-        print("\nPlease choose which method to use:\n[1] AHP (under construction) \n[2] Electre \n[3] Promethee \n[4] SMART \n[5] TOPSIS \n[6] Weighted Sum Method")
+        print("\nPlease choose which method to use:\n[1] AHP \n[2] Electre \n[3] Promethee \n[4] SMART \n[5] TOPSIS \n[6] Weighted Sum Method")
 
         method = None
         result = None
@@ -39,8 +40,8 @@ if __name__ == "__main__":
 
         match chosen_method:
             case "1":
-                print("\nNot active at the moment, please choose another method.")
-                continue
+                method = AHP(decision_matrix, weights)
+                result = method.calculate_ahp()
             case "2":
                 method = Electre(decision_matrix, weights)
                 result = method.calculate_electre()
