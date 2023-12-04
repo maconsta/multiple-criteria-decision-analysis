@@ -120,6 +120,15 @@ class Electre:
         # >= или > при сравненията за доминантност? 
         # трябва ли да се направи агрегирана матрица?
 
+        result = []
+        for i in range(len(self.net_superior_vector)):
+            name = self.decision_matrix.alternatives[i].name
+            result.append({"name": name, "score": self.net_superior_vector[i]})
+
+        result = sorted(result, key=lambda d: d['score'], reverse=True)
+
+        return result
+
 
 
 # c1 = Criterion("c1", "max")
@@ -140,4 +149,4 @@ class Electre:
 # weights = [0.2336, 0.1652, 0.3355, 0.1021, 0.0424, 0.1212]
 
 # el = Electre(dm, weights)
-# el.calc()
+# print(el.calculate_electre())
