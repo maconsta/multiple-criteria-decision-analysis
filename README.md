@@ -2,8 +2,8 @@
 
 ## Todo:
 
+* Да се теста AHP метода.
 * Да се разгледа и тества Topsis Pairwise метода дали работи правилно.
-* Да се реализира правилно AHP метода, като се ползва основата, която е в проекта.
 * Да се допълни weighted_sum unit test-a.
 * Да се добави Promethee Unit Test
 * Да се допълни Promethee (return value, more preference functions)
@@ -11,6 +11,7 @@
 
 ## Done 
 
+* Добавен е метода AHP (както се разбрахме без sub criteria) и unit tests към него.
 * Добавен е метода SMART и unit tests към него.
 * Добавен е метода Promethee
 * Добавен е Pairwise метод за намиране на тегла.
