@@ -163,7 +163,6 @@ class Pairwise:
         self.pairwise_matrix = np.zeros((self.crit_count, self.crit_count))
     
     def fill_matrix(self):
-        # would be a good idea to move the input to another class, responsible only for the input of data 
         for row in range(self.crit_count):
             for col in range(self.crit_count):
                 if row == col:
@@ -173,6 +172,8 @@ class Pairwise:
                 if self.pairwise_matrix[row][col] == 0:
                     print("How important is", self.criteria[row].name, "with respect to", self.criteria[col].name)
                     user_input = float(input("Enter: "))
+                    if user_input == 0:
+                        continue
                     self.pairwise_matrix[row][col] = user_input
                     self.pairwise_matrix[col][row] = 1 / user_input
 

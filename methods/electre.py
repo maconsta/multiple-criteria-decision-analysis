@@ -3,7 +3,7 @@ from core.core import Criterion, Alternative, DecisionMatrix
 
 
 class Electre:
-    def __init__(self, decision_matrix:  DecisionMatrix, weights: list):
+    def __init__(self, decision_matrix:  DecisionMatrix, weights):
         self.decision_matrix = decision_matrix
         self.weights = weights
         self.concordance_interval_matrix = np.zeros((self.decision_matrix.alt_count, self.decision_matrix.alt_count))

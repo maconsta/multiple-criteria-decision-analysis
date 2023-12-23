@@ -3,7 +3,7 @@ from core.core import Criterion, Alternative, DecisionMatrix
 
 
 class Promethee:
-    def __init__(self, decision_matrix:  DecisionMatrix, weights: list):
+    def __init__(self, decision_matrix:  DecisionMatrix, weights):
         self.decision_matrix = decision_matrix
         self.weights = weights
         self.performance_index_matrix = np.zeros(

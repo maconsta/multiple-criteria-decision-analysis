@@ -2,7 +2,7 @@ import numpy as np
 import core.core as core
 
 class SMART:
-    def __init__(self, decision_matrix: core.DecisionMatrix, weights: list):
+    def __init__(self, decision_matrix: core.DecisionMatrix, weights):
         self.decision_matrix = decision_matrix
         self.weights = weights
 

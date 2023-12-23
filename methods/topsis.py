@@ -3,7 +3,7 @@ import core.core as core
 
 
 class Topsis:
-    def __init__(self, decision_matrix: core.DecisionMatrix, weights: list):
+    def __init__(self, decision_matrix: core.DecisionMatrix, weights):
         self.decision_matrix = decision_matrix  # DOES IT MAKE A COPY HERE?
         self.weights = weights
         self.ideal_positive_solution = []
