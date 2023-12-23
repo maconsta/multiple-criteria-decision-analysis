@@ -42,7 +42,7 @@ def input_alternatives(criteria):
         values = []
         for i in range(len(criteria)):
             print("Please enter value for", criteria[i].name)
-            val = input("Value: ")
+            val = input("Value: ").replace(" ", "")
             # categorical data will raise some errors when casted to float!
             values.append(float(val))
 
@@ -88,8 +88,8 @@ def main_menu():
         chosen_method = input("\nPlease select a method: ")
 
         if chosen_method == "1":
-            # method = AHP(decision_matrix, weights)
-            # result = method.calculate_ahp()
+            method = AHP(decision_matrix, weights)
+            result = method.calculate_ahp()
             continue
         elif chosen_method == "2":
             method = Electre(decision_matrix, weights)
