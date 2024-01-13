@@ -1,0 +1,33 @@
+.nbu-logo {
+    display: inline-block;
+    background-size: 130px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("../images/nbu_logo.png");
+
+    &--large {
+        height: 75px;
+        width: 130px;
+    }
+
+    &--small {
+        // tbd
+    }
+}
+
+.github-logo {
+    display: inline-block;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("../images/github_logo.png");
+
+    &--large {
+        height: 30px;
+        width: 30px;
+    }
+
+    &--small {
+        // tbd
+    }
+}

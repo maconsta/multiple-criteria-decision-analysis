@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="A Multiple Criteria Decision Analysis System.">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {# loading Source Sans 3 font from google cdn #}
+        {# currently using regular, regular italic, semi-bold, bold #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet"
+              type="text/css"
+              href="{{ url_for('static', filename='css/styles.css') }}">
+        <title>MCDA</title>
+    </head>
+    <body>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"></script>
+        {# <script src="{{ url_for('static', filename='js/partials/sidebar.js') }}"></script> #}
+    </body>
+</html>

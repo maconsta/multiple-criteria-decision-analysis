@@ -1,0 +1,7 @@
+@mixin content-wrapper {
+    width: 1200px;
+
+    @media screen and (max-width: 600px) {
+        width: 400px;
+    }
+}
