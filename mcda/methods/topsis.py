@@ -32,7 +32,7 @@ class Topsis:
             self.decision_matrix.normalized_matrix[:, col] *= self.weights[col]
 
     def calculate_topsis(self):
-        self.decision_matrix.normalize_l2()
+        #self.decision_matrix.normalize_l2()
         self.weigh()
         self.calculate_ideal_solutions()
         positive_distances, negative_distances = self.calculate_distances()

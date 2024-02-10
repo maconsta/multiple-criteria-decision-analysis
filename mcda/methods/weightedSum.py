@@ -8,7 +8,7 @@ class WeightedSum:
         self.weights = weights
 
     def calculate_weighted_sum(self):
-        self.decision_matrix.normalize()
+        #self.decision_matrix.normalize()
         normalized_matrix = self.decision_matrix.normalized_matrix
         weighted_sum = np.matmul(normalized_matrix, np.array(self.weights))
 
