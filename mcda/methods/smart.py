@@ -16,7 +16,7 @@ class SMART:
     #     self.decision_matrix.normalized_matrix = self.decision_matrix.matrix / column_sums
 
     def calculate_smart(self):
-        self.decision_matrix.normalize_l2()  # Using L2 normalization from core
+        #self.decision_matrix.normalize_l2()  # Using L2 normalization from core
         self.weigh()
 
         scores = np.sum(self.decision_matrix.normalized_matrix, axis=1)

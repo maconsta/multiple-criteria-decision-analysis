@@ -84,7 +84,7 @@ class Electre:
         self.net_inferior_vector = row_sums - col_sums
 
     def calculate_electre(self):
-        self.decision_matrix.normalize_l2()
+        #self.decision_matrix.normalize_l2()
         # print("\nNormalized DM")
         # print(self.decision_matrix.normalized_matrix)
 

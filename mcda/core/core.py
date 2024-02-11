@@ -51,17 +51,15 @@ class Alternative:
 
 
 class DecisionMatrix:
-    def __init__(self, criteria: list, alternatives: list):
+    def __init__(self, criteria: list, alternatives: list, normalization_method):
         
         self.criteria = criteria #this is the old one
         self.alternatives = alternatives
         self.crit_count = len(criteria)
         self.alt_count = len(alternatives)
+        self.matrix = np.array([alt.values for alt in alternatives])
         self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
-        self.matrix = np.zeros((self.alt_count, self.crit_count))
-
-        for alt_index in range(self.alt_count):
-            self.matrix[alt_index] = alternatives[alt_index].values
+        normalization_method(self)
         
         # self.criteria = criteria #this is new one made for both topsis and ahp.
         # self.alternatives = alternatives

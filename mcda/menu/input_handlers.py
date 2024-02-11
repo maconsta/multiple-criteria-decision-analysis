@@ -77,7 +77,7 @@ def main_menu():
     criteria = input_criteria()
     alternaties = input_alternatives(criteria)
     weights = input_weights(criteria)
-    decision_matrix = DecisionMatrix(criteria, alternaties)
+    decision_matrix = DecisionMatrix(criteria, alternaties, DecisionMatrix.normalize_l2)
 
     while (True):
         print(
