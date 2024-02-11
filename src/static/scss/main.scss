@@ -1,4 +1,5 @@
 @import "vendor/destyle";
+@import "vendor/jquery-ui.min";
 
 @import "abstracts/mixins";
 @import "abstracts/variables";
@@ -7,6 +8,7 @@
 
 @import "partials/icons";
 @import "partials/header";
-@import "partials/buttons";
+@import "partials/tables";
+@import "partials/components";
 
 @import "pages/index";

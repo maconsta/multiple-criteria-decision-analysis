@@ -1,15 +1,90 @@
 {% extends "base.html.j2" %}
-
 {% block content %}
-
-{% include "/partials/header.html.j2" %}
-
-<div class="content">
-    <div class="topnav">
-        <div class="nav-btn nav-btn--left"></div>
-        <div class="nav-btn nav-btn--right"></div>
+    {% include "/partials/header.html.j2" %}
+    <div class="accordion-header">
+        <div class="title">
+            <h2>Add Criteria</h2>
+            <span class="help-icon" data-for="criteria-modal" title="Click for help"></span>
+        </div>
+        <span class="chevron chevron--active" data-for="criteria">
+            <span class="chevron__img"></span>
+        </span>
     </div>
-    <h2>Add Criteria</h2>
-</div>
-
+    <div class="accordion criteria">
+        <div class="btn-container">
+            <div class="add-btn" id="js-add-criterion">Add Criterion</div>
+            <div class="set-btn" id="js-set-criteria">Set Criteria</div>
+            <div class="unlock-btn" id="js-unlock-criteria">Unlock Editing</div>
+        </div>
+        <table class="input-table" id="js-criteria-table">
+            <thead>
+                <tr>
+                    <th class="name align-center">Name</th>
+                    <th class="beneficiality align-center">Beneficiality</th>
+                    <th class="edit align-center">Edit</th>
+                </tr>
+            </thead>
+            <tbody class="sortable">
+                <tr>
+                    <td>
+                        <input type="text" class="modern-input" placeholder="Add criterion name">
+                    </td>
+                    <td>
+                        <select name="beneficiality" class="modern-select" required>
+                            <option value="" selected disabled>Select type</option>
+                            <option value="max">Beneficial</option>
+                            <option value="min">Non-beneficial</option>
+                        </select>
+                    </td>
+                    <td class="edit">
+                        <div class="icon-container">
+                            <span class="reorder-icon reorder-icon--large" title="Reorder"></span><span class="x-icon x-icon--large remove-crit-btn" title="Remove"></span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="accordion-header">
+        <div class="title">
+            <h2>Add Weights</h2>
+            <span class="help-icon" data-for="weights-modal" title="Click for help"></span>
+        </div>
+        <span class="chevron chevron--disabled" data-for="weights">
+            <span class="chevron__img"></span>
+        </span>
+    </div>
+    <div class="accordion weights">
+        <table class="input-table weights-table" id="js-weights-table">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="accordion-header">
+        <div class="title">
+            <h2>Add Alternatives</h2>
+            <span class="help-icon"
+                  data-for="alternatives-modal"
+                  title="Click for help"></span>
+        </div>
+        <span class="chevron chevron--disabled" data-for="alternatives">
+            <span class="chevron__img"></span>
+        </span>
+    </div>
+    <div class="accordion alternatives">
+        <div class="add-btn" id="js-add-alternative">Add Alternative</div>
+        <table class="input-table alternatives-table" id="js-alternatives-table">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    {% include "/partials/help.modal.html.j2" %}
 {% endblock content %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/partials/alerts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/index.js') }}"></script>
+{% endblock js %}

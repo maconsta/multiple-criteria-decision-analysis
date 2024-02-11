@@ -34,9 +34,23 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 50px;
+    row-gap: 30px;
 }
 
 h2 {
     font-size: 32px;
     font-weight: 600;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.mb-30 {
+    margin-bottom: 30px;
 }

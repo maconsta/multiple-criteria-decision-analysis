@@ -1,33 +1,138 @@
 .nbu-logo {
-    display: inline-block;
-    background-size: 130px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-image: url("../images/nbu_logo.png");
+  display: inline-block;
+  background-size: 130px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("../images/nbu_logo.png");
 
-    &--large {
-        height: 75px;
-        width: 130px;
-    }
+  &--large {
+    height: 75px;
+    width: 130px;
+  }
 
-    &--small {
-        // tbd
-    }
+  &--small {
+    // tbd
+  }
 }
 
 .github-logo {
+  display: inline-block;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("../images/github_logo.png");
+
+  &--large {
+    height: 30px;
+    width: 30px;
+  }
+
+  &--small {
+    // tbd
+  }
+}
+
+.x-icon {
+  display: inline-block;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("../images/x.svg");
+  cursor: pointer;
+  border-radius: 50%;
+
+  &--disabled {
+    cursor: not-allowed;
+  }
+
+  &--large {
+    height: 30px;
+    width: 30px;
+  }
+
+  &--small {
+    // tbd
+  }
+
+  &:hover {
+    background-color: $gainsboro;
+  }
+}
+
+.reorder-icon {
+  display: inline-block;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("../images/reorder.svg");
+  cursor: grab;
+  border-radius: 50%;
+
+  &--large {
+    height: 30px;
+    width: 30px;
+  }
+
+  &--small {
+    // tbd
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    background-color: $gainsboro;
+  }
+}
+
+.chevron {
+  $block: &;
+
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: $blue;
+
+  &--active {
+    #{ $block }__img {
+      -o-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+
+  &--disabled {
+    background-color: $disabled;
+  }
+
+  &__img {
+    @include button-transition;
+
+    width: 40px;
+    height: 40px;
     display: inline-block;
-    background-size: 30px;
+    background-size: 40px;
     background-repeat: no-repeat;
     background-position: center center;
-    background-image: url("../images/github_logo.png");
+    background-image: url("../images/chevron_down.svg");
+    cursor: pointer;
+  }
+}
 
-    &--large {
-        height: 30px;
-        width: 30px;
-    }
-
-    &--small {
-        // tbd
-    }
+.help-icon {
+  display: inline-block;
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("../images/help-circle.svg");
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  color: red;
 }
