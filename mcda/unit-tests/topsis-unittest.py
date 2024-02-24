@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import unittest
-from methods.topsis import Topsis
-from core.core import Criterion, Alternative, DecisionMatrix
+from mcda.methods.topsis import Topsis
+from mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class TopsisCarTest (unittest.TestCase):
@@ -19,7 +19,7 @@ class TopsisCarTest (unittest.TestCase):
         a4 = Alternative("Mazda", [6, 7, 8, 6])
         alternatives2 = [a1, a2, a3, a4]
 
-        decisionmatrix = DecisionMatrix(criteria2, alternatives2)
+        decisionmatrix = DecisionMatrix(criteria2, alternatives2, DecisionMatrix.normalize)
 
         self.assertEqual(decisionmatrix.matrix[0][0], 7, "DM[0][0] is not OK")
         self.assertEqual(decisionmatrix.matrix[0][1], 9, "DM[0][1] is not OK")
@@ -41,7 +41,6 @@ class TopsisCarTest (unittest.TestCase):
         # test topsis with linear normalizaton
         w = [0.1, 0.4, 0.4, 0.1]
         topsis = Topsis(decisionmatrix, w)
-        topsis.decision_matrix.normalize()
         topsis.weigh()
         topsis.calculate_ideal_solutions()
 

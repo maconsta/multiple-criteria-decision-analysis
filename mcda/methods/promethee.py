@@ -1,9 +1,9 @@
 import numpy as np
-from core.core import Criterion, Alternative, DecisionMatrix
+from mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class Promethee:
-    def __init__(self, decision_matrix:  DecisionMatrix, weights):
+    def __init__(self, decision_matrix: DecisionMatrix, weights):
         self.decision_matrix = decision_matrix
         self.weights = weights
         self.performance_index_matrix = np.zeros(

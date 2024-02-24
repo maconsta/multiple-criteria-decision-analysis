@@ -1,11 +1,11 @@
-from core.core import Criterion, Alternative
-from core.core import DecisionMatrix, Pairwise
-from methods.ahp import AHP
-from methods.electre import Electre
-from methods.promethee import Promethee
-from methods.smart import SMART
-from methods.topsis import Topsis
-from methods.weightedSum import WeightedSum
+from mcda.core.core import Criterion, Alternative
+from mcda.core.core import DecisionMatrix, Pairwise
+from mcda.methods.ahp import AHP
+from mcda.methods.electre import Electre
+from mcda.methods.promethee import Promethee
+from mcda.methods.smart import SMART
+from mcda.methods.topsis import Topsis
+from mcda.methods.weightedSum import WeightedSum
 
 
 def input_criteria():
@@ -16,12 +16,12 @@ def input_criteria():
         name = input("Criteria name: ")
 
         beneficiality = None
-        while (beneficiality != "1" and beneficiality != "2"):
+        while (beneficiality != "max" and beneficiality != "min"):
             beneficiality = input(
-                "Is this criteria beneficial or non-beneficial (Please enter 1 for 'beneficial' and 2 for 'non-beneficial'): ")
+                "Is this criteria beneficial or non-beneficial (Please enter max for 'beneficial' and min for 'non-beneficial'): ")
 
-            if beneficiality != "1" and beneficiality != "2":
-                print("Please enter only 1 or 2")
+            if beneficiality != "max" and beneficiality != "min":
+                print("Please enter only min or max")
 
         criterion = Criterion(name=name, min_max=beneficiality)
         criteria.append(criterion)

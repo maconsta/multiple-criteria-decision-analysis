@@ -1,5 +1,5 @@
 import numpy as np
-import core.core as core
+import mcda.core.core as core
 
 
 class WeightedSum:

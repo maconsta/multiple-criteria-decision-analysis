@@ -1,6 +1,6 @@
 import unittest
-from methods.smart import SMART
-from core.core import Criterion, Alternative, DecisionMatrix
+from mcda.methods.smart import SMART
+from mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 class SmartCarTest (unittest.TestCase):
      def runTest(self):
@@ -18,7 +18,7 @@ class SmartCarTest (unittest.TestCase):
         a4 = Alternative("a4", [1470, 1850, 9.5, 3.16, 98.4, 0.072])
         alternatives = [a1, a2, a3, a4]
 
-        dm = DecisionMatrix(criteria, alternatives)
+        dm = DecisionMatrix(criteria, alternatives, DecisionMatrix.normalize_l2)
         weights = [0.2336, 0.1652, 0.3355, 0.1021, 0.0424, 0.1212] # using pre-calculated weights
 
         smart = SMART(dm, weights)

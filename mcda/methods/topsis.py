@@ -1,5 +1,5 @@
 import numpy as np
-import core.core as core
+import mcda.core.core as core
 
 
 class Topsis:
@@ -28,11 +28,9 @@ class Topsis:
         return closeness
 
     def weigh(self):
-        for col in range(self.decision_matrix.normalized_matrix.shape[0]):
-            self.decision_matrix.normalized_matrix[:, col] *= self.weights[col]
+        self.decision_matrix.normalized_matrix *= self.weights
 
     def calculate_topsis(self):
-        #self.decision_matrix.normalize_l2()
         self.weigh()
         self.calculate_ideal_solutions()
         positive_distances, negative_distances = self.calculate_distances()

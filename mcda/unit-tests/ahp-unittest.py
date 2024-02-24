@@ -1,7 +1,6 @@
 import unittest
-import numpy as np
-from methods.ahp import AHP
-from core.core import Criterion, Alternative, DecisionMatrix, Pairwise
+from mcda.methods.ahp import AHP
+from mcda.core.core import Criterion, Alternative, DecisionMatrix, Pairwise
 
 
 class AHPTest(unittest.TestCase):

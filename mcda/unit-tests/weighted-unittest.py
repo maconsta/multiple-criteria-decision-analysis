@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import unittest
-from methods.weightedSum import WeightedSum
-from core.core import Criterion, Alternative, DecisionMatrix
+from mcda.methods.weightedSum import WeightedSum
+from mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class WeightedSumTest (unittest.TestCase):
@@ -18,7 +18,7 @@ class WeightedSumTest (unittest.TestCase):
         a3 = Alternative("Z", [0.071,0.114,0.692,0.319])
         w = [0.232, 0.402, 0.061, 0.305]
         alternatives2 = [a1, a2, a3]
-        decisionmatrix = DecisionMatrix(criteria2, alternatives2)        
+        decisionmatrix = DecisionMatrix(criteria2, alternatives2, DecisionMatrix.normalize_l2)        
 
         self.assertEqual(decisionmatrix.matrix[0][0], 0.751, "DM[0][0] is not OK")
         self.assertEqual(decisionmatrix.matrix[0][1], 0.480, "DM[0][1] is not OK")
