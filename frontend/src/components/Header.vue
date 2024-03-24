@@ -6,7 +6,9 @@
         <span class="nav__text">Home</span>
       </router-link>
       <router-link :to="{ name: 'projects' }" class="link">
-        <span class="projects-btn"><span class="projects-btn__img"></span></span>
+        <span class="projects-btn"
+          ><span class="projects-btn__img"></span
+        ></span>
         <span class="nav__text">Projects</span>
       </router-link>
     </nav>
@@ -14,9 +16,8 @@
 </template>
 
 <script>
-
 export default {
-  name: "Header",
+  name: "HeaderItem",
   props: {
     msg: String,
   },
@@ -27,7 +28,7 @@ export default {
 <style scoped lang="scss">
 header {
   background-color: $white-smoke;
-  box-shadow: 0 2px 10px rgba($color: #c6c6c6, $alpha: 1.0);
+  box-shadow: 0 2px 10px rgba($color: #c6c6c6, $alpha: 1);
   padding: 20px;
   height: 75px;
   display: flex;

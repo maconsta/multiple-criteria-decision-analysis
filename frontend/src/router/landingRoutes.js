@@ -4,6 +4,7 @@
 */
 
 import HomeView from "../views/Landing/HomeView.vue";
+import SolutionsView from "../views/Landing/SolutionsView.vue";
 
 export default [
   {
@@ -11,4 +12,10 @@ export default [
     name: "home",
     component: HomeView,
   },
+  {
+    path: "/solutions",
+    name: "solutions",
+    component: SolutionsView,
+  },
 ];
+
