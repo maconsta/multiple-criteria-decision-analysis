@@ -53,10 +53,10 @@
         <div class="nav__bot nav__bot--wrap">
           <CardFolder size="folder--large" backgroundColor="folder--darkblue" :description="{title: 'World Geography', more: 'true', author: 'Martin Konstantinov', visibility: 'public'}"/>
           <CardFolder size="folder--large" backgroundColor="folder--lightblue" :description="{title: 'Real Estate', more: 'true', author: 'John Doe', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--green" :description="{title: 'Social Media', more: 'true', author: 'The Baron', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--lightorange" :description="{title: 'University Location', more: 'true', author: 'Martin Konstantinov', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--yellow" :description="{title: 'Electric Car Manufacturing', more: 'true', author: 'Mihaela Mateva', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--darkorange" :description="{title: 'Popular Instagram Profiles', more: 'true', author: 'Boris Konstantinov', visibility: 'public'}"/>
+          <CardFolder size="folder--large" backgroundColor="folder--green" :description="{title: 'Social Media', more: 'true', author: 'Foo Bar', visibility: 'public'}"/>
+          <CardFolder size="folder--large" backgroundColor="folder--lightorange" :description="{title: 'University Location', more: 'true', author: 'Jane Roe', visibility: 'public'}"/>
+          <CardFolder size="folder--large" backgroundColor="folder--yellow" :description="{title: 'Electric Car Manufacturing', more: 'true', author: 'Flag Foe', visibility: 'public'}"/>
+          <CardFolder size="folder--large" backgroundColor="folder--darkorange" :description="{title: 'Popular Instagram Profiles', more: 'true', author: 'Jane Doe', visibility: 'public'}"/>
         </div>
       </nav>
     </div>
