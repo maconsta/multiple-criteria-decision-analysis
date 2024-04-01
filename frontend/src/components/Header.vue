@@ -28,9 +28,10 @@ export default {
 <style scoped lang="scss">
 header {
   background-color: $white-smoke;
-  box-shadow: 0 2px 10px rgba($color: #c6c6c6, $alpha: 1);
+  border-bottom: 1px solid $light-gray;
   padding: 20px;
   height: 75px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

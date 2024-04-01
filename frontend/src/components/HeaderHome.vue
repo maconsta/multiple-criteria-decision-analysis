@@ -5,7 +5,9 @@
       <img v-bind:src="logoImage" style="width: 250px; height: 150px" />
       <div class="nav-links">
         <router-link to="/" class="nav-link">Home</router-link>
-        <router-link :to="{ name: 'solutions' }" class="nav-link">Solutions</router-link>
+        <router-link :to="{ name: 'solutions' }" class="nav-link"
+          >Solutions</router-link
+        >
         <router-link to="/resources" class="nav-link">Resources</router-link>
         <router-link to="/about" class="nav-link">About Us</router-link>
       </div>
