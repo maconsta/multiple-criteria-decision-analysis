@@ -11,33 +11,61 @@
           </div>
         </div>
         <div class="nav__bot">
-          <CardFolder size="folder--small" backgroundColor="folder--gray" :havePlus="true"
-            :bottomText="{ show: true, text: 'Blank' }" />
+          <CardFolder
+            size="folder--small"
+            backgroundColor="folder--gray"
+            :havePlus="true"
+            :bottomText="{ show: true, text: 'Blank' }"
+          />
           <div class="vertical-spacer"></div>
           <swiper-container loop="true" slidesPerView="5" spaceBetween="30">
             <swiper-slide>
-              <CardFolder size="folder--small" backgroundColor="folder--gray"
-                :bottomText="{ show: true, text: 'Public Template 1' }" :description="{title: 'World Geography'}"/>
+              <CardFolder
+                size="folder--small"
+                backgroundColor="folder--gray"
+                :bottomText="{ show: true, text: 'Public Template 1' }"
+                :description="{ title: 'World Geography' }"
+              />
             </swiper-slide>
             <swiper-slide>
-              <CardFolder size="folder--small" backgroundColor="folder--gray"
-                :bottomText="{ show: true, text: 'Public Template 2' }" :description="{title: 'Real Estate'}"/>
+              <CardFolder
+                size="folder--small"
+                backgroundColor="folder--gray"
+                :bottomText="{ show: true, text: 'Public Template 2' }"
+                :description="{ title: 'Real Estate' }"
+              />
             </swiper-slide>
             <swiper-slide>
-              <CardFolder size="folder--small" backgroundColor="folder--gray"
-                :bottomText="{ show: true, text: 'Public Template 3' }" :description="{title: 'Best Economy Vehicle'}"/>
+              <CardFolder
+                size="folder--small"
+                backgroundColor="folder--gray"
+                :bottomText="{ show: true, text: 'Public Template 3' }"
+                :description="{ title: 'Best Economy Vehicle' }"
+              />
             </swiper-slide>
             <swiper-slide>
-              <CardFolder size="folder--small" backgroundColor="folder--gray"
-                :bottomText="{ show: true, text: 'Public Template 4' }" :description="{title: 'Social Media Marketing'}"/>
+              <CardFolder
+                size="folder--small"
+                backgroundColor="folder--gray"
+                :bottomText="{ show: true, text: 'Public Template 4' }"
+                :description="{ title: 'Social Media Marketing' }"
+              />
             </swiper-slide>
             <swiper-slide>
-              <CardFolder size="folder--small" backgroundColor="folder--gray"
-                :bottomText="{ show: true, text: 'Public Template 5' }" :description="{title: 'New House'}"/>
+              <CardFolder
+                size="folder--small"
+                backgroundColor="folder--gray"
+                :bottomText="{ show: true, text: 'Public Template 5' }"
+                :description="{ title: 'New House' }"
+              />
             </swiper-slide>
             <swiper-slide>
-              <CardFolder size="folder--small" backgroundColor="folder--gray"
-                :bottomText="{ show: true, text: 'Public Template 6' }" :description="{title: 'Popular Trends'}"/>
+              <CardFolder
+                size="folder--small"
+                backgroundColor="folder--gray"
+                :bottomText="{ show: true, text: 'Public Template 6' }"
+                :description="{ title: 'Popular Trends' }"
+              />
             </swiper-slide>
           </swiper-container>
         </div>
@@ -51,12 +79,66 @@
           </div>
         </div>
         <div class="nav__bot nav__bot--wrap">
-          <CardFolder size="folder--large" backgroundColor="folder--darkblue" :description="{title: 'World Geography', more: 'true', author: 'Martin Konstantinov', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--lightblue" :description="{title: 'Real Estate', more: 'true', author: 'John Doe', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--green" :description="{title: 'Social Media', more: 'true', author: 'Foo Bar', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--lightorange" :description="{title: 'University Location', more: 'true', author: 'Jane Roe', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--yellow" :description="{title: 'Electric Car Manufacturing', more: 'true', author: 'Flag Foe', visibility: 'public'}"/>
-          <CardFolder size="folder--large" backgroundColor="folder--darkorange" :description="{title: 'Popular Instagram Profiles', more: 'true', author: 'Jane Doe', visibility: 'public'}"/>
+          <CardFolder
+            size="folder--large"
+            backgroundColor="folder--darkblue"
+            :description="{
+              title: 'World Geography',
+              more: 'true',
+              author: 'Martin Konstantinov',
+              visibility: 'public',
+            }"
+          />
+          <CardFolder
+            size="folder--large"
+            backgroundColor="folder--lightblue"
+            :description="{
+              title: 'Real Estate',
+              more: 'true',
+              author: 'John Doe',
+              visibility: 'public',
+            }"
+          />
+          <CardFolder
+            size="folder--large"
+            backgroundColor="folder--green"
+            :description="{
+              title: 'Social Media',
+              more: 'true',
+              author: 'Foo Bar',
+              visibility: 'public',
+            }"
+          />
+          <CardFolder
+            size="folder--large"
+            backgroundColor="folder--lightorange"
+            :description="{
+              title: 'University Location',
+              more: 'true',
+              author: 'Jane Roe',
+              visibility: 'public',
+            }"
+          />
+          <CardFolder
+            size="folder--large"
+            backgroundColor="folder--yellow"
+            :description="{
+              title: 'Electric Car Manufacturing',
+              more: 'true',
+              author: 'Flag Foe',
+              visibility: 'public',
+            }"
+          />
+          <CardFolder
+            size="folder--large"
+            backgroundColor="folder--darkorange"
+            :description="{
+              title: 'Popular Instagram Profiles',
+              more: 'true',
+              author: 'Jane Doe',
+              visibility: 'public',
+            }"
+          />
         </div>
       </nav>
     </div>
@@ -172,7 +254,6 @@ swiper-container {
     background-image: url("../../assets/images/chevron-right.svg");
   }
 }
-
 
 .list-icon {
   width: 20px;
