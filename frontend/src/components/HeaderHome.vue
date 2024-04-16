@@ -14,10 +14,6 @@
       </div>
     </nav>
   </header>
-  <main class="main-content">
-    <h1>Welcome to SynthetIQ!</h1>
-    <p>Your new problem decider</p>
-  </main>
 </template>
 
 <script>
@@ -32,6 +28,10 @@ export default {
 </script>
 
 <style scoped>
+*,*::before,*::after {
+    box-sizing: border-box;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -66,27 +66,6 @@ export default {
 
 .nav-link:hover {
   background-color: #5375ff;
-}
-
-.main-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1rem;
-  padding: 2rem;
-  color: #fff;
-}
-
-h1 {
-  font-size: 2.5rem;
-}
-
-p {
-  font-size: 1.2rem;
-  max-width: 600px;
 }
 
 .nav {
