@@ -12,5 +12,5 @@ module.exports = {
       },
     },
   },
-  lintOnSave: "warning"
+  lintOnSave: "warning",
 };
