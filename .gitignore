@@ -1,6 +1,7 @@
 .vscode/settings.json
 __pycache__
 venv
+backend/app/db/db_config.py
 
 
 .DS_Store

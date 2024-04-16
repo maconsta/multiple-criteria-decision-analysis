@@ -5,9 +5,13 @@
       <div class="folder__bottom">
         <div v-if="havePlus" class="plus-icon"></div>
         <div class="description" v-if="description">
-          <div class="title" v-if="description.title">{{ description.title }}</div>
+          <div class="title" v-if="description.title">
+            {{ description.title }}
+          </div>
           <span class="more-icon" v-if="description.more"></span>
-          <div class="author" v-if="description.author">{{ description.author }}</div>
+          <div class="author" v-if="description.author">
+            {{ description.author }}
+          </div>
           <div class="visibility" v-if="description.visibility">
             <span class="visibility__icon visibility__icon--public"></span>
             <span class="visibility__text">Public</span>
@@ -34,8 +38,8 @@ export default {
     },
     description: {
       title: String,
-      author: String
-    }
+      author: String,
+    },
   },
 };
 </script>
@@ -84,6 +88,16 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &::after {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+      // opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    :hover::after {
+      opacity: 1;
+    }
   }
 
   &--green {
