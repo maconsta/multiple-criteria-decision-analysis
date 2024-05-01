@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^1.6.8",
     "core-js": "^3.8.3",
     "sweetalert2": "^11.10.7",
     "swiper": "^11.1.0",
