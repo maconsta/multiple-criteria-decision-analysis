@@ -77,6 +77,7 @@ export default {
     border-right-style: solid;
     border-right-color: transparent;
     cursor: pointer;
+    transition: 0.3s ease-in-out;
   }
 
   &__bottom {
@@ -88,86 +89,104 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    &::after {
-      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
-      // opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-    }
-
-    :hover::after {
-      opacity: 1;
-    }
+    transition: 0.3s ease-in-out;
   }
 
   &--green {
     #{$block}__top {
-      border-bottom-color: #00c89e;
+      border-bottom-color: $folder-green;
     }
 
     #{$block}__bottom {
-      background-color: #00c89e;
+      border: 2px solid $folder-green;
+
+      &:hover {
+        background-color: $folder-green;
+      }
     }
   }
 
   &--lightblue {
     #{$block}__top {
-      border-bottom-color: #8ddcf9;
+      border-bottom-color: $folder-lightblue;
     }
 
     #{$block}__bottom {
-      background-color: #8ddcf9;
+      border: 2px solid $folder-lightblue;
+
+      &:hover {
+        background-color: $folder-lightblue;
+      }
     }
   }
 
   &--darkblue {
     #{$block}__top {
-      border-bottom-color: #6081f7;
+      border-bottom-color: $folder-darkblue;
     }
 
     #{$block}__bottom {
-      background-color: #6081f7;
+      border: 2px solid $folder-darkblue;
+
+      &:hover {
+        background-color: $folder-darkblue;
+      }
     }
   }
 
   &--lightorange {
     #{$block}__top {
-      border-bottom-color: #ffa594;
+      border-bottom-color: $folder-lightorange;
     }
 
     #{$block}__bottom {
-      background-color: #ffa594;
+      border: 2px solid $folder-lightorange;
+
+      &:hover {
+        background-color: $folder-lightorange;
+      }
     }
   }
 
   &--darkorange {
     #{$block}__top {
-      border-bottom-color: #e87c60;
+      border-bottom-color: $folder-darkorange;
     }
 
     #{$block}__bottom {
-      background-color: #e87c60;
+      border: 2px solid $folder-darkorange;
+
+      &:hover {
+        background-color: $folder-darkorange;
+      }
     }
   }
 
   &--yellow {
     #{$block}__top {
-      border-bottom-color: #ffe986;
+      border-bottom-color: $folder-yellow;
     }
 
     #{$block}__bottom {
-      background-color: #ffe986;
+      border: 2px solid $folder-yellow;
+
+      &:hover {
+        background-color: $folder-yellow;
+      }
     }
   }
 
   &--gray {
     #{$block}__top {
-      border-bottom-color: #878787;
+      border-bottom-color: $folder-gray;
     }
 
     #{$block}__bottom {
-      background-color: transparent;
-      border: 1px solid #878787;
+      border: 2px solid $folder-gray;
+
+      &:hover {
+        background-color: $folder-gray;
+      }
     }
   }
 

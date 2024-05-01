@@ -10,3 +10,10 @@ session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=en
 
 Model = declarative_base()
 Model.query = session.query_property()
+
+from backend.app.db.models.user import User
+from backend.app.db.models.project import Project
+from backend.app.db.models.task import Task
+from backend.app.db.models.alternative import Alternative
+from backend.app.db.models.criterion import Criterion
+from backend.app.db.models.decision_matrix import DecisionMatrix

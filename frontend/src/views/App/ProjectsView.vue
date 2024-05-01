@@ -2,16 +2,17 @@
   <div class="main">
     <Header />
     <div class="projects">
-      <nav class="nav">
-        <div class="nav__top mt-45">
-          <h3 class="nav__heading">Start a new project</h3>
-          <div class="nav__icons">
+      <nav class="dashboard">
+        <div class="dashboard__top mt-45">
+          <h3 class="dashboard__heading">Start a new project</h3>
+          <div class="dashboard__icons">
             <div class="chevron chevron--left" @click="handlePrev"></div>
             <div class="chevron chevron--right" @click="handleNext"></div>
           </div>
         </div>
-        <div class="nav__bot">
+        <div class="dashboard__bot">
           <CardFolder
+            @click="openNewProjectModal"
             size="folder--small"
             backgroundColor="folder--gray"
             :havePlus="true"
@@ -70,15 +71,15 @@
           </swiper-container>
         </div>
       </nav>
-      <nav class="nav">
-        <div class="nav__top mt-45">
-          <h3 class="nav__heading">Recent Projects</h3>
-          <div class="nav__icons">
+      <nav class="dashboard">
+        <div class="dashboard__top mt-45">
+          <h3 class="dashboard__heading">Recent Projects</h3>
+          <div class="dashboard__icons">
             <div class="grid-icon grid-icon--active"></div>
             <div class="list-icon"></div>
           </div>
         </div>
-        <div class="nav__bot nav__bot--wrap">
+        <div class="dashboard__bot dashboard__bot--wrap">
           <CardFolder
             size="folder--large"
             backgroundColor="folder--darkblue"
@@ -151,18 +152,10 @@
 import Header from "@/components/Header.vue";
 import CardFolder from "@/components/CardFolder.vue";
 import { register } from "swiper/element/bundle";
+import Swal from "sweetalert2/dist/sweetalert2.all.min.js";
+import axios from "axios";
 
 register();
-
-function handleNext() {
-  const swiperElement = document.querySelector("swiper-container");
-  swiperElement.swiper.slideNext();
-}
-
-function handlePrev() {
-  const swiperElement = document.querySelector("swiper-container");
-  swiperElement.swiper.slidePrev();
-}
 
 export default {
   name: "ProjectsView",
@@ -171,13 +164,91 @@ export default {
     CardFolder,
   },
   methods: {
-    handleNext,
-    handlePrev,
+    handleNext() {
+      const swiperElement = document.querySelector("swiper-container");
+      swiperElement.swiper.slideNext();
+    },
+    handlePrev() {
+      const swiperElement = document.querySelector("swiper-container");
+      swiperElement.swiper.slidePrev();
+    },
+    saveProjectToDatabase(projectName) {
+      const path = "http://127.0.0.1:5000/save-project-to-db";
+      const axiosPromise = axios.post(path, {
+        name: projectName,
+      });
+
+      const router = this.$router;
+      axiosPromise
+        .then(() => {
+          router.push({ name: "projectEdit" });
+        })
+        .catch(() => {
+          console.log("Error when creating a new project. Please try again...");
+        });
+    },
+    openNewProjectModal() {
+      const swalPromise = Swal.fire({
+        title: "Blank Project",
+        input: "text",
+        inputLabel: "Enter new project name",
+        inputPlaceholder: "Enter name",
+        confirmButtonText: "Create",
+        confirmButtonAriaLabel: "Create",
+        cancelButtonAriaLabel: "Cancel",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "swal-btn swal-btn__confirm",
+          cancelButton: "swal-btn swal-btn__cancel",
+          input: "swal-input swal-input__text",
+        },
+        buttonsStyling: false,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Project name cannot be empty!";
+          }
+        },
+      });
+
+      swalPromise.then((swalResult) => {
+        if (swalResult.isConfirmed && swalResult.value) {
+          this.saveProjectToDatabase(swalResult.value);
+        }
+      });
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import url("sweetalert2/dist/sweetalert2.css");
+
+.swal-btn {
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+
+  &__confirm {
+    background-color: $main-blue;
+  }
+
+  &__cancel {
+    background-color: $dark-gray;
+  }
+}
+
+.swal2-actions {
+  gap: 10px;
+}
+
+.swal-input {
+  &:focus {
+    box-shadow: none !important;
+    border-color: $main-blue !important;
+    outline: 2px solid $main-blue !important;
+  }
+}
+
 .main {
   display: flex;
   width: 100%;
@@ -186,10 +257,11 @@ export default {
 }
 
 .projects {
-  width: 1260px;
+  max-width: 1260px;
+  width: 100%;
 }
 
-.nav {
+.dashboard {
   padding-bottom: 30px;
   border-bottom: 1px solid $light-gray;
   width: 100%;
@@ -231,7 +303,7 @@ swiper-container {
   opacity: 0 !important;
 }
 
-.nav__icons {
+.dashboard__icons {
   display: flex;
   align-content: center;
   justify-content: space-between;
