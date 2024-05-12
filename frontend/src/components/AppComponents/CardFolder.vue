@@ -3,16 +3,20 @@
     <div class="folder" :class="[size, backgroundColor]">
       <div class="folder__top"></div>
       <div class="folder__bottom">
-        <div v-if="havePlus" class="plus-icon"></div>
-        <div class="description" v-if="description">
-          <div class="title" v-if="description.title">
-            {{ description.title }}
+        <div v-if="havePlus" class="plus-icon plus-icon--black"></div>
+        <div class="description" v-if="showDescription">
+          <div class="title" v-if="projectName">
+            {{ projectName }}
           </div>
-          <span class="more-icon" v-if="description.more"></span>
-          <div class="author" v-if="description.author">
-            {{ description.author }}
+          <span class="more-icon" v-if="more"></span>
+          <div class="owner" v-if="owner">
+            {{ owner }}
           </div>
-          <div class="visibility" v-if="description.visibility">
+          <div class="visibility" v-if="visibility == 'private'">
+            <span class="visibility__icon visibility__icon--private"></span>
+            <span class="visibility__text">Private</span>
+          </div>
+          <div class="visibility" v-if="visibility == 'public'">
             <span class="visibility__icon visibility__icon--public"></span>
             <span class="visibility__text">Public</span>
           </div>
@@ -26,19 +30,22 @@
 </template>
 
 <script>
+// TODO: Expand CardFolder to be two components - CardFolderSmall and CardFolderBig; Also, add folder color to DB when migrating
+
 export default {
   name: "CardFolder",
   props: {
     size: String,
     backgroundColor: String,
     havePlus: Boolean,
+    showDescription: Boolean,
+    projectName: String,
+    owner: String,
+    visibility: String,
+    more: Boolean,
     bottomText: {
       show: Boolean,
       text: String,
-    },
-    description: {
-      title: String,
-      author: String,
     },
   },
 };
@@ -54,15 +61,6 @@ export default {
   margin-top: 10px;
   font-weight: 300;
   color: $dark-gray;
-}
-
-.plus-icon {
-  background: url("../assets/images/plus.svg");
-  background-size: 30px;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 30px;
-  width: 30px;
 }
 
 .folder {
@@ -241,7 +239,7 @@ export default {
   }
 
   .more-icon {
-    background: url("../assets/images/more-horizontal.svg");
+    background: url("../../assets/images/more-horizontal.svg");
     background-size: 25px;
     background-position: center;
     background-repeat: no-repeat;
@@ -250,7 +248,7 @@ export default {
     flex-shrink: 0;
   }
 
-  .author {
+  .owner {
     font-weight: 300;
     line-height: 20px;
     // font-style: ;
@@ -270,11 +268,11 @@ export default {
       width: 20px;
 
       &--public {
-        background-image: url("../assets/images/globe.svg");
+        background-image: url("../../assets/images/globe.svg");
       }
 
       &--private {
-        background-image: url("../assets/images/lock.svg");
+        background-image: url("../../assets/images/lock.svg");
       }
     }
 

@@ -6,9 +6,9 @@
         <span class="text">Home</span>
       </router-link>
       <router-link :to="{ name: 'projects' }" class="link">
-        <span class="projects-btn"
-          ><span class="projects-btn__img"></span
-        ></span>
+        <span class="projects-btn">
+          <span class="projects-btn__img"></span>
+        </span>
         <span class="text">Projects</span>
       </router-link>
     </nav>
@@ -17,10 +17,7 @@
 
 <script>
 export default {
-  name: "HeaderItem",
-  props: {
-    msg: String,
-  },
+  name: "TheHeader",
 };
 </script>
 
@@ -53,7 +50,7 @@ nav {
   justify-content: center;
 
   &__img {
-    background: url("../assets/images/home.svg");
+    background: url("../../assets/images/home.svg");
     background-repeat: no-repeat;
     background-size: 25px;
     width: 25px;
@@ -67,7 +64,7 @@ nav {
   justify-content: center;
 
   &__img {
-    background-image: url("../assets/images/folder.svg");
+    background-image: url("../../assets/images/folder.svg");
     background-repeat: no-repeat;
     background-size: 25px;
     width: 25px;
@@ -89,11 +86,11 @@ nav {
     color: $main-green;
 
     .projects-btn__img {
-      background-image: url("../assets/images/folder_green.svg");
+      background-image: url("../../assets/images/folder_green.svg");
     }
 
     .home-btn__img {
-      background-image: url("../assets/images/home_green.svg");
+      background-image: url("../../assets/images/home_green.svg");
     }
   }
 }

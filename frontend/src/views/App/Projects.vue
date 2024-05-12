@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <Header />
-    <div class="projects">
-      <nav class="dashboard">
-        <div class="dashboard__top mt-45">
+    <TheHeader />
+    <div class="full-width">
+      <nav class="dashboard mt-45">
+        <div class="dashboard__top">
           <h3 class="dashboard__heading">Start a new project</h3>
           <div class="dashboard__icons">
             <div class="chevron chevron--left" @click="handlePrev"></div>
@@ -14,58 +14,64 @@
           <CardFolder
             @click="openNewProjectModal"
             size="folder--small"
-            backgroundColor="folder--gray"
-            :havePlus="true"
-            :bottomText="{ show: true, text: 'Blank' }"
+            background-color="folder--gray"
+            :have-plus="true"
+            :bottom-text="{ show: true, text: 'Blank' }"
           />
           <div class="vertical-spacer"></div>
           <swiper-container loop="true" slidesPerView="5" spaceBetween="30">
             <swiper-slide>
               <CardFolder
                 size="folder--small"
-                backgroundColor="folder--gray"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="World Geography"
                 :bottomText="{ show: true, text: 'Public Template 1' }"
-                :description="{ title: 'World Geography' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
                 size="folder--small"
-                backgroundColor="folder--gray"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Real Estate"
                 :bottomText="{ show: true, text: 'Public Template 2' }"
-                :description="{ title: 'Real Estate' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
                 size="folder--small"
-                backgroundColor="folder--gray"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Best Economy Vehicle"
                 :bottomText="{ show: true, text: 'Public Template 3' }"
-                :description="{ title: 'Best Economy Vehicle' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
                 size="folder--small"
-                backgroundColor="folder--gray"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Social Media Marketing"
                 :bottomText="{ show: true, text: 'Public Template 4' }"
-                :description="{ title: 'Social Media Marketing' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
                 size="folder--small"
-                backgroundColor="folder--gray"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="New House"
                 :bottomText="{ show: true, text: 'Public Template 5' }"
-                :description="{ title: 'New House' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
                 size="folder--small"
-                backgroundColor="folder--gray"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Popular Trends"
                 :bottomText="{ show: true, text: 'Public Template 6' }"
-                :description="{ title: 'Popular Trends' }"
               />
             </swiper-slide>
           </swiper-container>
@@ -80,65 +86,20 @@
           </div>
         </div>
         <div class="dashboard__bot dashboard__bot--wrap">
+          <div v-if="projects.length === 0" class="empty-placeholder">
+            You don't have any projects.
+          </div>
           <CardFolder
+            v-for="(project, index) in projects"
+            :key="index"
             size="folder--large"
-            backgroundColor="folder--darkblue"
-            :description="{
-              title: 'World Geography',
-              more: 'true',
-              author: 'Martin Konstantinov',
-              visibility: 'public',
-            }"
-          />
-          <CardFolder
-            size="folder--large"
-            backgroundColor="folder--lightblue"
-            :description="{
-              title: 'Real Estate',
-              more: 'true',
-              author: 'John Doe',
-              visibility: 'public',
-            }"
-          />
-          <CardFolder
-            size="folder--large"
-            backgroundColor="folder--green"
-            :description="{
-              title: 'Social Media',
-              more: 'true',
-              author: 'Foo Bar',
-              visibility: 'public',
-            }"
-          />
-          <CardFolder
-            size="folder--large"
-            backgroundColor="folder--lightorange"
-            :description="{
-              title: 'University Location',
-              more: 'true',
-              author: 'Jane Roe',
-              visibility: 'public',
-            }"
-          />
-          <CardFolder
-            size="folder--large"
-            backgroundColor="folder--yellow"
-            :description="{
-              title: 'Electric Car Manufacturing',
-              more: 'true',
-              author: 'Flag Foe',
-              visibility: 'public',
-            }"
-          />
-          <CardFolder
-            size="folder--large"
-            backgroundColor="folder--darkorange"
-            :description="{
-              title: 'Popular Instagram Profiles',
-              more: 'true',
-              author: 'Jane Doe',
-              visibility: 'public',
-            }"
+            background-color="folder--yellow"
+            :show-description="true"
+            :project-name="project.projectName"
+            :more="true"
+            :owner="project.owner"
+            :visibility="project.visibility"
+            @click="openExistingProject(project.projectID)"
           />
         </div>
       </nav>
@@ -149,18 +110,16 @@
 <script>
 // @ is an alias to /src
 
-import Header from "@/components/Header.vue";
-import CardFolder from "@/components/CardFolder.vue";
+import TheHeader from "@/components/AppComponents/TheHeader.vue";
+import CardFolder from "@/components/AppComponents/CardFolder.vue";
 import { register } from "swiper/element/bundle";
 import Swal from "sweetalert2/dist/sweetalert2.all.min.js";
 import axios from "axios";
 
-register();
-
 export default {
-  name: "ProjectsView",
+  name: "Projects",
   components: {
-    Header,
+    TheHeader,
     CardFolder,
   },
   methods: {
@@ -173,6 +132,8 @@ export default {
       swiperElement.swiper.slidePrev();
     },
     saveProjectToDatabase(projectName) {
+      // TODO: Change to a dynamic url to switch between prod/local
+
       const path = "http://127.0.0.1:5000/save-project-to-db";
       const axiosPromise = axios.post(path, {
         name: projectName,
@@ -180,8 +141,11 @@ export default {
 
       const router = this.$router;
       axiosPromise
-        .then(() => {
-          router.push({ name: "projectEdit" });
+        .then((response) => {
+          router.push({
+            name: "projectEdit",
+            params: { projectID: response.data.projectID },
+          });
         })
         .catch(() => {
           console.log("Error when creating a new project. Please try again...");
@@ -216,50 +180,42 @@ export default {
         }
       });
     },
+    getAllProjects() {
+      const path = "http://127.0.0.1:5000/get-all-projects";
+      const axiosPromise = axios.get(path);
+
+      axiosPromise
+        .then((response) => {
+          this.projects = response.data;
+        })
+        .catch(() => {
+          console.log(
+            "Error when querying for all projects. Please try again..."
+          );
+        });
+    },
+    openExistingProject(id) {
+      const router = this.$router;
+      router.push({
+        name: "projectEdit",
+        params: { projectID: id },
+      });
+    },
+  },
+  created() {
+    register();
+    this.getAllProjects();
+  },
+  data() {
+    return {
+      projects: [],
+    };
   },
 };
 </script>
 
 <style lang="scss">
 @import url("sweetalert2/dist/sweetalert2.css");
-
-.swal-btn {
-  border-radius: 10px;
-  padding: 10px;
-  color: #fff;
-
-  &__confirm {
-    background-color: $main-blue;
-  }
-
-  &__cancel {
-    background-color: $dark-gray;
-  }
-}
-
-.swal2-actions {
-  gap: 10px;
-}
-
-.swal-input {
-  &:focus {
-    box-shadow: none !important;
-    border-color: $main-blue !important;
-    outline: 2px solid $main-blue !important;
-  }
-}
-
-.main {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-}
-
-.projects {
-  max-width: 1260px;
-  width: 100%;
-}
 
 .dashboard {
   padding-bottom: 30px;
@@ -310,23 +266,6 @@ swiper-container {
   gap: 10px;
 }
 
-.chevron {
-  width: 20px;
-  height: 20px;
-  background-size: 25px;
-  background-position: center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-
-  &--left {
-    background-image: url("../../assets/images/chevron-left.svg");
-  }
-
-  &--right {
-    background-image: url("../../assets/images/chevron-right.svg");
-  }
-}
-
 .list-icon {
   width: 20px;
   height: 20px;
@@ -353,5 +292,29 @@ swiper-container {
   &--active {
     background-image: url("../../assets/images/grid_active.svg");
   }
+}
+
+.empty-placeholder {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url(http://app.localhost:8080/img/about.1f15f248.png);
+  background-size: 300px;
+  background-position: center right 20px;
+  background-repeat: no-repeat;
+  height: 340px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 7px $dark-gray;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $dark-gray;
 }
 </style>

@@ -1,13 +1,37 @@
 html {
-    font-size: 16px;
-    font-family: "Montserrat", sans-serif;
-    color: $night;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #ffffff;
-    scroll-behavior: smooth;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  color: $night;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  scroll-behavior: smooth;
 }
 
 .mt-45 {
-    margin-top: 45px;
+  margin-top: 45px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.full-width {
+  max-width: 1260px;
+  width: 100%;
+}
+
+.main {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
 }
