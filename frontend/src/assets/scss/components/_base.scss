@@ -6,6 +6,15 @@ html {
   -moz-osx-font-smoothing: grayscale;
   background-color: #ffffff;
   scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+#app {
+  height: 100%;
 }
 
 .mt-45 {
@@ -20,6 +29,10 @@ html {
   margin-top: 15px;
 }
 
+.mb-15 {
+  margin-bottom: 15px
+}
+
 .full-width {
   max-width: 1260px;
   width: 100%;
@@ -28,10 +41,18 @@ html {
 .main {
   display: flex;
   width: 100%;
+  height: 100%;
   flex-direction: column;
   align-items: center;
 }
 
 .hidden {
   display: none;
+}
+
+.line {
+  margin: 10px 0;
+  height: 0;
+  width: 100%;
+  border-top: 1px solid $light-gray;
 }

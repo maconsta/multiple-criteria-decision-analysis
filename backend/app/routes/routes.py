@@ -53,7 +53,6 @@ def get_all_projects():
                User.first_name, User.last_name, User.user_id)
         .join(User, Project.owner == User.user_id).all()
     )
-    print(projects)
 
     result = []
     for p in projects:
@@ -69,7 +68,6 @@ def get_all_projects():
 
 @app.route("/save-task-to-db", methods=['POST'])
 def save_task_to_db():
-    print("asd")
     post_data = request.get_json()
     task_name = post_data['name']
     project_id = post_data['projectID']
@@ -86,5 +84,4 @@ def save_task_to_db():
     else:
         response = {"result": "Task saved!", "taskID": new_task.task_id}
 
-    print(response)
     return jsonify(response)

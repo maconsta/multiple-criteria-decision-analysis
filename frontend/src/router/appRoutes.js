@@ -7,8 +7,11 @@ import Home from "@/views/App/Home.vue";
 import Projects from "@/views/App/Projects.vue";
 import ProjectEdit from "@/views/App/ProjectEdit.vue";
 import TaskEdit from "@/views/App/TaskEdit.vue";
+import TaskEditOverview from "@/views/App/TaskEditOverview.vue";
 import TaskEditMethod from "@/views/App/TaskEditMethod.vue";
 import TaskEditCriteria from "@/views/App/TaskEditCriteria.vue";
+import TaskEditAlternatives from "@/views/App/TaskEditAlternatives.vue";
+import TaskEditResult from "@/views/App/TaskEditResult.vue";
 
 export default [
   {
@@ -32,6 +35,11 @@ export default [
     component: TaskEdit,
     children: [
       {
+        path: "overview",
+        name: "taskEditOverview",
+        component: TaskEditOverview,
+      },
+      {
         path: "method",
         name: "taskEditMethod",
         component: TaskEditMethod,
@@ -40,6 +48,16 @@ export default [
         path: "criteria",
         name: "taskEditCriteria",
         component: TaskEditCriteria,
+      },
+      {
+        path: "alternatives",
+        name: "taskEditAlternatives",
+        component: TaskEditAlternatives,
+      },
+      {
+        path: "result",
+        name: "taskEditResult",
+        component: TaskEditResult,
       },
     ],
   },

@@ -139,7 +139,7 @@ export default defineComponent({
       axiosPromise
         .then((response) => {
           router.push({
-            name: "taskEdit",
+            name: "taskEditOverview",
             params: { taskID: response.data.taskID },
           });
         })
