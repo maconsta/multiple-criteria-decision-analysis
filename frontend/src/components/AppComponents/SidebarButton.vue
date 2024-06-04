@@ -1,6 +1,6 @@
 <template>
   <router-link :to="{ name: routeName }" class="sidebar-btn">
-    <img :src="require('@/assets/images/' + imageUrl)">
+    <img :src="require('@/assets/images/' + imageUrl)" />
     <span>{{ buttonText }}</span>
   </router-link>
 </template>
@@ -11,7 +11,7 @@ export default {
   props: {
     routeName: String,
     buttonText: String,
-    imageUrl: String
+    imageUrl: String,
   },
 };
 </script>
@@ -26,6 +26,7 @@ export default {
   align-items: center;
   column-gap: 5px;
   height: 45px;
+  transition: 0.2s ease-in-out;
 
   &--small {
     width: 45px;
@@ -45,5 +46,4 @@ export default {
     color: $main-blue;
   }
 }
-
 </style>

@@ -46,3 +46,24 @@
     background-image: url("@/assets/images/share_white.svg");
   }
 }
+
+.help {
+  background: center no-repeat url("@/assets/images/help_circle.svg");
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.trash-icon {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+
+  &--white {
+    background-image: url("@/assets/images/trash_white.svg") ;
+  }
+}

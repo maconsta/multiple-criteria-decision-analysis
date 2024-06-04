@@ -20,10 +20,19 @@
       </div>
       <div class="tasks mt-30">
         <h3>{{ projectName }}</h3>
-        <div v-if="test" class="tasks__empty-placeholder mt-30">
+        <div v-if="tasks.length === 0" class="tasks__empty-placeholder mt-30">
           You don't have any tasks yet.
         </div>
+        <div v-else class="card-container mt-20">
+          <TaskCard
+            v-for="(task, index) in tasks"
+            :key="index"
+            :task-name="task.taskName"
+            @click="openExistingTask(task.taskID)"
+          />
+        </div>
       </div>
+      <div class="line mt-30"></div>
     </div>
   </div>
 </template>
@@ -34,10 +43,11 @@ import { useRoute } from "vue-router";
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import Swal from "sweetalert2";
 import axios from "axios";
+import TaskCard from "@/components/AppComponents/TaskCard.vue";
 
 export default defineComponent({
   name: "ProjectEdit",
-  components: { TheHeader },
+  components: { TheHeader, TaskCard },
   methods: {
     openShareProjectModal() {
       Swal.fire({
@@ -147,16 +157,38 @@ export default defineComponent({
           console.log("Error when creating a new task. Please try again...");
         });
     },
+    getTasksByProjectID() {
+      const path = "http://127.0.0.1:5000/get-tasks-by-project-id";
+      const axiosPromise = axios.post(path, {
+        projectID: this.route.params.projectID,
+      });
+
+      axiosPromise
+        .then((response) => {
+          this.tasks = response.data;
+        })
+        .catch(() => {
+          console.log("Error when querying for all tasks. Please try again...");
+        });
+    },
+    openExistingTask(id) {
+      const router = this.$router;
+      router.push({
+        name: "taskEditOverview",
+        params: { taskID: id },
+      });
+    },
   },
   created() {
     this.getProjectName();
     this.route = useRoute();
+    this.getTasksByProjectID();
   },
   data() {
     return {
       projectName: "",
-      test: true,
       route: null,
+      tasks: [],
     };
   },
 });
@@ -240,6 +272,7 @@ export default defineComponent({
 .tasks {
   h3 {
     font-size: 1.25rem;
+    font-weight: 600;
   }
 
   &__empty-placeholder {
@@ -264,6 +297,12 @@ export default defineComponent({
     font-size: 1.5rem;
     font-weight: 600;
     color: $dark-gray;
+  }
+
+  .card-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 }
 </style>

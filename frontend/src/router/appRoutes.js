@@ -12,6 +12,7 @@ import TaskEditMethod from "@/views/App/TaskEditMethod.vue";
 import TaskEditCriteria from "@/views/App/TaskEditCriteria.vue";
 import TaskEditAlternatives from "@/views/App/TaskEditAlternatives.vue";
 import TaskEditResult from "@/views/App/TaskEditResult.vue";
+import TaskEditNewCriterion from "@/views/App/TaskEditNewCriterion.vue";
 
 export default [
   {
@@ -58,6 +59,11 @@ export default [
         path: "result",
         name: "taskEditResult",
         component: TaskEditResult,
+      },
+      {
+        path: "new-criterion",
+        name: "taskEditNewCriterion",
+        component: TaskEditNewCriterion,
       },
     ],
   },

@@ -1,3 +1,5 @@
+# RUN THIS SCRIPT TO CREATE A DB
+
 from backend.app.db.models import engine
 from backend.app.db.models import Model
 

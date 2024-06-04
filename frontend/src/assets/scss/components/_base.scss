@@ -25,12 +25,28 @@ body {
   margin-top: 30px;
 }
 
+.mt-20 {
+  margin-top: 20px;
+}
+
 .mt-15 {
   margin-top: 15px;
 }
 
+.mt-10 {
+  margin-top: 10px;
+}
+
 .mb-15 {
   margin-bottom: 15px
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 .full-width {
@@ -51,7 +67,6 @@ body {
 }
 
 .line {
-  margin: 10px 0;
   height: 0;
   width: 100%;
   border-top: 1px solid $light-gray;

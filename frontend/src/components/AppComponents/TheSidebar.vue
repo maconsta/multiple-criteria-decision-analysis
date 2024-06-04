@@ -7,7 +7,7 @@
         button-text="Overview"
         @click="openSidebar"
       />
-      <div class="line"></div>
+      <div class="line mt-10 mb-10"></div>
       <SidebarButton
         image-url="triangle.svg"
         route-name="taskEditMethod"
@@ -26,7 +26,7 @@
         button-text="Alternatives"
         @click="openSidebar"
       />
-      <div class="line"></div>
+      <div class="line mt-10 mb-10"></div>
       <SidebarButton
         image-url="cpu.svg"
         route-name="taskEditResult"
@@ -98,7 +98,10 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-shrink: 0;
   box-shadow: -2px 6px 10px $charcoal;
+  transition: 0.2s ease-in-out;
+  overflow: hidden;
 
   &--open {
     width: 220px;
@@ -119,6 +122,7 @@ export default {
   width: 45px;
   border-radius: 8px;
   align-self: flex-end;
+  transition: 0.2s ease-in-out;
 
   &:hover {
     background-color: $main-blue-20;
