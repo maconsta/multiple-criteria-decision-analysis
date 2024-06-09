@@ -1,12 +1,73 @@
 html {
-    font-size: 16px;
-    font-family: "Roboto";
-    color: $night;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: $white-smoke;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  color: $night;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+#app {
+  height: 100%;
 }
 
 .mt-45 {
-    margin-top: 45px;
+  margin-top: 45px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mb-15 {
+  margin-bottom: 15px
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.full-width {
+  max-width: 1260px;
+  width: 100%;
+}
+
+.main {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.line {
+  height: 0;
+  width: 100%;
+  border-top: 1px solid $light-gray;
 }

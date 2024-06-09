@@ -3,47 +3,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 @font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-style: italic;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 500;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 500;
-    font-style: italic;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 600;
-    font-style: italic;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: italic;
 }
+
 @font-face {
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    font-style: italic;
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: italic;
 }
 
 
@@ -52,45 +56,149 @@
 @import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap");
 
 @font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 400;
-    font-style: italic;
+  font-family: "Inconsolata", monospace;
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 500;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 500;
-    font-style: italic;
+  font-family: "Inconsolata", monospace;
+  font-weight: 400;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 600;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 600;
-    font-style: italic;
+  font-family: "Inconsolata", monospace;
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Inconsolata", monospace;
+  font-weight: 500;
+  font-style: italic;
 }
+
 @font-face {
-    font-family: "Inconsolata", monospace;
-    font-weight: 700;
-    font-style: italic;
+  font-family: "Inconsolata", monospace;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inconsolata", monospace;
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Inconsolata", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inconsolata", monospace;
+  font-weight: 700;
+  font-style: italic;
+}
+
+// Montserrat
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 900;
+  font-style: italic;
 }

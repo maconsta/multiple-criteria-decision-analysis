@@ -1,0 +1,69 @@
+.chevron {
+  width: 20px;
+  height: 20px;
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+
+  &--left {
+    background-image: url("@/assets/images/chevron-left.svg");
+  }
+
+  &--right {
+    background-image: url("@/assets/images/chevron-right.svg");
+  }
+}
+
+.plus-icon {
+  background-size: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 30px;
+  width: 30px;
+
+  &--black {
+    background-image: url("@/assets/images/plus_charcoal.svg");
+  }
+
+  &--white {
+    background-image: url("@/assets/images/plus_white.svg");
+  }
+}
+
+.share-icon {
+  background-size: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 30px;
+  width: 30px;
+
+  &--charcoal {
+    background-image: url("@/assets/images/share_charcoal.svg");
+  }
+
+  &--white {
+    background-image: url("@/assets/images/share_white.svg");
+  }
+}
+
+.help {
+  background: center no-repeat url("@/assets/images/help_circle.svg");
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.trash-icon {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+
+  &--white {
+    background-image: url("@/assets/images/trash_white.svg") ;
+  }
+}

@@ -1,15 +1,15 @@
 <template>
   <header>
-    <nav class="nav">
+    <nav>
       <router-link :to="{ name: 'home' }" class="link">
         <span class="home-btn"><span class="home-btn__img"></span></span>
-        <span class="nav__text">Home</span>
+        <span class="text">Home</span>
       </router-link>
       <router-link :to="{ name: 'projects' }" class="link">
-        <span class="projects-btn"
-          ><span class="projects-btn__img"></span
-        ></span>
-        <span class="nav__text">Projects</span>
+        <span class="projects-btn">
+          <span class="projects-btn__img"></span>
+        </span>
+        <span class="text">Projects</span>
       </router-link>
     </nav>
   </header>
@@ -17,17 +17,14 @@
 
 <script>
 export default {
-  name: "HeaderItem",
-  props: {
-    msg: String,
-  },
+  name: "TheHeader",
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 header {
-  background-color: $white-smoke;
+  background-color: $main-blue;
   border-bottom: 1px solid $light-gray;
   padding: 20px;
   height: 75px;
@@ -37,12 +34,12 @@ header {
   justify-content: center;
 }
 
-.nav {
+nav {
   display: flex;
   align-items: center;
   column-gap: 10px;
 
-  &__text {
+  .text {
     padding-top: 4px;
   }
 }
@@ -53,7 +50,7 @@ header {
   justify-content: center;
 
   &__img {
-    background: url("../assets/images/home.svg");
+    background: url("../../assets/images/home.svg");
     background-repeat: no-repeat;
     background-size: 25px;
     width: 25px;
@@ -67,7 +64,7 @@ header {
   justify-content: center;
 
   &__img {
-    background: url("../assets/images/folder.svg");
+    background-image: url("../../assets/images/folder.svg");
     background-repeat: no-repeat;
     background-size: 25px;
     width: 25px;
@@ -82,9 +79,23 @@ header {
   column-gap: 5px;
   border-radius: 8px;
   padding: 4px;
+  color: #fff;
+  font-weight: 900;
+
+  &:hover {
+    color: $main-green;
+
+    .projects-btn__img {
+      background-image: url("../../assets/images/folder_green.svg");
+    }
+
+    .home-btn__img {
+      background-image: url("../../assets/images/home_green.svg");
+    }
+  }
 }
 
 .router-link-exact-active {
-  background-color: $blue-lagoon-20;
+  //background-color: $main-green;
 }
 </style>

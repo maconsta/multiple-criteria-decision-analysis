@@ -3,16 +3,20 @@
     <div class="folder" :class="[size, backgroundColor]">
       <div class="folder__top"></div>
       <div class="folder__bottom">
-        <div v-if="havePlus" class="plus-icon"></div>
-        <div class="description" v-if="description">
-          <div class="title" v-if="description.title">
-            {{ description.title }}
+        <div v-if="havePlus" class="plus-icon plus-icon--black"></div>
+        <div class="description" v-if="showDescription">
+          <div class="title" v-if="projectName">
+            {{ projectName }}
           </div>
-          <span class="more-icon" v-if="description.more"></span>
-          <div class="author" v-if="description.author">
-            {{ description.author }}
+          <span class="more-icon" v-if="more"></span>
+          <div class="owner" v-if="owner">
+            {{ owner }}
           </div>
-          <div class="visibility" v-if="description.visibility">
+          <div class="visibility" v-if="visibility == 'private'">
+            <span class="visibility__icon visibility__icon--private"></span>
+            <span class="visibility__text">Private</span>
+          </div>
+          <div class="visibility" v-if="visibility == 'public'">
             <span class="visibility__icon visibility__icon--public"></span>
             <span class="visibility__text">Public</span>
           </div>
@@ -26,19 +30,22 @@
 </template>
 
 <script>
+// TODO: Expand CardFolder to be two components - CardFolderSmall and CardFolderBig; Also, add folder color to DB when migrating
+
 export default {
   name: "CardFolder",
   props: {
     size: String,
     backgroundColor: String,
     havePlus: Boolean,
+    showDescription: Boolean,
+    projectName: String,
+    owner: String,
+    visibility: String,
+    more: Boolean,
     bottomText: {
       show: Boolean,
       text: String,
-    },
-    description: {
-      title: String,
-      author: String,
     },
   },
 };
@@ -56,15 +63,6 @@ export default {
   color: $dark-gray;
 }
 
-.plus-icon {
-  background: url("../assets/images/plus.svg");
-  background-size: 30px;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 30px;
-  width: 30px;
-}
-
 .folder {
   $block: &;
   background-color: transparent;
@@ -77,6 +75,7 @@ export default {
     border-right-style: solid;
     border-right-color: transparent;
     cursor: pointer;
+    transition: 0.3s ease-in-out;
   }
 
   &__bottom {
@@ -88,86 +87,104 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    &::after {
-      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
-      // opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-    }
-
-    :hover::after {
-      opacity: 1;
-    }
+    transition: 0.3s ease-in-out;
   }
 
   &--green {
     #{$block}__top {
-      border-bottom-color: #00c89e;
+      border-bottom-color: $folder-green;
     }
 
     #{$block}__bottom {
-      background-color: #00c89e;
+      border: 2px solid $folder-green;
+
+      &:hover {
+        background-color: $folder-green;
+      }
     }
   }
 
   &--lightblue {
     #{$block}__top {
-      border-bottom-color: #8ddcf9;
+      border-bottom-color: $folder-lightblue;
     }
 
     #{$block}__bottom {
-      background-color: #8ddcf9;
+      border: 2px solid $folder-lightblue;
+
+      &:hover {
+        background-color: $folder-lightblue;
+      }
     }
   }
 
   &--darkblue {
     #{$block}__top {
-      border-bottom-color: #6081f7;
+      border-bottom-color: $folder-darkblue;
     }
 
     #{$block}__bottom {
-      background-color: #6081f7;
+      border: 2px solid $folder-darkblue;
+
+      &:hover {
+        background-color: $folder-darkblue;
+      }
     }
   }
 
   &--lightorange {
     #{$block}__top {
-      border-bottom-color: #ffa594;
+      border-bottom-color: $folder-lightorange;
     }
 
     #{$block}__bottom {
-      background-color: #ffa594;
+      border: 2px solid $folder-lightorange;
+
+      &:hover {
+        background-color: $folder-lightorange;
+      }
     }
   }
 
   &--darkorange {
     #{$block}__top {
-      border-bottom-color: #e87c60;
+      border-bottom-color: $folder-darkorange;
     }
 
     #{$block}__bottom {
-      background-color: #e87c60;
+      border: 2px solid $folder-darkorange;
+
+      &:hover {
+        background-color: $folder-darkorange;
+      }
     }
   }
 
   &--yellow {
     #{$block}__top {
-      border-bottom-color: #ffe986;
+      border-bottom-color: $folder-yellow;
     }
 
     #{$block}__bottom {
-      background-color: #ffe986;
+      border: 2px solid $folder-yellow;
+
+      &:hover {
+        background-color: $folder-yellow;
+      }
     }
   }
 
   &--gray {
     #{$block}__top {
-      border-bottom-color: #878787;
+      border-bottom-color: $folder-gray;
     }
 
     #{$block}__bottom {
-      background-color: transparent;
-      border: 1px solid #878787;
+      border: 2px solid $folder-gray;
+
+      &:hover {
+        background-color: $folder-gray;
+      }
     }
   }
 
@@ -222,7 +239,7 @@ export default {
   }
 
   .more-icon {
-    background: url("../assets/images/more-horizontal.svg");
+    background: url("../../assets/images/more-horizontal.svg");
     background-size: 25px;
     background-position: center;
     background-repeat: no-repeat;
@@ -231,7 +248,7 @@ export default {
     flex-shrink: 0;
   }
 
-  .author {
+  .owner {
     font-weight: 300;
     line-height: 20px;
     // font-style: ;
@@ -251,11 +268,11 @@ export default {
       width: 20px;
 
       &--public {
-        background-image: url("../assets/images/globe.svg");
+        background-image: url("../../assets/images/globe.svg");
       }
 
       &--private {
-        background-image: url("../assets/images/lock.svg");
+        background-image: url("../../assets/images/lock.svg");
       }
     }
 

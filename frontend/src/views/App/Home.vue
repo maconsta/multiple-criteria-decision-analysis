@@ -1,19 +1,18 @@
 <template>
   <div class="home">
-    <Header />
+    <TheHeader />
     <h1>Home</h1>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
-import Header from "@/components/Header.vue";
+import TheHeader from "@/components/AppComponents/TheHeader.vue";
 
 export default {
-  name: "HomeView",
+  name: "Home",
   components: {
-    Header,
+    TheHeader,
   },
 };
 </script>

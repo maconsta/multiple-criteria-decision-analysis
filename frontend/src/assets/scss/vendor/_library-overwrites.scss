@@ -1,0 +1,46 @@
+.swal-btn {
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+
+  &__confirm {
+    background-color: $main-blue;
+  }
+
+  &__cancel {
+    background-color: $dark-gray;
+  }
+}
+
+.swal2-actions {
+  gap: 10px;
+}
+
+.swal-input {
+  &:focus {
+    box-shadow: none !important;
+    border-color: $main-blue !important;
+    outline: 2px solid $main-blue !important;
+  }
+
+
+  &.swal2-inputsuccess {
+    border-color: $plant-green !important;
+    box-shadow: 0 0 2px $plant-green !important;
+  }
+}
+
+.swal2-validation-message {
+  &.no-before {
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.v-popper__inner {
+  max-width: 360px;
+  max-height: 100%;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}

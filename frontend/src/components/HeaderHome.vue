@@ -30,8 +30,10 @@ export default {
 </script>
 
 <style scoped>
-*,*::before,*::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 .container {

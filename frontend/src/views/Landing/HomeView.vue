@@ -8,8 +8,7 @@
       </div>
     </div>
     <div class="features">Test1</div>
-  -->
-  </div>
+  --></div>
 </template>
 
 <script>
@@ -18,28 +17,27 @@ import HeroHome from "@/components/HeroHome.vue";
 
 export default {
   name: "HomeView",
-  name: "HeroView",
   components: {
     HeaderHomeNew,
-    HeroHome
+    HeroHome,
   },
 };
-
 </script>
 
 <style scoped lang="scss">
-
-*,*::before,*::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.conteiner{
+.conteiner {
   width: 100%;
   height: 100%;
 }
 
-.hero{
-  width:100%;
+.hero {
+  width: 100%;
   height: 600px;
   background-image: url("../../assets/images/hero-1-bg.png");
   background-color: #1b48fa;
@@ -49,8 +47,8 @@ export default {
   position: relative;
 }
 
-.hero-second-img{
-  width:100%;
+.hero-second-img {
+  width: 100%;
   height: 200px;
   position: absolute;
   bottom: 0;
@@ -61,7 +59,6 @@ export default {
   background-repeat: no-repeat;
 }
 
-.features{
-  
+.features {
 }
 </style>
