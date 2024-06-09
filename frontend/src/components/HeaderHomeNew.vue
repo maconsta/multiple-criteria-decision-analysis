@@ -1,22 +1,22 @@
 <template>
-    <!-- Navigation -->
-    <header :class="{'small-header': isScrolled}">
-        <div class="container header row">
-            <a href="#" class="logo">
-                <h1>Synthet<span>IQ</span></h1>
-            </a>
-            <div class="toggleMenu" v-on:click="toggleMenu"></div>
-            <nav class="navigation row">
-                <ul class="row">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#solution">Solutions</a></li>
-                    <li><a href="#resource">Resources</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <a href= "/signIn">Sign In</a>
-                </ul>
-            </nav>
-        </div>
-    </header>
+  <!-- Navigation -->
+  <header :class="{ 'small-header': isScrolled }">
+    <div class="container header row">
+      <a href="#" class="logo">
+        <h1>Synthet<span>IQ</span></h1>
+      </a>
+      <div class="toggleMenu" v-on:click="toggleMenu"></div>
+      <nav class="navigation row">
+        <ul class="row">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#solution">Solutions</a></li>
+          <li><a href="#resource">Resources</a></li>
+          <li><a href="#about">About Us</a></li>
+          <a href="/signIn">Sign In</a>
+        </ul>
+      </nav>
+    </div>
+  </header>
 </template>
 
 <script>
@@ -141,9 +141,9 @@ nav ul {
 }
 
 nav a {
-    font-weight: 500;
-    font-size: 18px;
-    color: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  color: #fff;
 }
 
 nav a:hover {

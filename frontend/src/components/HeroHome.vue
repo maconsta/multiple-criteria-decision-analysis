@@ -1,23 +1,8 @@
 <template>
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container hero-content row">
-            <div class="col row">
-                <div>
-                    <h1>Welcome to SynthetIQ Decider</h1>
-                    <p>Your new advisor!</p>
-                </div>
-            </div>
-            <div class="col row">
-                <div>
-                    <img src="../assets/images/heroLogo.png" alt="">
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Hero Section -->
-
-    <section class="wave">
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="container hero-content row">
+      <div class="col row">
         <div>
           <h1>Welcome to SynthetIQ Decider</h1>
           <p>Your new advisor!</p>
@@ -25,8 +10,21 @@
       </div>
       <div class="col row">
         <div>
-          <img src="../assets/images/heroImg3.png" alt="" />
+          <img src="../assets/images/heroLogo.png" alt="" />
         </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Hero Section -->
+
+  <section class="wave">
+    <div>
+      <h1>Welcome to SynthetIQ Decider</h1>
+      <p>Your new advisor!</p>
+    </div>
+    <div class="col row">
+      <div>
+        <img src="../assets/images/heroImg3.png" alt="" />
       </div>
     </div>
   </section>
@@ -92,21 +90,22 @@
           <h2>Social Link</h2>
           <ul class="row">
             <li>
-              <a href="#" class="facebook-icon"
-                ><Icon icon="fe:facebook" style="font-size: 30px"
-              /></a>
+              <a href="#" class="facebook-icon">
+                <Icon icon="fe:facebook" style="font-size: 30px" />
+              </a>
             </li>
             <li>
-              <a href="#" class="instagram-icon"
-                ><Icon icon="mdi:instagram" style="font-size: 30px"
-              /></a>
+              <a href="#" class="instagram-icon">
+                <Icon icon="mdi:instagram" style="font-size: 30px" />
+              </a>
             </li>
             <li>
-              <a href="#" class="x-icon"
-                ><Icon
+              <a href="#" class="x-icon">
+                <Icon
                   icon="fa6-brands:square-x-twitter"
                   style="font-size: 30px"
-              /></a>
+                />
+              </a>
             </li>
           </ul>
         </div>
@@ -148,9 +147,9 @@ body {
 }
 
 img {
-    width: 900px;
-    height: 300px;
-    max-width: 100%;
+  width: 900px;
+  height: 300px;
+  max-width: 100%;
 }
 
 .container {
@@ -206,10 +205,11 @@ ul {
 }
 
 .hero-content p {
-    font-weight: 500;
-    font-size: 1.3em;
-    color: #fff;
+  font-weight: 500;
+  font-size: 1.3em;
+  color: #fff;
 }
+
 /* End Hero Section */
 
 /* Wave */
@@ -238,7 +238,8 @@ ul {
 */
 
 .resource {
-  padding-top: 50px; /* Adjust the value as needed */
+  padding-top: 50px;
+  /* Adjust the value as needed */
   align-items: center;
 }
 
@@ -281,8 +282,10 @@ ul {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100px; /* Adjust if needed */
-  height: 100px; /* Adjust if needed */
+  width: 100px;
+  /* Adjust if needed */
+  height: 100px;
+  /* Adjust if needed */
   content: "";
   border: solid 2px black;
   transform: translate(-50%, -50%) rotate(45deg);
@@ -290,20 +293,22 @@ ul {
 }
 
 .resource .col:hover .icon::after {
-  transform: translate(-50%, -50%) rotate(90deg); /* Or any degree you prefer */
-  transition: transform 0.3s ease-in-out; /* Smooth transition */
+  transform: translate(-50%, -50%) rotate(90deg);
+  /* Or any degree you prefer */
+  transition: transform 0.3s ease-in-out;
+  /* Smooth transition */
 }
 
 .resource-content col h3 {
-    font-weight: 500;
-    font-size: 2em;
-    align-items: center;
+  font-weight: 500;
+  font-size: 2em;
+  align-items: center;
 }
 
 .resource-content p {
-    font-weight: 300;
-    font-size: 1em;
-    text-align: center;
+  font-weight: 300;
+  font-size: 1em;
+  text-align: center;
 }
 
 /* About us */
@@ -404,10 +409,10 @@ ul {
 }
 
 .footer h4 {
-    color: #2CFFC7;
-    font-size: 0.7em;
-    font-weight: 600;
-    text-align: center;
+  color: #2cffc7;
+  font-size: 0.7em;
+  font-weight: 600;
+  text-align: center;
 }
 
 .facebook-icon:hover {
@@ -419,7 +424,8 @@ ul {
 }
 
 .x-icon:hover {
-  color: black; /* This will apply only to the Facebook icon */
+  color: black;
+  /* This will apply only to the Facebook icon */
 }
 
 @media screen and (max-width: 1100px) {
@@ -435,6 +441,7 @@ ul {
     padding: 2em;
     z-index: 1000;
   }
+
   .toggleMenu.active {
     position: fixed;
     background-size: 25px;
@@ -469,6 +476,7 @@ ul {
     z-index: 999;
     background-color: #2c64ff;
   }
+
   .navigation ul {
     flex-direction: column;
     text-align: center;
@@ -484,6 +492,7 @@ ul {
     flex-wrap: wrap;
     gap: 3em;
   }
+
   .hero-content h1 {
     text-align: center;
   }

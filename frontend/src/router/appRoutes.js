@@ -67,9 +67,4 @@ export default [
       },
     ],
   },
-  {
-    path: "/signIn",
-    name: "signIn",
-    component : LoginView,
-  },
 ];
