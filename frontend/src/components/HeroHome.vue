@@ -10,7 +10,7 @@
             </div>
             <div class="col row">
                 <div>
-                    <img src="../assets/images/heroImg3.png" alt="">
+                    <img src="../assets/images/heroLogo.png" alt="">
                 </div>
             </div>
         </div>
@@ -119,8 +119,8 @@ body {
 }
 
 img {
-    width: 400px;
-    height: 200px;
+    width: 900px;
+    height: 300px;
     max-width: 100%;
 }
 
@@ -177,7 +177,7 @@ ul {
 }
 
 .hero-content p {
-    font-weight: 90;
+    font-weight: 500;
     font-size: 1.3em;
     color: #fff;
 }
@@ -273,11 +273,13 @@ ul {
 .resource-content col h3 {
     font-weight: 500;
     font-size: 2em;
+    align-items: center;
 }
 
 .resource-content p {
     font-weight: 300;
     font-size: 1em;
+    text-align: center;
 }
 
 /* About us */
@@ -381,6 +383,7 @@ ul {
 .footer h4 {
     color: #2CFFC7;
     font-size: 0.7em;
+    font-weight: 600;
     text-align: center;
 }
 

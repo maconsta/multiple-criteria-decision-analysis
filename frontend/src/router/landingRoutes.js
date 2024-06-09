@@ -5,6 +5,7 @@
 
 import HomeView from "../views/Landing/HomeView.vue";
 import SolutionsView from "../views/Landing/SolutionsView.vue";
+import LoginView from "../views/Landing/LoginView.vue";
 
 export default [
   {
@@ -16,5 +17,10 @@ export default [
     path: "/solutions",
     name: "solutions",
     component: SolutionsView,
+  },
+  {
+    path: "/signIn",
+    name: "signIn",
+    component : LoginView,
   },
 ];

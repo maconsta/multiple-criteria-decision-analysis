@@ -12,7 +12,7 @@
                     <li><a href="#solution">Solutions</a></li>
                     <li><a href="#resource">Resources</a></li>
                     <li><a href="#about">About Us</a></li>
-                    <a href="#signIn">Sign In</a>
+                    <a href= "/signIn">Sign In</a>
                 </ul>
             </nav>
         </div>
@@ -138,7 +138,7 @@ nav ul {
 }
 
 nav a {
-    font-weight: 300;
+    font-weight: 500;
     font-size: 18px;
     color: #fff;
 }
