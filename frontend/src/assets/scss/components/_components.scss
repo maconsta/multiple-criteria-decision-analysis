@@ -13,6 +13,14 @@
   &--right {
     background-image: url("@/assets/images/chevron-right.svg");
   }
+
+  &--down {
+    background-image: url("@/assets/images/chevron-down.svg");
+  }
+
+  &--up {
+    background-image: url("@/assets/images/chevron-up.svg");
+  }
 }
 
 .plus-icon {
@@ -65,5 +73,22 @@
 
   &--white {
     background-image: url("@/assets/images/trash_white.svg") ;
+  }
+}
+
+.cpu-icon {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+
+  &--charcoal {
+    background-image: url("@/assets/images/cpu.svg");
+  }
+
+  &--white {
+    background-image: url("@/assets/images/cpu_white.svg");
   }
 }

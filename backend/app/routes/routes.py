@@ -1,7 +1,7 @@
 from flask import render_template, request, jsonify
 
-from backend.app.db.models import session, User, Project, Task, Criterion
-
+from backend.app.db.models import session, User, Project, Task, Criterion, Alternative
+from backend.mcda.core.core import Criterion as Crit, Alternative as Alt
 from backend.app import app
 
 
@@ -176,3 +176,98 @@ def delete_criteria_by_id():
         response = {"result": "success"}
 
     return jsonify(response)
+
+
+@app.route("/save-alternative-to-db", methods=['POST'])
+def save_alternative_to_db():
+    post_data = request.get_json()
+    alternative_name = post_data['name']
+    alternative_description = post_data['description']
+    task_id = post_data['taskID']
+
+    new_alternative = Alternative(alternative_name=alternative_name,
+                                  description=alternative_description, task_id=task_id)
+    session.add(new_alternative)
+
+    try:
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        session.flush()
+        response = {"result": "Alternative not saved, error: " + str(e) + "!"}
+    else:
+        response = {"result": "Alternative Saved!", "alternative_id": new_alternative.alternative_id}
+
+    return jsonify(response)
+
+
+@app.route("/get-alternatives-by-task-id", methods=['POST'])
+def get_alternatives_by_task_id():
+    post_data = request.get_json()
+    task_id = post_data['taskID']
+
+    alternatives = (
+        session
+        .query(Alternative.task_id, Alternative.alternative_name, Alternative.alternative_id, Alternative.description,
+               )
+        .filter(Alternative.task_id == task_id)
+        .all()
+    )
+
+    result = []
+    for alt in alternatives:
+        result.append(
+            {"taskID": alt.task_id, "name": alt.alternative_name, "alternativeID": alt.alternative_id,
+             "description": alt.description})
+
+    return jsonify(result)
+
+
+@app.route("/delete-alternatives-by-id", methods=['POST'])
+def delete_alternatives_by_id():
+    post_data = request.get_json()
+    alternatives_ids = post_data['alternativesIDs']
+
+    for alt_id in alternatives_ids:
+        alt = Alternative.query.get(alt_id)
+
+        if alt:
+            session.delete(alt)
+
+    response = {}
+    try:
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        session.flush()
+        response = {"result": "Alternatives not deleted, error: " + str(e) + "!"}
+    else:
+        response = {"result": "success"}
+
+    return jsonify(response)
+
+
+@app.route("/calculate-results", methods=['POST'])
+def calculate_results():
+    post_data = request.get_json()
+    weight_matrix_raw = post_data['weightMatrix']
+    alternatives_raw = post_data['alternatives']
+    criteria_raw = post_data['criteria']
+
+    # print(weight_matrix_raw)
+    # print(alternatives_raw)
+    # print(criteria_raw)
+
+    criteria = []
+    for crit in criteria_raw:
+        c = Crit(name=crit['name'], min_max=crit['beneficiality'])
+        criteria.append(c)
+
+    alternatives = []
+    # for alt in alternatives_raw:
+        # alternatives need values, fix that first and come back
+        # a = Alt()
+
+    print(criteria)
+
+    return jsonify("test")

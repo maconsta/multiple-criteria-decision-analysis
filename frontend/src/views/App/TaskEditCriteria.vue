@@ -48,6 +48,7 @@
 import axios from "axios";
 import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
+import { criteria as storedCriteria } from "@/store/store";
 
 export default {
   name: "TaskEditCriteria",
@@ -70,6 +71,8 @@ export default {
             crit.beneficiality =
               crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
           }
+
+          storedCriteria.criteria = this.criteria;
         })
         .catch(() => {
           console.log("Error when querying for criteria. Please try again...");
@@ -131,6 +134,9 @@ export default {
             timer: 3000,
           });
 
+          // set stored crit to an empty arr to trigger a DB call
+          storedCriteria.criteria = [];
+
           this.criteria = this.criteria.filter(
             (crit) => !selectedCriteriaIDs.includes(crit.criterionID)
           );
@@ -142,11 +148,14 @@ export default {
   },
   created() {
     this.route = useRoute();
-    this.getCriteriaByTaskID();
+
+    if (!storedCriteria.criteria.length) {
+      this.getCriteriaByTaskID();
+    }
   },
   data() {
     return {
-      criteria: [],
+      criteria: storedCriteria.criteria,
       route: null,
       numberOfSelectedCrit: 0,
     };

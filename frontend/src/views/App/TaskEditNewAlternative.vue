@@ -1,16 +1,18 @@
+<!-- TODO add value selector dropdown (decimal, string, etc) then an input field for the actual value -->
+
 <template>
   <div class="w-100 mt-30">
     <div class="topbar w-100">
-      <router-link :to="{ name: 'taskEditCriteria' }" class="back-btn">
+      <router-link :to="{ name: 'taskEditAlternatives' }" class="back-btn">
         <div class="chevron chevron--left"></div>
-        <div class="back-btn__text">Back to Criteria</div>
+        <div class="back-btn__text">Back to Alternatives</div>
       </router-link>
-      <div class="save-criterion-btn" @click="saveCriterion">
-        <div class="save-criterion-btn__text">Save Criterion</div>
+      <div class="save-alternative-btn" @click="saveAlternative">
+        <div class="save-alternative-btn__text">Save Alternative</div>
       </div>
     </div>
-    <div class="criterion mt-20">
-      <div class="criterion__name">
+    <div class="alternative mt-20">
+      <div class="alternative__name">
         <label for="name">Name (Required)</label>
         <input
           type="text"
@@ -19,17 +21,10 @@
           required
           minlength="3"
           maxlength="70"
-          placeholder="Criterion Name"
+          placeholder="Alternative Name"
         />
       </div>
-      <div class="criterion__beneficiality mt-15">
-        <label for="beneficiality">Beneficiality (Required)</label>
-        <select id="beneficiality">
-          <option value="max">Beneficial</option>
-          <option value="min">Non-beneficial</option>
-        </select>
-      </div>
-      <div class="criterion__description mt-15">
+      <div class="alternative__description mt-15">
         <label for="description">Description (Required)</label>
         <textarea
           type="text"
@@ -49,21 +44,19 @@
 import { useRoute } from "vue-router";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { criteria as storedCriteria } from "@/store/store";
+import { alternatives as storedAlternatives } from "@/store/store";
 
 export default {
-  name: "TaskEditNewCriterion",
+  name: "TaskEditNewAlternative",
   methods: {
-    saveCriterion() {
+    saveAlternative() {
       const name = document.getElementById("name").value;
-      const beneficiality = document.getElementById("beneficiality").value;
       const description = document.getElementById("description").value;
       const taskID = this.route.params.taskID;
 
-      const path = "http://127.0.0.1:5000/save-criterion-to-db";
+      const path = "http://127.0.0.1:5000/save-alternative-to-db";
       const axiosPromise = axios.post(path, {
         name: name,
-        beneficiality: beneficiality,
         description: description,
         taskID: taskID,
       });
@@ -75,21 +68,21 @@ export default {
             position: "top-end",
             toast: true,
             icon: "success",
-            title: "Criterion has been saved",
+            title: "Alternative has been saved",
             showConfirmButton: false,
             timer: 3000,
           });
 
-          // set stored crit to an empty arr to trigger a DB call
-          storedCriteria.criteria = [];
+          // set stored alts to blank so that a DB call is triggered
+          storedAlternatives.alternatives = [];
 
           router.push({
-            name: "taskEditCriteria",
+            name: "taskEditAlternatives",
           });
         })
         .catch(() => {
           console.log(
-            "Error when creating a new criterion. Please try again..."
+            "Error when creating a new alternative. Please try again..."
           );
         });
     },
@@ -134,7 +127,7 @@ export default {
   }
 }
 
-.save-criterion-btn {
+.save-alternative-btn {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -155,7 +148,7 @@ export default {
   }
 }
 
-.criterion {
+.alternative {
   &__name {
     display: flex;
     flex-direction: column;
@@ -176,36 +169,6 @@ export default {
 
       &:focus {
         outline: 2px solid $main-blue-20;
-      }
-    }
-  }
-
-  &__beneficiality {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    label {
-      width: fit-content;
-      font-size: 0.875rem;
-      font-weight: 300;
-      font-style: italic;
-    }
-
-    select {
-      border: 1px solid #e7e7e9;
-      border-radius: 8px;
-      padding: 8px;
-      //appearance: auto;
-      //-webkit-appearance: auto;
-      background: url("@/assets/images/chevron-down.svg");
-      background-repeat: no-repeat;
-      background-size: 25px;
-      background-position: center right 2px;
-
-      &:focus {
-        outline: 2px solid $main-blue-20;
-        background-image: url("@/assets/images/chevron-up.svg");
       }
     }
   }

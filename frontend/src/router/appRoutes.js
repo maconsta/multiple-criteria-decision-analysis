@@ -11,8 +11,10 @@ import TaskEditOverview from "@/views/App/TaskEditOverview.vue";
 import TaskEditMethod from "@/views/App/TaskEditMethod.vue";
 import TaskEditCriteria from "@/views/App/TaskEditCriteria.vue";
 import TaskEditAlternatives from "@/views/App/TaskEditAlternatives.vue";
-import TaskEditResult from "@/views/App/TaskEditResult.vue";
+import TaskEditWeights from "@/views/App/TaskEditWeights.vue";
 import TaskEditNewCriterion from "@/views/App/TaskEditNewCriterion.vue";
+import TaskEditNewAlternative from "@/views/App/TaskEditNewAlternative.vue";
+import TaskEditCalculate from "@/views/App/TaskEditCalculate.vue";
 
 export default [
   {
@@ -56,14 +58,24 @@ export default [
         component: TaskEditAlternatives,
       },
       {
-        path: "result",
-        name: "taskEditResult",
-        component: TaskEditResult,
+        path: "weights",
+        name: "taskEditWeights",
+        component: TaskEditWeights,
       },
       {
         path: "new-criterion",
         name: "taskEditNewCriterion",
         component: TaskEditNewCriterion,
+      },
+      {
+        path: "new-alternative",
+        name: "taskEditNewAlternative",
+        component: TaskEditNewAlternative,
+      },
+      {
+        path: "calculate",
+        name: "taskEditCalculate",
+        component: TaskEditCalculate,
       },
     ],
   },

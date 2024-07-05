@@ -1,8 +1,10 @@
-<template>Result</template>
+<template>
+  asd
+</template>
 
 <script>
 export default {
-  name: "TaskEditResult",
+  name: "TaskEditCalculate",
 };
 </script>
 

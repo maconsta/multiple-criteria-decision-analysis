@@ -44,3 +44,38 @@
   overflow-wrap: break-word;
   hyphens: auto;
 }
+
+// nouislider overrwrites
+.range-slider {
+  height: 10px;
+
+  .noUi-handle {
+    border: 2px solid $main-blue;
+    border-radius: 50%;
+    box-shadow: none;
+    cursor: pointer;
+    background: $main-blue;
+    width: 28px !important;
+    height: 28px !important;
+    right: -14px !important;
+    top: -10px !important;
+
+    &::before, &::after {
+      display: none;
+    }
+  }
+
+  .noUi-connects  {
+    background: $main-green;
+  }
+
+  .noUi-marker-large {
+    height: 8px;
+    display: none;
+  }
+
+  .noUi-value {
+    color: $dark-gray;
+    transform: translate(-50%, 0%);
+  }
+}

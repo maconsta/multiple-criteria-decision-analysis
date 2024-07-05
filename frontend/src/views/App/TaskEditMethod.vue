@@ -2,27 +2,27 @@
   <div class="w-100 mt-30">
     <h2>Select Method</h2>
     <div class="methods mt-20">
-      <div class="method" @click="selectMethod($event)">
+      <div class="method" @click="selectMethod($event)" data-method="topsis">
         <span class="checkbox"></span>
         <span class="text">TOPSIS</span>
         <span class="help"></span>
       </div>
-      <div class="method" @click="selectMethod($event)">
+      <div class="method" @click="selectMethod($event)" data-method="ahp">
         <span class="checkbox"></span>
         <span class="text">AHP</span>
         <span class="help"></span>
       </div>
-      <div class="method" @click="selectMethod($event)">
+      <div class="method" @click="selectMethod($event)" data-method="electre">
         <span class="checkbox"></span>
         <span class="text">Electre</span>
         <span class="help"></span>
       </div>
-      <div class="method" @click="selectMethod($event)">
+      <div class="method" @click="selectMethod($event)" data-method="wsm">
         <span class="checkbox"></span>
         <span class="text">Weighted Sum</span>
         <span class="help"></span>
       </div>
-      <div class="method" @click="selectMethod($event)">
+      <div class="method" @click="selectMethod($event)" data-method="promethee">
         <span class="checkbox"></span>
         <span class="text">PROMETHEE II</span>
         <span class="help"></span>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { helpText } from "@/store/store";
+import { helpText, selectedMethod } from "@/store/store";
 
 export default {
   name: "TaskEditMethod",
@@ -46,6 +46,7 @@ export default {
       const checkbox = event.currentTarget.querySelector(".checkbox");
       checkbox.classList.add("checkbox--selected");
 
+      selectedMethod.method = event.currentTarget.getAttribute("data-method");
       helpText.text = "Test Methods";
 
       // Todo: add call to DB and make a decision matrix?
@@ -55,6 +56,13 @@ export default {
     return {
       helpText,
     };
+  },
+  mounted() {
+    if (selectedMethod.method) {
+      document
+        .querySelector("div[data-method='" + selectedMethod.method + "']")
+        .click();
+    }
   },
 };
 </script>
