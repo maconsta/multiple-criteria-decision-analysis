@@ -17,7 +17,7 @@
   </section>
   <!-- End Hero Section -->
 
-  <section class="wave">
+  <!-- <section class="wave">
     <div>
       <h1>Welcome to SynthetIQ Decider</h1>
       <p>Your new advisor!</p>
@@ -28,7 +28,7 @@
       </div>
     </div>
   </section>
-  <!-- End Hero Section -->
+  End Hero Section -->
 
   <section class="wave">
     <div></div>
@@ -41,22 +41,36 @@
         <div class="icon">
           <Icon icon="flowbite:brain-solid" style="font-size: 50px" />
         </div>
-        <h3>Method AHP</h3>
-        <p>AHP is one of the most popular MCDM Methods</p>
+        <div class="tooltip">
+          <h2>Method AHP</h2>
+          <div class="toolcontent">
+            <p>The Analytic Hierarchy Process (AHP) is a method for organizing and analyzing complex decisions, using math and psychology. It was developed by Thomas L. Saaty in the 1970s and has been refined since then. It contains three parts: the ultimate goal or problem you’re trying to solve, all of the possible solutions, called alternatives, and the criteria you will judge the alternatives on. AHP provides a rational framework for a needed decision by quantifying its criteria and alternative options, and for relating those elements to the overall goal.</p>
+          </div>
+        </div>
       </div>
       <div class="col column">
         <div class="icon">
           <Icon icon="flowbite:brain-solid" style="font-size: 50px" />
         </div>
-        <h3>Method TOPSIS</h3>
-        <p>TOPSIS is one of the most popular MCDM Methods</p>
+        <div class="tooltip">
+          <h2>Method TOPSIS</h2>
+          <div class="toolcontent">
+            <h3>What is TOPSIS</h3>
+            <p>The Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS) is a multi-criteria decision analysis method, which was originally developed by Ching-Lai Hwang and Yoon in 1981[1] with further developments by Yoon in 1987,[2] and Hwang, Lai and Liu in 1993.[3] TOPSIS is based on the concept that the chosen alternative should have the shortest geometric distance from the positive ideal solution (PIS) and the longest geometric distance from the negative ideal solution (NIS).</p>
+          </div>
+        </div>
       </div>
       <div class="col column">
         <div class="icon">
           <Icon icon="flowbite:brain-solid" style="font-size: 50px" />
         </div>
-        <h3>Method ELECTRE I</h3>
-        <p>ELECTRE I is one of the most popular MCDM Methods</p>
+        <div class="tooltip">
+          <h2>Method ELECTRE I</h2>
+          <div class="toolcontent2">
+            <h3>What is ELECTRE I</h3>
+            <p>ÉLECTRE is a family of multi-criteria decision analysis (MCDA) methods that originated in Europe in the mid-1960s. The acronym ÉLECTRE stands for: ÉLimination Et Choix Traduisant la REalité ("Elimination and Choice Translating Reality"). The method was first proposed by Bernard Roy and his colleagues at SEMA consultancy company. A team at SEMA was working on the concrete, multiple criteria, real-world problem of how firms could decide on new activities and had encountered problems using a weighted sum technique. Roy was called in as a consultant and the group devised the ELECTRE method.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -237,11 +251,23 @@ ul {
 }
 */
 
+
+.resource .feature-content {
+  display: flex;
+  gap: 12em; /* Adjust the value as needed to add more space */
+  flex-wrap: wrap;
+  justify-content: center; /* Ensure the columns are centered */
+}
+
 .resource {
-  padding-top: 50px;
+  padding-top: 100px;
   /* Adjust the value as needed */
   align-items: center;
+  justify-content: center;
+  /* Center the section */
+  margin-left: 47px;
 }
+
 
 .resource-content > * {
   flex-basis: 100%;
@@ -251,6 +277,7 @@ ul {
   padding-top: 15em;
   gap: 2.5em;
   align-items: center;
+  justify-content: center;
 }
 
 .resource-content .col {
@@ -266,6 +293,7 @@ ul {
 .row {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
 }
 
@@ -297,7 +325,15 @@ ul {
   /* Or any degree you prefer */
   transition: transform 0.3s ease-in-out;
   /* Smooth transition */
+  border: solid 2px #2cffc7;
 }
+
+/* Change icon color on hover */
+.resource .col:hover .icon {
+  filter: invert(60%) sepia(110%) saturate(510%) hue-rotate(190deg);
+}
+
+
 
 .resource-content col h3 {
   font-weight: 500;
@@ -311,11 +347,87 @@ ul {
   text-align: center;
 }
 
+.tooltip{
+  position: relative;
+}
+
+h2{
+  color: #2c64ff;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+h2:hover{
+  opacity: 0.7;
+}
+
+.toolcontent{
+  width: 600px;
+  background-color: #2cffc7;
+  padding: 20px;
+  position: absolute;
+  bottom: -150%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  border-radius: 5px;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.toolcontent2{
+  width: 600px;
+  background-color: #2cffc7;
+  padding: 20px;
+  position: absolute;
+  bottom: -175%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  border-radius: 5px;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.toolcontent h3{
+  text-transform: uppercase;
+  font-weight: 900;
+  margin-bottom: 15px;
+}
+
+.toolcontent p{
+  line-height: 1.4;
+}
+
+h2:hover + .toolcontent{
+  visibility: visible;
+  opacity: 1;
+}
+
+.toolcontent2 h3{
+  text-transform: uppercase;
+  font-weight: 900;
+  margin-bottom: 15px;
+}
+
+.toolcontent2 p{
+  line-height: 1.4;
+}
+
+h2:hover + .toolcontent2{
+  visibility: visible;
+  opacity: 1;
+}
+
 /* About us */
 .about-content {
   text-align: center;
   grid-gap: 3em;
-  padding: 5em 0;
+  padding: 18em 0;
   background-color: #fff;
 }
 

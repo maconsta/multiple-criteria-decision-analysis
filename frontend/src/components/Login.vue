@@ -1,78 +1,75 @@
 <template>
-  <head>
-    <title>Sign In</title>
-  </head>
-
   <body>
-    <div class="container" id="container" :class="{ active: isActive }">
-      <div class="form-container sign-up">
-        <form>
-          <h1>Create Account</h1>
-          <div class="social-icons">
-            <a href="#" class="google-icon"
-              ><Icon icon="mdi:google-plus" style="font-size: 20px"
-            /></a>
-            <a href="#" class="facebook-icon"
-              ><Icon icon="fe:facebook" style="font-size: 20px"
-            /></a>
-            <a href="#" class="git-icon"
-              ><Icon icon="mdi:github" style="font-size: 20px"
-            /></a>
-          </div>
-          <span>or use your email for registration</span>
-          <input type="text" placeholder="Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <button>Sign Up</button>
-        </form>
-      </div>
-      <div class="form-container sign-in">
-        <form>
-          <h1>Sign In</h1>
-          <div class="social-icons">
-            <a href="#" class="google-icon"
-              ><Icon icon="mdi:google-plus" style="font-size: 20px"
-            /></a>
-            <a href="#" class="facebook-icon"
-              ><Icon icon="fe:facebook" style="font-size: 20px"
-            /></a>
-            <a href="#" class="git-icon"
-              ><Icon icon="mdi:github" style="font-size: 20px"
-            /></a>
-          </div>
-          <span>or use your email and password</span>
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <a href="#">Forget your Password?</a>
-          <button>Sign In</button>
-        </form>
-      </div>
-      <div class="toggle-container">
-        <div class="toggle">
-          <div class="toggle-panel toggle-left">
-            <h1>Welcome Back!</h1>
-            <p>Enter your personal details to use all of site features</p>
-            <button class="hidden" id="login" @click="deactivateContainer">
-              Sign In
-            </button>
-          </div>
-          <div class="toggle-panel toggle-right">
-            <h1>Hello, Friend!</h1>
-            <p>
-              Register with your personal details to use all of site features
-            </p>
-            <button class="hidden" id="register" @click="activateContainer">
-              Sign Up
-            </button>
+    <div>
+      <div class="container" id="container" :class="{ active: isActive }">
+        <div class="form-container sign-up">
+          <form @submit.prevent="validateSignUp">
+            <h1>Create Account</h1>
+            <div class="social-icons">
+              <a href="#" class="google-icon" aria-label="Google">
+                <Icon icon="mdi:google-plus" style="font-size: 20px" />
+              </a>
+              <a href="#" class="facebook-icon" aria-label="Facebook">
+                <Icon icon="fe:facebook" style="font-size: 20px" />
+              </a>
+              <a href="#" class="git-icon" aria-label="GitHub">
+                <Icon icon="mdi:github" style="font-size: 20px" />
+              </a>
+            </div>
+            <span>or use your email for registration</span>
+            <input type="text" id="first-name" placeholder="First Name" v-model="signUpData.firstName" />
+            <input type="text" id="last-name" placeholder="Last Name" v-model="signUpData.lastName" />
+            <input type="email" id="email" placeholder="Email" v-model="signUpData.email" />
+            <input type="password" id="password" placeholder="Password" v-model="signUpData.password" />
+            <div class="button" @click="validateSignUp">Sign Up</div>
+            <p v-if="signUpError">{{ signUpError }}</p>
+          </form>
+        </div>
+        <div class="form-container sign-in">
+          <form @submit.prevent="validateSignIn">
+            <h1>Sign In</h1>
+            <div class="social-icons">
+              <a href="#" class="google-icon" aria-label="Google">
+                <Icon icon="mdi:google-plus" style="font-size: 20px" />
+              </a>
+              <a href="#" class="facebook-icon" aria-label="Facebook">
+                <Icon icon="fe:facebook" style="font-size: 20px" />
+              </a>
+              <a href="#" class="git-icon" aria-label="GitHub">
+                <Icon icon="mdi:github" style="font-size: 20px" />
+              </a>
+            </div>
+            <span>or use your email and password</span>
+            <input type="email" placeholder="Email" v-model="signInData.email" />
+            <input type="password" placeholder="Password" v-model="signInData.password" />
+            <a href="#">Forget your Password?</a>
+            <div class="button" @click="validateSignIn">Sign In</div>
+            <p v-if="signInError">{{ signInError }}</p>
+          </form>
+        </div>
+        <div class="toggle-container">
+          <div class="toggle">
+            <div class="toggle-panel toggle-left">
+              <h1>Welcome Back!</h1>
+              <p>Enter your personal details to use all of site features</p>
+              <div class="button" id="login" @click="deactivateContainer">Sign In</div>
+            </div>
+            <div class="toggle-panel toggle-right">
+              <h1>Hello, Friend!</h1>
+              <p>Register with your personal details to use all of site features</p>
+              <div class="button" id="register" @click="activateContainer">Sign Up</div>
+            </div>
           </div>
         </div>
       </div>
+      <div v-if="signUpSuccess" class="success-message">Your account has been successfully created!</div>
     </div>
   </body>
 </template>
 
 <script>
 import { Icon } from "@iconify/vue";
+import axios from "axios";
 
 export default {
   name: "Login",
@@ -82,6 +79,19 @@ export default {
   data() {
     return {
       isActive: false,
+      signUpData: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      },
+      signInData: {
+        email: "",
+        password: "",
+      },
+      signUpError: "",
+      signInError: "",
+      signUpSuccess: false,
     };
   },
   methods: {
@@ -90,6 +100,73 @@ export default {
     },
     deactivateContainer() {
       this.isActive = false;
+    },
+    validateSignUp() {
+      const { firstName, lastName, email, password } = this.signUpData;
+      if (!firstName || !lastName || !email || !password) {
+        this.signUpError = "All fields are required.";
+        return;
+      }
+      if (!this.validateEmail(email)) {
+        this.signUpError = "Invalid email format.";
+        return;
+      }
+      if (password.length < 6) {
+        this.signUpError = "Password must be at least 6 characters long.";
+        return;
+      }
+      this.signUpError = "";
+      this.registerUser();
+    },
+    validateSignIn() {
+      const { email, password } = this.signInData;
+      if (!email || !password) {
+        this.signInError = "All fields are required.";
+        return;
+      }
+      if (!this.validateEmail(email)) {
+        this.signInError = "Invalid email format.";
+        return;
+      }
+      this.signInError = "";
+      this.signInUser();
+    },
+    validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    },
+    registerUser() {
+      const { firstName, lastName, email, password } = this.signUpData;
+      const path = "http://127.0.0.1:5000/register-user";
+      axios
+        .post(path, {
+          firstName,
+          lastName,
+          email,
+          password,
+        })
+        .then((response) => {
+          console.log(response);
+          this.signUpSuccess = true;
+        })
+        .catch(() => {
+          console.log("Error when creating a new account. Please try again...");
+        });
+    },
+    signInUser() {
+      const { email, password } = this.signInData;
+      const path = "http://127.0.0.1:5000/sign-in";
+      axios
+        .post(path, {
+          email,
+          password,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch(() => {
+          console.log("Error when signing in. Please try again...");
+        });
     },
   },
 };
@@ -108,9 +185,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  height: 100hv;
-  min-height: 1000px;
+  height: 100vh;
+  margin: 0;
+}
+
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
 .container {
@@ -122,6 +206,9 @@ body {
   width: 768px;
   max-width: 100%;
   min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container p {
@@ -142,12 +229,12 @@ body {
   margin: 15px 0 10px;
 }
 
-.container button {
+.container .button {
   background-color: #2c64ff;
   color: #fff;
   font-size: 12px;
   padding: 10px 45px;
-  border: 1px solid transparent;
+  border: 1px solid white;
   border-radius: 8px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -156,7 +243,11 @@ body {
   cursor: pointer;
 }
 
-.container button.hidden {
+.container .button p {
+  color: red;
+}
+
+.container .button.hidden {
   background-color: transparent;
   border-color: #fff;
 }
@@ -242,7 +333,7 @@ body {
 
 .social-icons a {
   border: 1px solid #ccc;
-  border-radius: 20%;
+  border-radius: 50%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -323,7 +414,25 @@ body {
   font-weight: 700;
 }
 
+.toggle-right register {
+  background-color: #fff;
+}
+
 .container.active .toggle-right {
   transform: translateX(200%);
+}
+
+.success-message {
+  color: green;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.form-container .button + p {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
 }
 </style>

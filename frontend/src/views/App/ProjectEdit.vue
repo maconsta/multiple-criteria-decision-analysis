@@ -148,6 +148,7 @@ export default defineComponent({
       const router = this.$router;
       axiosPromise
         .then((response) => {
+          console.log("Tuk sme");
           router.push({
             name: "taskEditOverview",
             params: { taskID: response.data.taskID },

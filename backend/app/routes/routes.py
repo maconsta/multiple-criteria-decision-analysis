@@ -84,7 +84,7 @@ def save_task_to_db():
         response = {"result": "Criteria not deleted, error: " + str(e) + "!"}
     else:
         response = {"result": "success"}
-
+    print(response)
     return jsonify(response)
 
 
