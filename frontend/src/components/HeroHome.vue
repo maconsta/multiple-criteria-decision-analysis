@@ -24,7 +24,7 @@
     </div>
     <div class="col row">
       <div>
-        <img src="../assets/images/heroImg3.png" alt="" />
+<!--        <img src="../assets/images/heroImg3.png" alt="" />-->
       </div>
     </div>
   </section>

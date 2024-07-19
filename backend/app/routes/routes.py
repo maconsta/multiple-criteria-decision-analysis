@@ -19,7 +19,7 @@ def save_project_to_db():
     # current user should be taken from the session!
     # for now, it will be hardcoded...
 
-    current_user = User.query.filter(User.first_name == "Martin").first()
+    current_user = User.query.first()
     new_project = Project(project_name=project_name, visibility=False, owner=current_user.user_id)
 
     session.add(new_project)
@@ -183,7 +183,10 @@ def save_alternative_to_db():
     post_data = request.get_json()
     alternative_name = post_data['name']
     alternative_description = post_data['description']
+    values = post_data['values']
     task_id = post_data['taskID']
+
+    print(values)
 
     new_alternative = Alternative(alternative_name=alternative_name,
                                   description=alternative_description, task_id=task_id)

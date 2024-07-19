@@ -9,7 +9,7 @@ class Alternative(TimeStampedModel):
 
     alternative_id = Column(Integer, primary_key=True, autoincrement=True)
     alternative_name = Column(String(80), nullable=False)
-    values = Column(PickleType)
+    alternative_obj = Column(PickleType)
     description = Column(String(500))
     task_id = Column(Integer, ForeignKey("tasks.task_id", ondelete="Cascade"), nullable = False, index = True)
 

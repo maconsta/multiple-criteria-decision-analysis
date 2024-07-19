@@ -24,6 +24,33 @@
           placeholder="Alternative Name"
         />
       </div>
+      <div class="alternative__values mt-15">
+        <label for="values">Values (Required)</label>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(crit, index) in criteria" :key="index">
+              <td>{{ crit.name }}</td>
+              <td>
+                <input
+                  type="number"
+                  :name="crit.name"
+                  :id="crit.name"
+                  :data-crit-id="crit.criterionID"
+                  class="alt-value"
+                  step="1"
+                  required
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="alternative__description mt-15">
         <label for="description">Description (Required)</label>
         <textarea
@@ -44,7 +71,10 @@
 import { useRoute } from "vue-router";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { alternatives as storedAlternatives } from "@/store/store";
+import {
+  alternatives as storedAlternatives,
+  criteria as storedCriteria,
+} from "@/store/store";
 
 export default {
   name: "TaskEditNewAlternative",
@@ -54,16 +84,28 @@ export default {
       const description = document.getElementById("description").value;
       const taskID = this.route.params.taskID;
 
+      const values = [];
+      const inputFields = document.getElementsByClassName("alt-value");
+      for (let i = 0; i < inputFields.length; i++) {
+        values.push({
+          key: inputFields[i].getAttribute("data-crit-id"),
+          value: inputFields[i].value,
+        });
+      }
+
+      console.log(values);
+
       const path = "http://127.0.0.1:5000/save-alternative-to-db";
       const axiosPromise = axios.post(path, {
         name: name,
         description: description,
         taskID: taskID,
+        values: values,
       });
 
       const router = this.$router;
       axiosPromise
-        .then(() => {
+        .then((result) => {
           Swal.fire({
             position: "top-end",
             toast: true,
@@ -94,10 +136,12 @@ export default {
     // clear the text fields
     document.getElementById("name").value = "";
     document.getElementById("description").value = "";
+    console.log(storedCriteria.criteria);
   },
   data() {
     return {
       route: null,
+      criteria: storedCriteria.criteria,
     };
   },
 };
@@ -149,17 +193,17 @@ export default {
 }
 
 .alternative {
+  label {
+    width: fit-content;
+    font-size: 0.875rem;
+    font-weight: 300;
+    font-style: italic;
+  }
+
   &__name {
     display: flex;
     flex-direction: column;
     gap: 5px;
-
-    label {
-      width: fit-content;
-      font-size: 0.875rem;
-      font-weight: 300;
-      font-style: italic;
-    }
 
     input {
       border: 1px solid $light-gray;
@@ -178,13 +222,6 @@ export default {
     flex-direction: column;
     gap: 5px;
 
-    label {
-      width: fit-content;
-      font-size: 0.875rem;
-      font-weight: 300;
-      font-style: italic;
-    }
-
     textarea {
       border: 1px solid $light-gray;
       border-radius: 8px;
@@ -195,6 +232,67 @@ export default {
 
       &:focus {
         outline: 2px solid $main-blue-20;
+      }
+    }
+  }
+
+  &__values {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    table {
+      width: 100%;
+
+      th,
+      td {
+        padding: 8px 12px;
+        font-size: 0.875rem;
+      }
+
+      thead {
+        tr {
+          background-color: $main-blue-10;
+
+          th {
+          }
+        }
+      }
+
+      tbody {
+        tr:not(:last-child) {
+          border-bottom: 1px solid $main-blue-10;
+        }
+
+        td {
+          vertical-align: middle;
+        }
+      }
+
+      input {
+        outline: none;
+        border: 1px solid $main-blue-10;
+        border-radius: 4px;
+        width: 100%;
+        padding: 4px 8px;
+
+        &:focus {
+          border-color: $main-blue-20;
+          outline: 1px solid $main-blue-20;
+        }
+
+        // hide arrows
+        //-webkit-appearance: none;
+        //margin: 0;
+        //-moz-appearance: textfield;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
       }
     }
   }

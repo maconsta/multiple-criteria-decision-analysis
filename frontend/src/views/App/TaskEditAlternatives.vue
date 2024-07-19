@@ -29,39 +29,16 @@
         @click="openAlternative"
         :data-alternative-id="alternative.alternativeID"
       >
-        <!--        <span class="checkbox"></span>-->
+        <span class="checkbox"></span>
         <span class="text">{{ alternative.name }}</span>
-        <span class="chevron chevron--down"></span>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(crit, index) in criteria" :key="index">
-              <td>{{ crit.name }}</td>
-              <td>
-                <input
-                  type="number"
-                  :name="crit.name"
-                  :id="crit.name"
-                  step="1"
-                  required
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <!--suppress VueUnrecognizedDirective -->
-        <!--        <span-->
-        <!--          class="help"-->
-        <!--          v-tooltip="{-->
-        <!--            content: '<b>Description</b>: ' + alternative.description,-->
-        <!--            html: true,-->
-        <!--          }"-->
-        <!--        ></span>-->
+        <!--        suppress VueUnrecognizedDirective-->
+        <span
+          class="help"
+          v-tooltip="{
+            content: '<b>Description</b>: ' + alternative.description,
+            html: true,
+          }"
+        ></span>
       </div>
     </div>
   </div>
@@ -102,29 +79,29 @@ export default {
         });
     },
     openAlternative(event) {
-      // const checkbox = event.currentTarget.querySelector(".checkbox");
-      // checkbox.classList.toggle("checkbox--selected");
-      //
-      // if (checkbox.classList.contains("checkbox--selected")) {
-      //   event.currentTarget.dataset.selected = "true";
-      //   this.numberOfSelectedAlternatives++;
-      // } else {
-      //   event.currentTarget.dataset.selected = "false";
-      //   this.numberOfSelectedAlternatives--;
-      // }
-      //
-      // this.updateDeleteButtonVisibility();
-      // Todo: add help text to the help panel (description from the DB/criterion)
+      const checkbox = event.currentTarget.querySelector(".checkbox");
+      checkbox.classList.toggle("checkbox--selected");
 
-      const inputTable = event.currentTarget.querySelector("table");
-      if (event.target == inputTable || inputTable.contains(event.target)) {
-        return;
+      if (checkbox.classList.contains("checkbox--selected")) {
+        event.currentTarget.dataset.selected = "true";
+        this.numberOfSelectedAlternatives++;
+      } else {
+        event.currentTarget.dataset.selected = "false";
+        this.numberOfSelectedAlternatives--;
       }
 
-      event.currentTarget.classList.toggle("alternative--open");
-      ["chevron--up", "chevron--down"].map((c) => {
-        event.currentTarget.querySelector(".chevron").classList.toggle(c);
-      });
+      this.updateDeleteButtonVisibility();
+      // Todo: add help text to the help panel (description from the DB/criterion)
+
+      // const inputTable = event.currentTarget.querySelector("table");
+      // if (event.target == inputTable || inputTable.contains(event.target)) {
+      //   return;
+      // }
+      //
+      // event.currentTarget.classList.toggle("alternative--open");
+      // ["chevron--up", "chevron--down"].map((c) => {
+      //   event.currentTarget.querySelector(".chevron").classList.toggle(c);
+      // });
     },
     updateDeleteButtonVisibility() {
       const deleteButton = document.querySelector(".delete-alternatives-btn");
@@ -274,18 +251,18 @@ export default {
   cursor: pointer;
   transition: 0.2s ease-in-out;
 
-  //.checkbox {
-  //  height: 20px;
-  //  width: 20px;
-  //  background-image: url("@/assets/images/square.svg");
-  //  background-position: center;
-  //  background-repeat: no-repeat;
-  //  background-size: 17px;
-  //
-  //  &--selected {
-  //    background-image: url("@/assets/images/check-square.svg");
-  //  }
-  //}
+  .checkbox {
+    height: 20px;
+    width: 20px;
+    background-image: url("@/assets/images/square.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 17px;
+
+    &--selected {
+      background-image: url("@/assets/images/check-square.svg");
+    }
+  }
 
   .text {
     align-self: center;
@@ -294,73 +271,17 @@ export default {
     font-size: 15px;
   }
 
-  table {
-    flex: 100%;
-    display: none;
-
-    th,
-    td {
-      padding: 8px 12px;
-      font-size: 0.875rem;
-    }
-
-    thead {
-      tr {
-        background-color: $main-blue-10;
-
-        th {
-        }
-      }
-    }
-
-    tbody {
-      tr:not(:last-child) {
-        border-bottom: 1px solid $main-blue-10;
-      }
-
-      td {
-        vertical-align: middle;
-      }
-    }
-
-    input {
-      outline: none;
-      border: 1px solid $main-blue-10;
-      border-radius: 4px;
-      width: 100%;
-      padding: 4px 8px;
-
-      &:focus {
-        border-color: $main-blue-20;
-        outline: 1px solid $main-blue-20;
-      }
-
-      // hide arrows
-      //-webkit-appearance: none;
-      //margin: 0;
-      //-moz-appearance: textfield;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      margin: 0;
-    }
-  }
-
   &:hover {
     border-color: $main-blue-20;
     //background-color: $main-blue-20;
   }
 
-  &--open {
-    height: auto;
-
-    table {
-      display: table;
-    }
-  }
+  //&--open {
+  //  height: auto;
+  //
+  //  table {
+  //    display: table;
+  //  }
+  //}
 }
 </style>

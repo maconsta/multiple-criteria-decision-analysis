@@ -10,6 +10,7 @@ session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=en
 
 Model = declarative_base()
 Model.query = session.query_property()
+metadata = Model.metadata
 
 from backend.app.db.models.user import User
 from backend.app.db.models.project import Project

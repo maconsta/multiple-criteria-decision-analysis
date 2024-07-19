@@ -5,7 +5,7 @@
 
 import HomeView from "../views/Landing/HomeView.vue";
 import SolutionsView from "../views/Landing/SolutionsView.vue";
-import LoginView from "../views/Landing/LoginView.vue";
+import LoginView from "../views/App/LoginView.vue";
 
 export default [
   {
