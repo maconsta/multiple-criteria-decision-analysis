@@ -274,3 +274,32 @@ def calculate_results():
     print(criteria)
 
     return jsonify("test")
+
+
+@app.route("/register-user", methods=['POST'])
+def register_user():
+    post_data = request.get_json()
+    firstName = post_data['firstName']
+    lastName = post_data['lastName']
+    email = post_data['email']
+    password = post_data ['password']
+
+    # current user should be taken from the session!
+    # for now, it will be hardcoded...
+
+    # current_user = User.query.first()
+    new_user = User(first_name=firstName, last_name=lastName, email=email, password=password)
+
+    session.add(new_user)
+    response = {}
+
+    try:
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        session.flush()
+        response = {"result": "User not registered, error: " + str(e) + "!"}
+    else:
+        response = {"result": "User registered!", "userID": new_user.user_id}
+
+    return jsonify(response)

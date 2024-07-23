@@ -62,7 +62,7 @@
           </div>
         </div>
       </div>
-      <div v-if="signUpSuccess" class="success-message">Your account has been successfully created!</div>
+      <!-- <div v-if="signUpSuccess" class="success-message">Your account has been successfully created!</div> -->
     </div>
   </body>
 </template>
