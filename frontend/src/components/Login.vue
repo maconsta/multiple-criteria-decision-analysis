@@ -148,6 +148,7 @@ export default {
         .then((response) => {
           console.log(response);
           this.signUpSuccess = true;
+          //this.$router.push({ name: '' });
         })
         .catch(() => {
           console.log("Error when creating a new account. Please try again...");
