@@ -17,10 +17,30 @@
               </a>
             </div>
             <span>or use your email for registration</span>
-            <input type="text" id="first-name" placeholder="First Name" v-model="signUpData.firstName" />
-            <input type="text" id="last-name" placeholder="Last Name" v-model="signUpData.lastName" />
-            <input type="email" id="email" placeholder="Email" v-model="signUpData.email" />
-            <input type="password" id="password" placeholder="Password" v-model="signUpData.password" />
+            <input
+              type="text"
+              id="first-name"
+              placeholder="First Name"
+              v-model="signUpData.firstName"
+            />
+            <input
+              type="text"
+              id="last-name"
+              placeholder="Last Name"
+              v-model="signUpData.lastName"
+            />
+            <input
+              type="email"
+              id="email"
+              placeholder="Email"
+              v-model="signUpData.email"
+            />
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              v-model="signUpData.password"
+            />
             <div class="button" @click="validateSignUp">Sign Up</div>
             <p v-if="signUpError">{{ signUpError }}</p>
           </form>
@@ -40,8 +60,16 @@
               </a>
             </div>
             <span>or use your email and password</span>
-            <input type="email" placeholder="Email" v-model="signInData.email" />
-            <input type="password" placeholder="Password" v-model="signInData.password" />
+            <input
+              type="email"
+              placeholder="Email"
+              v-model="signInData.email"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              v-model="signInData.password"
+            />
             <a href="#">Forget your Password?</a>
             <div class="button" @click="validateSignIn">Sign In</div>
             <p v-if="signInError">{{ signInError }}</p>
@@ -52,12 +80,18 @@
             <div class="toggle-panel toggle-left">
               <h1>Welcome Back!</h1>
               <p>Enter your personal details to use all of site features</p>
-              <div class="button" id="login" @click="deactivateContainer">Sign In</div>
+              <div class="button" id="login" @click="deactivateContainer">
+                Sign In
+              </div>
             </div>
             <div class="toggle-panel toggle-right">
               <h1>Hello, Friend!</h1>
-              <p>Register with your personal details to use all of site features</p>
-              <div class="button" id="register" @click="activateContainer">Sign Up</div>
+              <p>
+                Register with your personal details to use all of site features
+              </p>
+              <div class="button" id="register" @click="activateContainer">
+                Sign Up
+              </div>
             </div>
           </div>
         </div>
@@ -70,6 +104,7 @@
 <script>
 import { Icon } from "@iconify/vue";
 import axios from "axios";
+import { redirectToSubdomain } from "@/router";
 
 export default {
   name: "Login",
@@ -146,9 +181,14 @@ export default {
           password,
         })
         .then((response) => {
-          console.log(response);
-          this.signUpSuccess = true;
-          //this.$router.push({ name: '' });
+          if (response.data.success === true) {
+            this.signUpSuccess = true;
+
+            // bad practice; remove subdomain; keep "app" as path of route tho
+            let url = window.location.origin;
+            url = url.replace("www", "app");
+            window.location.href = url;
+          }
         })
         .catch(() => {
           console.log("Error when creating a new account. Please try again...");
