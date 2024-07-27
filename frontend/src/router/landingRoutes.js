@@ -1,7 +1,4 @@
-/* Routes for the default landing page go here
-
-   Domain: www.synthetiq.com
-*/
+/* Routes for the default landing page go here */
 
 import HomeView from "../views/Landing/HomeView.vue";
 import SolutionsView from "../views/Landing/SolutionsView.vue";
