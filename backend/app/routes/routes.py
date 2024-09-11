@@ -1,8 +1,17 @@
 from flask import render_template, request, jsonify
+from datetime import datetime, timedelta
 
 from backend.app.db.models import session, User, Project, Task, Criterion, Alternative
 from backend.mcda.core.core import Criterion as Crit, Alternative as Alt
 from backend.app import app
+
+from flask_jwt_extended import create_access_token, get_csrf_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+from flask_jwt_extended import set_access_cookies
+
+jwt = JWTManager(app)
 
 
 @app.route('/', methods=['GET'])
@@ -12,15 +21,13 @@ def greetings():
 
 # API ROUTES
 @app.route("/save-project-to-db", methods=['POST'])
+@jwt_required()
 def save_project_to_db():
+    print(request.cookies)
     post_data = request.get_json()
     project_name = post_data['name']
-
-    # current user should be taken from the session!
-    # for now, it will be hardcoded...
-
-    current_user = User.query.first()
-    new_project = Project(project_name=project_name, visibility=False, owner=current_user.user_id)
+    user_id = get_jwt_identity()
+    new_project = Project(project_name=project_name, visibility=False, owner=user_id)
 
     session.add(new_project)
 
@@ -37,6 +44,7 @@ def save_project_to_db():
 
 
 @app.route("/get-project-name-by-id/<project_id>", methods=['GET'])
+# @requires_auth
 def get_project(project_id):
     project = Project.query.filter(Project.project_id == project_id).first()
 
@@ -268,8 +276,8 @@ def calculate_results():
 
     alternatives = []
     # for alt in alternatives_raw:
-        # alternatives need values, fix that first and come back
-        # a = Alt()
+    # alternatives need values, fix that first and come back
+    # a = Alt()
 
     print(criteria)
 
@@ -282,11 +290,12 @@ def register_user():
     firstName = post_data['firstName']
     lastName = post_data['lastName']
     email = post_data['email']
-    password = post_data ['password']
+    password = post_data['password']
 
     new_user = User(first_name=firstName, last_name=lastName, email=email, password=password)
 
     session.add(new_user)
+
     response = {}
 
     try:
@@ -296,6 +305,19 @@ def register_user():
         session.flush()
         response = {"result": "User not registered, error: " + str(e) + "!", "success": False}
     else:
-        response = {"result": "User registered!", "userID": new_user.user_id, "success": True}
+        token = create_access_token(identity=str(new_user.user_id), expires_delta=timedelta(weeks=1))
 
-    return jsonify(response)
+        response = jsonify({"result": "User registered!", "userID": new_user.user_id, "success": True,
+                            "csrf_token": get_csrf_token(token)})
+
+        set_access_cookies(response, token)
+
+    return response
+
+
+@app.route("/test-api", methods=['GET', 'POST'])
+@jwt_required()
+def test_api():
+    # print(request.cookies)
+    print(get_jwt_identity())
+    return jsonify({"testkey": "testvalue"})

@@ -135,9 +135,16 @@ export default {
       // TODO: Change to a dynamic url to switch between prod/local
 
       const path = "http://127.0.0.1:5000/save-project-to-db";
-      const axiosPromise = axios.post(path, {
-        name: projectName,
-      });
+      const axiosPromise = axios.post(
+        path,
+        {
+          name: projectName,
+        },
+        {
+          withCredentials: true,
+          withXSRFToken: true,
+        }
+      );
 
       const router = this.$router;
       axiosPromise

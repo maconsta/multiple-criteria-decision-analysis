@@ -19,6 +19,7 @@
     "sweetalert2": "^11.10.7",
     "swiper": "^11.1.0",
     "vue": "^3.2.13",
+    "vue-cookies": "^1.8.4",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav>
-      <router-link :to="{ name: 'home' }" class="link">
+      <router-link :to="{ name: 'homeApp' }" class="link">
         <span class="home-btn"><span class="home-btn__img"></span></span>
         <span class="text">Home</span>
       </router-link>

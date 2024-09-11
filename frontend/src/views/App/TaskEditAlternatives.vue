@@ -156,6 +156,8 @@ export default {
     if (!storedAlternatives.alternatives.length) {
       this.getAlternativesByTaskID();
     }
+
+    console.log(this.$cookies);
   },
   data() {
     return {

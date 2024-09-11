@@ -174,20 +174,23 @@ export default {
       const { firstName, lastName, email, password } = this.signUpData;
       const path = "http://127.0.0.1:5000/register-user";
       axios
-        .post(path, {
-          firstName,
-          lastName,
-          email,
-          password,
-        })
+        .post(
+          path,
+          {
+            firstName,
+            lastName,
+            email,
+            password,
+          },
+          { withCredentials: true }
+        )
         .then((response) => {
           if (response.data.success === true) {
+            localStorage.setItem("csrfToken", response.data.csrf_token);
             this.signUpSuccess = true;
-
-            // bad practice; remove subdomain; keep "app" as path of route tho
-            let url = window.location.origin;
-            url = url.replace("www", "app");
-            window.location.href = url;
+            this.$router.push({
+              name: "homeApp",
+            });
           }
         })
         .catch(() => {
