@@ -13,7 +13,7 @@ app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_COOKIE_SAMESITE"] = "None"
 app.config["JWT_COOKIE_SECURE"] = "Secure"
 
-CORS(app, origins="http://www.localhost:8080", supports_credentials=True, allow_headers=["x-csrf-token", "content-type"
+CORS(app, origins=["http://localhost:8080", "http://www.localhost:8080"], supports_credentials=True, allow_headers=["x-csrf-token", "content-type"
                                                                                          ])  # allows CORS from localhost only
 
 from backend.app.routes import routes

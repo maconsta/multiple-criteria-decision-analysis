@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <TheHeader />
+    <TheHeader/>
     <div class="full-width">
       <nav class="dashboard mt-45">
         <div class="dashboard__top">
@@ -12,66 +12,66 @@
         </div>
         <div class="dashboard__bot">
           <CardFolder
-            @click="openNewProjectModal"
-            size="folder--small"
-            background-color="folder--gray"
-            :have-plus="true"
-            :bottom-text="{ show: true, text: 'Blank' }"
+              @click="openNewProjectModal"
+              size="folder--small"
+              background-color="folder--gray"
+              :have-plus="true"
+              :bottom-text="{ show: true, text: 'Blank' }"
           />
           <div class="vertical-spacer"></div>
           <swiper-container loop="true" slidesPerView="5" spaceBetween="30">
             <swiper-slide>
               <CardFolder
-                size="folder--small"
-                background-color="folder--gray"
-                :show-description="true"
-                project-name="World Geography"
-                :bottomText="{ show: true, text: 'Public Template 1' }"
+                  size="folder--small"
+                  background-color="folder--gray"
+                  :show-description="true"
+                  project-name="World Geography"
+                  :bottomText="{ show: true, text: 'Public Template 1' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
-                size="folder--small"
-                background-color="folder--gray"
-                :show-description="true"
-                project-name="Real Estate"
-                :bottomText="{ show: true, text: 'Public Template 2' }"
+                  size="folder--small"
+                  background-color="folder--gray"
+                  :show-description="true"
+                  project-name="Real Estate"
+                  :bottomText="{ show: true, text: 'Public Template 2' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
-                size="folder--small"
-                background-color="folder--gray"
-                :show-description="true"
-                project-name="Best Economy Vehicle"
-                :bottomText="{ show: true, text: 'Public Template 3' }"
+                  size="folder--small"
+                  background-color="folder--gray"
+                  :show-description="true"
+                  project-name="Best Economy Vehicle"
+                  :bottomText="{ show: true, text: 'Public Template 3' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
-                size="folder--small"
-                background-color="folder--gray"
-                :show-description="true"
-                project-name="Social Media Marketing"
-                :bottomText="{ show: true, text: 'Public Template 4' }"
+                  size="folder--small"
+                  background-color="folder--gray"
+                  :show-description="true"
+                  project-name="Social Media Marketing"
+                  :bottomText="{ show: true, text: 'Public Template 4' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
-                size="folder--small"
-                background-color="folder--gray"
-                :show-description="true"
-                project-name="New House"
-                :bottomText="{ show: true, text: 'Public Template 5' }"
+                  size="folder--small"
+                  background-color="folder--gray"
+                  :show-description="true"
+                  project-name="New House"
+                  :bottomText="{ show: true, text: 'Public Template 5' }"
               />
             </swiper-slide>
             <swiper-slide>
               <CardFolder
-                size="folder--small"
-                background-color="folder--gray"
-                :show-description="true"
-                project-name="Popular Trends"
-                :bottomText="{ show: true, text: 'Public Template 6' }"
+                  size="folder--small"
+                  background-color="folder--gray"
+                  :show-description="true"
+                  project-name="Popular Trends"
+                  :bottomText="{ show: true, text: 'Public Template 6' }"
               />
             </swiper-slide>
           </swiper-container>
@@ -90,16 +90,16 @@
             You don't have any projects.
           </div>
           <CardFolder
-            v-for="(project, index) in projects"
-            :key="index"
-            size="folder--large"
-            background-color="folder--yellow"
-            :show-description="true"
-            :project-name="project.projectName"
-            :more="true"
-            :owner="project.owner"
-            :visibility="project.visibility"
-            @click="openExistingProject(project.projectID)"
+              v-for="(project, index) in projects"
+              :key="index"
+              size="folder--large"
+              background-color="folder--yellow"
+              :show-description="true"
+              :project-name="project.projectName"
+              :more="true"
+              :owner="project.owner"
+              :visibility="project.visibility"
+              @click="openExistingProject(project.projectID)"
           />
         </div>
       </nav>
@@ -112,7 +112,7 @@
 
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import CardFolder from "@/components/AppComponents/CardFolder.vue";
-import { register } from "swiper/element/bundle";
+import {register} from "swiper/element/bundle";
 import Swal from "sweetalert2/dist/sweetalert2.all.min.js";
 import axios from "axios";
 
@@ -136,27 +136,29 @@ export default {
 
       const path = "http://127.0.0.1:5000/save-project-to-db";
       const axiosPromise = axios.post(
-        path,
-        {
-          name: projectName,
-        },
-        {
-          withCredentials: true,
-          withXSRFToken: true,
-        }
+          path,
+          {
+            name: projectName,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+            },
+          }
       );
 
       const router = this.$router;
       axiosPromise
-        .then((response) => {
-          router.push({
-            name: "projectEdit",
-            params: { projectID: response.data.projectID },
+          .then((response) => {
+            router.push({
+              name: "projectEdit",
+              params: {projectID: response.data.projectID},
+            });
+          })
+          .catch(() => {
+            console.log("Error when creating a new project. Please try again...");
           });
-        })
-        .catch(() => {
-          console.log("Error when creating a new project. Please try again...");
-        });
     },
     openNewProjectModal() {
       const swalPromise = Swal.fire({
@@ -189,23 +191,28 @@ export default {
     },
     getAllProjects() {
       const path = "http://127.0.0.1:5000/get-all-projects";
-      const axiosPromise = axios.get(path);
+      const axiosPromise = axios.get(path, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      });
 
       axiosPromise
-        .then((response) => {
-          this.projects = response.data;
-        })
-        .catch(() => {
-          console.log(
-            "Error when querying for all projects. Please try again..."
-          );
-        });
+          .then((response) => {
+            this.projects = response.data;
+          })
+          .catch(() => {
+            console.log(
+                "Error when querying for all projects. Please try again..."
+            );
+          });
     },
     openExistingProject(id) {
       const router = this.$router;
       router.push({
         name: "projectEdit",
-        params: { projectID: id },
+        params: {projectID: id},
       });
     },
   },
@@ -303,10 +310,10 @@ swiper-container {
 
 .empty-placeholder {
   background-image: linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
-    ),
-    url(http://app.localhost:8080/img/about.1f15f248.png);
+          rgba(255, 255, 255, 0.5),
+          rgba(255, 255, 255, 0.5)
+  ),
+  url(http://app.localhost:8080/img/about.1f15f248.png);
   background-size: 300px;
   background-position: center right 20px;
   background-repeat: no-repeat;

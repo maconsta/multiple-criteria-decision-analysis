@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <TheHeader />
+    <TheHeader/>
     <div class="full-width">
       <div class="navbar mt-45">
         <router-link :to="{ name: 'projects' }" class="back-btn">
@@ -25,10 +25,10 @@
         </div>
         <div v-else class="card-container mt-20">
           <TaskCard
-            v-for="(task, index) in tasks"
-            :key="index"
-            :task-name="task.taskName"
-            @click="openExistingTask(task.taskID)"
+              v-for="(task, index) in tasks"
+              :key="index"
+              :task-name="task.taskName"
+              @click="openExistingTask(task.taskID)"
           />
         </div>
       </div>
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { useRoute } from "vue-router";
+import {defineComponent} from "vue";
+import {useRoute} from "vue-router";
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -47,7 +47,7 @@ import TaskCard from "@/components/AppComponents/TaskCard.vue";
 
 export default defineComponent({
   name: "ProjectEdit",
-  components: { TheHeader, TaskCard },
+  components: {TheHeader, TaskCard},
   methods: {
     openShareProjectModal() {
       Swal.fire({
@@ -74,20 +74,20 @@ export default defineComponent({
         preConfirm: (value) => {
           if (value.includes("@")) {
             document
-              .getElementById("swal2-input")
-              .classList.add("swal2-inputsuccess");
+                .getElementById("swal2-input")
+                .classList.add("swal2-inputsuccess");
             Swal.showValidationMessage("Invitation link sent to " + value);
             document
-              .getElementById("swal2-validation-message")
-              .classList.add("no-before");
+                .getElementById("swal2-validation-message")
+                .classList.add("no-before");
             return false;
           } else {
             document
-              .getElementById("swal2-input")
-              .classList.remove("swal2-inputsuccess");
+                .getElementById("swal2-input")
+                .classList.remove("swal2-inputsuccess");
             document
-              .getElementById("swal2-validation-message")
-              .classList.remove("no-before");
+                .getElementById("swal2-validation-message")
+                .classList.remove("no-before");
             Swal.showValidationMessage("Invalid email!");
             return false;
           }
@@ -97,15 +97,20 @@ export default defineComponent({
     getProjectName() {
       const route = useRoute();
       const path = `http://127.0.0.1:5000/get-project-name-by-id/${route.params.projectID}`;
-      const axiosPromise = axios.get(path);
+      const axiosPromise = axios.get(path, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      });
 
       axiosPromise
-        .then((response) => {
-          this.projectName = response.data;
-        })
-        .catch(() => {
-          console.log("Error when querying a project. Please try again...");
-        });
+          .then((response) => {
+            this.projectName = response.data;
+          })
+          .catch(() => {
+            console.log("Error when querying a project. Please try again...");
+          });
     },
     openNewProjectModal() {
       const swalPromise = Swal.fire({
@@ -143,40 +148,50 @@ export default defineComponent({
       const axiosPromise = axios.post(path, {
         name: taskName,
         projectID: this.route.params.projectID,
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
       });
 
       const router = this.$router;
       axiosPromise
-        .then((response) => {
-          console.log("Tuk sme");
-          router.push({
-            name: "taskEditOverview",
-            params: { taskID: response.data.taskID },
+          .then((response) => {
+            router.push({
+              name: "taskEditOverview",
+              params: {taskID: response.data.taskID},
+            });
+          })
+          .catch(() => {
+            console.log("Error when creating a new task. Please try again...");
           });
-        })
-        .catch(() => {
-          console.log("Error when creating a new task. Please try again...");
-        });
     },
     getTasksByProjectID() {
       const path = "http://127.0.0.1:5000/get-tasks-by-project-id";
       const axiosPromise = axios.post(path, {
         projectID: this.route.params.projectID,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
       });
 
       axiosPromise
-        .then((response) => {
-          this.tasks = response.data;
-        })
-        .catch(() => {
-          console.log("Error when querying for all tasks. Please try again...");
-        });
+          .then((response) => {
+            this.tasks = response.data;
+          })
+          .catch(() => {
+            console.log("Error when querying for all tasks. Please try again...");
+          });
     },
     openExistingTask(id) {
       const router = this.$router;
       router.push({
         name: "taskEditOverview",
-        params: { taskID: id },
+        params: {taskID: id},
       });
     },
   },
@@ -278,10 +293,10 @@ export default defineComponent({
 
   &__empty-placeholder {
     background-image: linear-gradient(
-        rgba(255, 255, 255, 0.5),
-        rgba(255, 255, 255, 0.5)
-      ),
-      url(http://app.localhost:8080/img/about.1f15f248.png);
+            rgba(255, 255, 255, 0.5),
+            rgba(255, 255, 255, 0.5)
+    ),
+    url(http://app.localhost:8080/img/about.1f15f248.png);
     background-size: 300px;
     background-position: center right 20px;
     background-repeat: no-repeat;

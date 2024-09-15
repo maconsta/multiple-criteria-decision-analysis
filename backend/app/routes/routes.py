@@ -23,7 +23,6 @@ def greetings():
 @app.route("/save-project-to-db", methods=['POST'])
 @jwt_required()
 def save_project_to_db():
-    print(request.cookies)
     post_data = request.get_json()
     project_name = post_data['name']
     user_id = get_jwt_identity()
@@ -44,7 +43,7 @@ def save_project_to_db():
 
 
 @app.route("/get-project-name-by-id/<project_id>", methods=['GET'])
-# @requires_auth
+@jwt_required()
 def get_project(project_id):
     project = Project.query.filter(Project.project_id == project_id).first()
 
@@ -52,15 +51,16 @@ def get_project(project_id):
 
 
 @app.route("/get-all-projects", methods=['GET'])
+@jwt_required()
 def get_all_projects():
-    projects = Project.query.all()
+    user_id = get_jwt_identity()
 
-    # TODO query is not OK, fix later! must add a check for the current active user
     projects = (
         session
         .query(Project.project_id, Project.project_name, Project.owner, Project.visibility,
-               User.first_name, User.last_name, User.user_id)
-        .join(User, Project.owner == User.user_id).all()
+               User.first_name, User.last_name)
+        .filter(User.user_id == user_id)
+        .filter(Project.owner == user_id).all()
     )
 
     result = []
@@ -76,6 +76,7 @@ def get_all_projects():
 
 
 @app.route("/save-task-to-db", methods=['POST'])
+@jwt_required()
 def save_task_to_db():
     post_data = request.get_json()
     task_name = post_data['name']
@@ -92,11 +93,11 @@ def save_task_to_db():
         response = {"result": "Criteria not deleted, error: " + str(e) + "!"}
     else:
         response = {"result": "success"}
-    print(response)
     return jsonify(response)
 
 
 @app.route("/get-tasks-by-project-id", methods=['POST'])
+@jwt_required()
 def get_tasks_by_project_id():
     post_data = request.get_json()
     project_id = post_data['projectID']
@@ -116,6 +117,7 @@ def get_tasks_by_project_id():
     return jsonify(result)
 
 
+# TODO: add jwt_required decorator and fix routes logic
 @app.route("/save-criterion-to-db", methods=['POST'])
 def save_criterion_to_db():
     post_data = request.get_json()
@@ -193,8 +195,6 @@ def save_alternative_to_db():
     alternative_description = post_data['description']
     values = post_data['values']
     task_id = post_data['taskID']
-
-    print(values)
 
     new_alternative = Alternative(alternative_name=alternative_name,
                                   description=alternative_description, task_id=task_id)
@@ -279,7 +279,7 @@ def calculate_results():
     # alternatives need values, fix that first and come back
     # a = Alt()
 
-    print(criteria)
+    # print(criteria)
 
     return jsonify("test")
 
@@ -318,6 +318,6 @@ def register_user():
 @app.route("/test-api", methods=['GET', 'POST'])
 @jwt_required()
 def test_api():
-    # print(request.cookies)
+    print(request.cookies)
     print(get_jwt_identity())
     return jsonify({"testkey": "testvalue"})
