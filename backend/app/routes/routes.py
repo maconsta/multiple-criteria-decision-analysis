@@ -75,6 +75,26 @@ def get_all_projects():
     return jsonify(result)
 
 
+@app.route("/delete-project-by-id", methods=['POST'])
+@jwt_required()
+def delete_project():
+    post_data = request.get_json()
+    project_id = post_data['projectID']
+    project = Project.query.filter(Project.project_id == project_id).first()
+    session.delete(project)
+
+    result = {}
+    try:
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        session.flush()
+        response = {"result": "Project not deleted, error: " + str(e) + "!"}
+    else:
+        response = {"result": "success"}
+    return jsonify(response)
+
+
 @app.route("/save-task-to-db", methods=['POST'])
 @jwt_required()
 def save_task_to_db():

@@ -96,10 +96,10 @@
               background-color="folder--yellow"
               :show-description="true"
               :project-name="project.projectName"
-              :more="true"
+              :trash="true"
               :owner="project.owner"
               :visibility="project.visibility"
-              @click="openExistingProject(project.projectID)"
+              @click="handleClickOnFolder(project.projectID, $event)"
           />
         </div>
       </nav>
@@ -200,6 +200,17 @@ export default {
 
       axiosPromise
           .then((response) => {
+            for (const project of response.data) {
+              if (project.owner.length > 20) {
+                const splitString = project.owner.split(" ");
+                project.owner = splitString[0][0] + ". " + splitString[1];
+              }
+
+              if (project.owner.length > 20) {
+                const splitString = project.owner.split(" ");
+                project.owner = splitString[0] + splitString[1][0] + ".";
+              }
+            }
             this.projects = response.data;
           })
           .catch(() => {
@@ -208,6 +219,31 @@ export default {
             );
           });
     },
+    handleClickOnFolder(id, event) {
+      const attribute = event.target.getAttribute("data-folder-action");
+      if (attribute == "delete") {
+        this.deleteProject(id);
+      } else {
+        this.openExistingProject(id);
+      }
+    },
+    deleteProject(id) {
+      const path = `http://127.0.0.1:5000/delete-project-by-id`;
+      const axiosPromise = axios.post(path, {
+        projectID: id
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      });
+
+      axiosPromise.then((response) => {
+        this.getAllProjects();
+      }).catch((response) => {
+        console.log("Error when deleting project.");
+      })
+    },
     openExistingProject(id) {
       const router = this.$router;
       router.push({
@@ -215,10 +251,35 @@ export default {
         params: {projectID: id},
       });
     },
+    handleSwiperSize() {
+      const displayWidth = window.innerWidth;
+      const swiperElement = document.querySelector("swiper-container").swiper;
+
+      if (displayWidth >= 1200) {
+        swiperElement.params.slidesPerView = 5;
+      } else if (displayWidth <= 1200 && displayWidth > 1000) {
+        swiperElement.params.slidesPerView = 4;
+      } else if (displayWidth <= 1000 && displayWidth > 800) {
+        swiperElement.params.slidesPerView = 3;
+      } else if (displayWidth <= 800 && displayWidth > 600) {
+        swiperElement.params.slidesPerView = 2;
+      } else if (displayWidth <= 600) {
+        swiperElement.params.slidesPerView = 1;
+      }
+
+      swiperElement.update();
+    }
   },
   created() {
     register();
     this.getAllProjects();
+    window.addEventListener("resize", this.handleSwiperSize);
+
+    // fire an event to make swiper redraw and update slidesPerView
+    setTimeout(function () {
+      window.dispatchEvent(new Event('resize'));
+
+    }, 500);
   },
   data() {
     return {
@@ -252,6 +313,10 @@ export default {
 
     &--wrap {
       flex-wrap: wrap;
+    }
+
+    @media screen and (max-width: 660px) {
+      justify-content: center;
     }
   }
 }

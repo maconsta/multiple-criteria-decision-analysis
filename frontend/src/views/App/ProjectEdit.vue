@@ -158,10 +158,7 @@ export default defineComponent({
       const router = this.$router;
       axiosPromise
           .then((response) => {
-            router.push({
-              name: "taskEditOverview",
-              params: {taskID: response.data.taskID},
-            });
+            this.getTasksByProjectID();
           })
           .catch(() => {
             console.log("Error when creating a new task. Please try again...");

@@ -72,7 +72,11 @@
   display: inline-block;
 
   &--white {
-    background-image: url("@/assets/images/trash_white.svg") ;
+    background-image: url("@/assets/images/trash_white.svg");
+  }
+
+  &--black {
+    background-image: url("@/assets/images/trash_black.svg");
   }
 }
 
