@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, session as flask_session
 from datetime import datetime, timedelta
 
 from backend.app.db.models import session, User, Project, Task, Criterion, Alternative
@@ -13,128 +13,11 @@ from flask_jwt_extended import set_access_cookies
 
 jwt = JWTManager(app)
 
+# TODO: cleanup here
 
 @app.route('/', methods=['GET'])
 def greetings():
     return ("Hello, world!")
-
-
-# API ROUTES
-@app.route("/save-project-to-db", methods=['POST'])
-@jwt_required()
-def save_project_to_db():
-    post_data = request.get_json()
-    project_name = post_data['name']
-    user_id = get_jwt_identity()
-    new_project = Project(project_name=project_name, visibility=False, owner=user_id)
-
-    session.add(new_project)
-
-    try:
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        session.flush()
-        response = {"result": "Project not saved, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project saved!", "projectID": new_project.project_id}
-
-    return jsonify(response)
-
-
-@app.route("/get-project-name-by-id/<project_id>", methods=['GET'])
-@jwt_required()
-def get_project(project_id):
-    project = Project.query.filter(Project.project_id == project_id).first()
-
-    return jsonify(project.project_name)
-
-
-@app.route("/get-all-projects", methods=['GET'])
-@jwt_required()
-def get_all_projects():
-    user_id = get_jwt_identity()
-
-    projects = (
-        session
-        .query(Project.project_id, Project.project_name, Project.owner, Project.visibility,
-               User.first_name, User.last_name)
-        .filter(User.user_id == user_id)
-        .filter(Project.owner == user_id).all()
-    )
-
-    result = []
-    for p in projects:
-        owner = p.first_name + " " + p.last_name
-        visibility = "public" if (p.visibility == True) else "private"
-
-        result.append(
-            {"projectID": p.project_id, "projectName": p.project_name, "visibility": visibility,
-             "owner": owner})
-
-    return jsonify(result)
-
-
-@app.route("/delete-project-by-id", methods=['POST'])
-@jwt_required()
-def delete_project():
-    post_data = request.get_json()
-    project_id = post_data['projectID']
-    project = Project.query.filter(Project.project_id == project_id).first()
-    session.delete(project)
-
-    result = {}
-    try:
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        session.flush()
-        response = {"result": "Project not deleted, error: " + str(e) + "!"}
-    else:
-        response = {"result": "success"}
-    return jsonify(response)
-
-
-@app.route("/save-task-to-db", methods=['POST'])
-@jwt_required()
-def save_task_to_db():
-    post_data = request.get_json()
-    task_name = post_data['name']
-    project_id = post_data['projectID']
-
-    new_task = Task(task_name=task_name, project_id=project_id)
-    session.add(new_task)
-
-    try:
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        session.flush()
-        response = {"result": "Criteria not deleted, error: " + str(e) + "!"}
-    else:
-        response = {"result": "success"}
-    return jsonify(response)
-
-
-@app.route("/get-tasks-by-project-id", methods=['POST'])
-@jwt_required()
-def get_tasks_by_project_id():
-    post_data = request.get_json()
-    project_id = post_data['projectID']
-
-    tasks = (
-        session
-        .query(Task.task_id, Task.task_name)
-        .filter(Task.project_id == project_id)
-        .all()
-    )
-
-    result = []
-    for task in tasks:
-        result.append(
-            {"taskID": task.task_id, "taskName": task.task_name})
-
-    return jsonify(result)
 
 
 # TODO: add jwt_required decorator and fix routes logic
@@ -304,40 +187,4 @@ def calculate_results():
     return jsonify("test")
 
 
-@app.route("/register-user", methods=['POST'])
-def register_user():
-    post_data = request.get_json()
-    firstName = post_data['firstName']
-    lastName = post_data['lastName']
-    email = post_data['email']
-    password = post_data['password']
 
-    new_user = User(first_name=firstName, last_name=lastName, email=email, password=password)
-
-    session.add(new_user)
-
-    response = {}
-
-    try:
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        session.flush()
-        response = {"result": "User not registered, error: " + str(e) + "!", "success": False}
-    else:
-        token = create_access_token(identity=str(new_user.user_id), expires_delta=timedelta(weeks=1))
-
-        response = jsonify({"result": "User registered!", "userID": new_user.user_id, "success": True,
-                            "csrf_token": get_csrf_token(token)})
-
-        set_access_cookies(response, token)
-
-    return response
-
-
-@app.route("/test-api", methods=['GET', 'POST'])
-@jwt_required()
-def test_api():
-    print(request.cookies)
-    print(get_jwt_identity())
-    return jsonify({"testkey": "testvalue"})

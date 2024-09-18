@@ -190,7 +190,7 @@ export default {
       });
     },
     getAllProjects() {
-      const path = "http://127.0.0.1:5000/get-all-projects";
+      const path = "http://127.0.0.1:5000/get-projects-by-user-id";
       const axiosPromise = axios.get(path, {
         withCredentials: true,
         headers: {

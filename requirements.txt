@@ -1,5 +1,6 @@
 alembic==1.13.2
 blinker==1.7.0
+cachelib==0.13.0
 click==8.1.7
 colorama==0.4.6
 cssbeautifier==1.14.11
@@ -18,12 +19,14 @@ json5==0.9.14
 Mako==1.3.5
 MarkupSafe==2.1.3
 -e git+https://github.com/maconsta/multiple-criteria-decision-analysis.git@00049ee25b5d3968a450c9754657e95c16410748#egg=MCDA
+msgspec==0.18.6
 numpy==1.25.1
 pathspec==0.12.1
 psycopg2-binary==2.9.9
 PyJWT==2.8.0
 python-dotenv==1.0.1
 PyYAML==6.0.1
+redis-server==6.0.9
 regex==2023.12.25
 six==1.16.0
 SQLAlchemy==2.0.29
