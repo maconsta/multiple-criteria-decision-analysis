@@ -7,6 +7,8 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
+from backend.app.routes.utils import save_project_in_session, delete_project_from_session
+
 jwt = JWTManager(app)
 
 
@@ -17,7 +19,6 @@ def save_project_to_db():
     project_name = post_data['name']
     user_id = get_jwt_identity()
     new_project = Project(project_name=project_name, visibility=False, owner=user_id)
-    user = User.query.filter(User.user_id == user_id).first()
 
     sql_session.add(new_project)
 
@@ -30,20 +31,7 @@ def save_project_to_db():
     else:
         response = {"result": "Project saved!", "projectID": new_project.project_id}
 
-        if flask_session.get("projects") is None:
-            flask_session["projects"] = []
-
-        owner = user.first_name + " " + user.last_name
-        visibility = "public" if (new_project.visibility == True) else "private"
-        flask_session["projects"].append(
-            {
-                "projectID": new_project.project_id,
-                "projectName": project_name,
-                "owner": owner,
-                "visibility": visibility
-            }
-        )
-        flask_session.modified = True
+        save_project_in_session(project_id=new_project.project_id, project_name=project_name, user_id=user_id)
 
     return jsonify(response)
 
@@ -54,10 +42,9 @@ def get_project(project_id):
     project_name = ""
     projects = flask_session.get("projects")
     if projects:
-        for project in projects:
-            if project["projectID"] == project_id:
-                project_name = project["project_name"]
-                break
+        project = projects.get(project_id)
+        if project:
+            project_name = project.get("projectName")
     else:
         project = Project.query.filter(Project.project_id == project_id).first()
         project_name = project.project_name
@@ -68,9 +55,11 @@ def get_project(project_id):
 @app.route("/get-projects-by-user-id", methods=['GET'])
 @jwt_required()
 def get_projects_by_user_id():
-    session_projects = flask_session.get("projects")
-    if session_projects:
-        return jsonify(session_projects)
+    projects = flask_session.get("projects")
+    if projects:
+        result = [value for value in projects.values()]
+        print("vzimam sesiq proekti")
+        return jsonify(result)
 
     user_id = get_jwt_identity()
 
@@ -89,7 +78,11 @@ def get_projects_by_user_id():
 
         result.append(
             {"projectID": p.project_id, "projectName": p.project_name, "visibility": visibility,
-             "owner": owner})
+             "owner": owner}
+        )
+
+        save_project_in_session(project_id=p.project_id, project_name=p.project_name, user_id=user_id,
+                               visibility=visibility)
 
     return jsonify(result)
 
@@ -102,7 +95,6 @@ def delete_project():
     project = Project.query.filter(Project.project_id == project_id).first()
     sql_session.delete(project)
 
-    result = {}
     try:
         sql_session.commit()
     except Exception as e:
@@ -110,13 +102,7 @@ def delete_project():
         sql_session.flush()
         response = {"result": "Project not deleted, error: " + str(e) + "!"}
     else:
-        projects = flask_session.get("projects")
-        if projects:
-            for project in projects:
-                if project["projectID"] == project_id:
-                    flask_session["projects"].remove(project)
-                    flask_session.modified = True
-                    break
+        delete_project_from_session(project_id=project_id)
 
         response = {"result": "success"}
 
@@ -127,5 +113,5 @@ def delete_project():
 @jwt_required()
 def test_api():
     print(get_jwt_identity())
-    print(flask_session.get("tasks"))
+    print(flask_session.get("projects"))
     return jsonify({"testkey": "testvalue"})

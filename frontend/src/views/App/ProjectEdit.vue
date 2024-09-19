@@ -28,7 +28,7 @@
               v-for="(task, index) in tasks"
               :key="index"
               :task-name="task.taskName"
-              @click="openExistingTask(task.taskID)"
+              @click="handleClickOnTask(task.taskID, $event)"
           />
         </div>
       </div>
@@ -167,14 +167,14 @@ export default defineComponent({
     getTasksByProjectID() {
       const path = "http://127.0.0.1:5000/get-tasks-by-project-id";
       const axiosPromise = axios.post(path, {
-        projectID: this.route.params.projectID,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
-      });
+            projectID: this.route.params.projectID,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+            },
+          });
 
       axiosPromise
           .then((response) => {
@@ -183,6 +183,32 @@ export default defineComponent({
           .catch(() => {
             console.log("Error when querying for all tasks. Please try again...");
           });
+    },
+    handleClickOnTask(id, event) {
+      const attribute = event.target.getAttribute("data-folder-action");
+      if (attribute == "delete") {
+        this.deleteTask(id);
+      } else {
+        this.openExistingTask(id);
+      }
+    },
+    deleteTask(id) {
+      const path = `http://127.0.0.1:5000/delete-task-by-id`;
+      const axiosPromise = axios.post(path, {
+        taskID: id,
+        projectID: this.route.params.projectID
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      });
+
+      axiosPromise.then((response) => {
+        this.getTasksByProjectID();
+      }).catch((response) => {
+        console.log("Error when deleting project.");
+      })
     },
     openExistingTask(id) {
       const router = this.$router;

@@ -6,6 +6,8 @@ from backend.app import app
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
+from backend.app.routes.utils import save_task_in_session, delete_task_from_session
+
 jwt = JWTManager(app)
 
 
@@ -26,16 +28,7 @@ def save_task_to_db():
         sql_session.flush()
         response = {"result": "Criteria not deleted, error: " + str(e) + "!"}
     else:
-        if flask_session.get("tasks") is None:
-            flask_session["tasks"] = []
-
-        flask_session["tasks"].append(
-            {
-                "taskID": new_task.task_id,
-                "taskName": new_task.task_name,
-                "projectID": project_id
-            }
-        )
+        save_task_in_session(task_id=new_task.task_id, task_name=new_task.task_name, project_id=project_id)
 
         response = {"result": "success"}
     return jsonify(response)
@@ -46,11 +39,15 @@ def save_task_to_db():
 def get_tasks_by_project_id():
     post_data = request.get_json()
     project_id = post_data['projectID']
+    result = []
 
-    session_tasks = flask_session.get("tasks")
-    if session_tasks:
-        print("logss")
-        return jsonify(session_tasks)
+    projects = flask_session.get("projects")
+    if projects:
+        project = projects.get(project_id)
+        if project:
+            tasks = project.get("tasks")
+            if tasks:
+                return jsonify([task for task in tasks.values()])
 
     tasks = (
         sql_session
@@ -59,9 +56,32 @@ def get_tasks_by_project_id():
         .all()
     )
 
-    result = []
     for task in tasks:
+        save_task_in_session(task_id=task.task_id, task_name=task.task_name, project_id=project_id)
+
         result.append(
-            {"taskID": task.task_id, "taskName": task.task_name})
+            {"taskID": task.task_id, "taskName": task.task_name, "projectID": project_id})
 
     return jsonify(result)
+
+
+@app.route("/delete-task-by-id", methods=['POST'])
+@jwt_required()
+def delete_task_by_id():
+    post_data = request.get_json()
+    task_id = post_data['taskID']
+    project_id = post_data['projectID']
+    task = Task.query.filter(Task.task_id == task_id).first()
+    sql_session.delete(task)
+
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        response = {"result": "Project not deleted, error: " + str(e) + "!"}
+    else:
+        delete_task_from_session(task_id=task_id, project_id=project_id)
+        response = {"result": "success"}
+
+    return jsonify(response)

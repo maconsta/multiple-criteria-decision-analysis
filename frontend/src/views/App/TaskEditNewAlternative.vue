@@ -93,8 +93,6 @@ export default {
         });
       }
 
-      console.log(values);
-
       const path = "http://127.0.0.1:5000/save-alternative-to-db";
       const axiosPromise = axios.post(path, {
         name: name,
@@ -136,7 +134,6 @@ export default {
     // clear the text fields
     document.getElementById("name").value = "";
     document.getElementById("description").value = "";
-    console.log(storedCriteria.criteria);
   },
   data() {
     return {

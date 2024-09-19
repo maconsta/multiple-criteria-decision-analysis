@@ -96,3 +96,16 @@
     background-image: url("@/assets/images/cpu_white.svg");
   }
 }
+
+.file-icon {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+
+  &--charcoal {
+    background-image: url("@/assets/images/file.svg");
+  }
+}
