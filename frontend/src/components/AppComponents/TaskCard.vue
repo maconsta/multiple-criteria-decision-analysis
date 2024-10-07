@@ -31,8 +31,13 @@ export default {
   font-size: 16px;
   font-weight: 500;
   //box-shadow: 1px 1px 5px $light-gray;
+  transition: 0.3s ease-in-out;
   position: relative;
   background: transparent;
+
+  &:hover {
+    border-color: $dark-gray;
+  }
 
   &__body {
     display: flex;

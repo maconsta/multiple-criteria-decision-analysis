@@ -26,3 +26,4 @@ CORS(app, origins=["http://localhost:8080", "http://www.localhost:8080"], suppor
 from backend.app.routes import project_routes
 from backend.app.routes import task_routes
 from backend.app.routes import authentication_routes
+from backend.app.routes import alternative_routes

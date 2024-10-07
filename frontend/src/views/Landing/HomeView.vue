@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <HeaderHomeNew />
-    <HeroHome />
+    <HeaderHomeNew/>
+    <HeroHome/>
     <!--<div class="hero">
       <div class="hero-second-img">
 
@@ -14,6 +14,7 @@
 <script>
 import HeaderHomeNew from "@/components/HeaderHomeNew.vue";
 import HeroHome from "@/components/HeroHome.vue";
+import axios from "axios";
 
 export default {
   name: "HomeView",
@@ -21,6 +22,27 @@ export default {
     HeaderHomeNew,
     HeroHome,
   },
+  beforeCreate() {
+    const path = "http://127.0.0.1:5000/is-logged-in";
+    const axiosPromise = axios.get(
+        path,
+        {
+          withCredentials: true,
+          headers: {
+            "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+          },
+        }
+    );
+
+    axiosPromise.then((result) => {
+      if (result.data.success === true) {
+        this.$router.push({
+          name: "homeApp",
+        });
+      }
+    })
+
+  }
 };
 </script>
 

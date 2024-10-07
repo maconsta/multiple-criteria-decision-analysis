@@ -15,52 +15,25 @@
       <div class="alternative__name">
         <label for="name">Name (Required)</label>
         <input
-          type="text"
-          name="name"
-          id="name"
-          required
-          minlength="3"
-          maxlength="70"
-          placeholder="Alternative Name"
+            type="text"
+            name="name"
+            id="name"
+            required
+            minlength="3"
+            maxlength="70"
+            placeholder="Alternative Name"
         />
-      </div>
-      <div class="alternative__values mt-15">
-        <label for="values">Values (Required)</label>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(crit, index) in criteria" :key="index">
-              <td>{{ crit.name }}</td>
-              <td>
-                <input
-                  type="number"
-                  :name="crit.name"
-                  :id="crit.name"
-                  :data-crit-id="crit.criterionID"
-                  class="alt-value"
-                  step="1"
-                  required
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </div>
       <div class="alternative__description mt-15">
         <label for="description">Description (Required)</label>
         <textarea
-          type="text"
-          name="description"
-          id="description"
-          minlength="3"
-          maxlength="80"
-          placeholder="..."
-          required
+            type="text"
+            name="description"
+            id="description"
+            minlength="3"
+            maxlength="500"
+            placeholder="..."
+            required
         />
       </div>
     </div>
@@ -68,7 +41,7 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {
@@ -84,47 +57,42 @@ export default {
       const description = document.getElementById("description").value;
       const taskID = this.route.params.taskID;
 
-      const values = [];
-      const inputFields = document.getElementsByClassName("alt-value");
-      for (let i = 0; i < inputFields.length; i++) {
-        values.push({
-          key: inputFields[i].getAttribute("data-crit-id"),
-          value: inputFields[i].value,
-        });
-      }
-
       const path = "http://127.0.0.1:5000/save-alternative-to-db";
       const axiosPromise = axios.post(path, {
         name: name,
         description: description,
         taskID: taskID,
-        values: values,
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
       });
 
       const router = this.$router;
       axiosPromise
-        .then((result) => {
-          Swal.fire({
-            position: "top-end",
-            toast: true,
-            icon: "success",
-            title: "Alternative has been saved",
-            showConfirmButton: false,
-            timer: 3000,
-          });
+          .then((result) => {
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: "Alternative has been saved",
+              showConfirmButton: false,
+              timer: 3000,
+            });
 
-          // set stored alts to blank so that a DB call is triggered
-          storedAlternatives.alternatives = [];
+            // set stored alts to blank so that a DB call is triggered
+            storedAlternatives.alternatives = [];
 
-          router.push({
-            name: "taskEditAlternatives",
+            router.push({
+              name: "taskEditAlternatives",
+            });
+          })
+          .catch(() => {
+            console.log(
+                "Error when creating a new alternative. Please try again..."
+            );
           });
-        })
-        .catch(() => {
-          console.log(
-            "Error when creating a new alternative. Please try again..."
-          );
-        });
     },
   },
   created() {

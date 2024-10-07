@@ -55,10 +55,11 @@ def get_project(project_id):
 @app.route("/get-projects-by-user-id", methods=['GET'])
 @jwt_required()
 def get_projects_by_user_id():
+
+    # TODO: remove session when user logs out, also when registering;
     projects = flask_session.get("projects")
     if projects:
         result = [value for value in projects.values()]
-        print("vzimam sesiq proekti")
         return jsonify(result)
 
     user_id = get_jwt_identity()

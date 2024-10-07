@@ -1,13 +1,19 @@
 <template>
   <div class="sidebar sidebar--open">
     <div class="sidebar-btn-container mt-15">
+<!--      <SidebarButton-->
+<!--        image-url="monitor.svg"-->
+<!--        route-name="taskEditOverview"-->
+<!--        button-text="Overview"-->
+<!--        @click="openSidebar"-->
+<!--      />-->
+<!--      <div class="line mt-10 mb-10"></div>-->
       <SidebarButton
-        image-url="monitor.svg"
-        route-name="taskEditOverview"
-        button-text="Overview"
+        image-url="square.svg"
+        route-name="taskEditAlternatives"
+        button-text="Alternatives"
         @click="openSidebar"
       />
-      <div class="line mt-10 mb-10"></div>
       <SidebarButton
         image-url="triangle.svg"
         route-name="taskEditMethod"
@@ -18,12 +24,6 @@
         image-url="circle.svg"
         route-name="taskEditCriteria"
         button-text="Criteria"
-        @click="openSidebar"
-      />
-      <SidebarButton
-        image-url="square.svg"
-        route-name="taskEditAlternatives"
-        button-text="Alternatives"
         @click="openSidebar"
       />
       <div class="line mt-10 mb-10"></div>

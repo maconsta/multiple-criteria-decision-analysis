@@ -90,3 +90,21 @@ def delete_task_from_session(task_id: int, project_id: int):
     del tasks[str(task_id)]
 
     flask_session.modified = True
+
+
+def save_alt_in_session(project_id: int, task_id: int, alt_id: int, alt_name: str, alt_description: str):
+    task = flask_session.get("projects").get(project_id).get("tasks").get(task_id)
+
+    if task.get("alternatives") is None:
+        task["alternatives"] = {}
+
+        task["alternatives"].update({
+            alt_id: {
+                "name": alt_name,
+                "alternativeID": alt_id,
+                "description": alt_description,
+                # "taskID": task_id # TODO should remove later; redundant
+            }
+        })
+
+    flask_session.modified = True
