@@ -1,3 +1,5 @@
+import os, hashlib
+
 from flask import request, jsonify, session as flask_session
 from datetime import timedelta
 
@@ -10,6 +12,31 @@ from flask_jwt_extended import set_access_cookies
 
 jwt = JWTManager(app)
 
+def hash_password(password: str):
+    # Create a salt
+    salt = os.urandom(16)
+
+    # Hash the password with the salt
+    hashed_password = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+
+    return salt + hashed_password
+
+
+def verify_password(stored_password: str, provided_password: str):
+    stored_password = stored_password.decode()
+
+    # Extract the salt from the stored password
+    salt = stored_password[:16]
+
+    # Extract the hashed password from the stored password
+    stored_hashed_password = stored_password[16:]
+
+    # Hash the provided password with the same salt
+    hashed_password = hashlib.pbkdf2_hmac('sha256', provided_password.encode(), salt, 100000)
+
+    # Compare the hashed passwords
+    return hashed_password == stored_hashed_password
+
 
 @app.route("/register-user", methods=['POST'])
 def register_user():
@@ -19,7 +46,10 @@ def register_user():
     email = post_data['email']
     password = post_data['password']
 
-    new_user = User(first_name=firstName, last_name=lastName, email=email, password=password)
+    # hash the password using hashlib
+    hashed_password = hash_password(password)
+
+    new_user = User(first_name=firstName, last_name=lastName, email=email, password=hashed_password)
 
     session.add(new_user)
 
@@ -45,6 +75,20 @@ def register_user():
 
     return response
 
+
+@app.route("/sign-in", methods=['POST'])
+def sign_in():
+    post_data = request.get_json()
+    email = post_data['email']
+    password = post_data['password']
+
+    user = session.query(User).filter_by(email=email).first()
+    if user and verify_password(user.password, password):
+        response = {"result": "User signed in!", "userID": user.user_id, "success": True}
+    else:
+        response = {"result": "Invalid email or password", "success": False}
+
+    return jsonify(response)
 
 @app.route("/is-logged-in", methods=['GET'])
 def is_logged_in():
