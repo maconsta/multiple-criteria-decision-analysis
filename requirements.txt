@@ -26,7 +26,6 @@ psycopg2-binary==2.9.9
 PyJWT==2.8.0
 python-dotenv==1.0.1
 PyYAML==6.0.1
-redis-server==6.0.9
 regex==2023.12.25
 six==1.16.0
 SQLAlchemy==2.0.29

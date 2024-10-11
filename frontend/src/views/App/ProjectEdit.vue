@@ -246,6 +246,10 @@ export default defineComponent({
   display: flex;
   align-items: center;
   width: fit-content;
+  color: #808080;
+  filter: grayscale(100%) brightness(50%);
+
+
 
   &:hover {
     color: $dark-gray;
@@ -268,7 +272,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: $plant-green;
+  background-color: #72bf6a;
   border-radius: 8px;
   width: fit-content;
   padding: 8px 12px 6px;
@@ -290,7 +294,7 @@ export default defineComponent({
   align-items: center;
   gap: 7px;
   background-color: #fff;
-  border: 1px solid $plant-green;
+  border: 1px solid #72bf6a;
   border-radius: 8px;
   width: fit-content;
   padding: 8px 12px 6px;
@@ -314,6 +318,7 @@ export default defineComponent({
   h3 {
     font-size: 1.25rem;
     font-weight: 600;
+    color: #808080;
   }
 
   &__empty-placeholder {

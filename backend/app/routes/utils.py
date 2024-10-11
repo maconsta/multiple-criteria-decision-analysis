@@ -33,7 +33,7 @@ def save_project_in_session(project_id: int, project_name: str, user_id: int, vi
     owner = user.first_name + " " + user.last_name
 
     flask_session["projects"].update({
-        project_id: {
+        str(project_id): {
             "projectID": project_id,
             "projectName": project_name,
             "owner": owner,

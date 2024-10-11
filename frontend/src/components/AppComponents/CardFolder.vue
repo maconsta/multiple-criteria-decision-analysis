@@ -60,7 +60,7 @@ export default {
   display: inline-block;
   margin-top: 10px;
   font-weight: 300;
-  color: $dark-gray;
+  color: #808080;
 }
 
 .folder {
@@ -176,14 +176,14 @@ export default {
 
   &--gray {
     #{$block}__top {
-      border-bottom-color: $folder-gray;
+      border-bottom-color: #bfd0ff;
     }
 
     #{$block}__bottom {
-      border: 2px solid $folder-gray;
+      border: 2px solid #bfd0ff;
 
       &:hover {
-        background-color: $folder-gray;
+        background-color: #bfd0ff;
       }
     }
   }
@@ -229,6 +229,7 @@ export default {
   align-content: space-between;
   justify-content: space-between;
   flex-wrap: wrap;
+  color: #596389;
   // font-family: "Inconsolata";
 
   .title {

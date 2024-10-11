@@ -43,6 +43,7 @@ def get_project(project_id):
     projects = flask_session.get("projects")
     if projects:
         project = projects.get(project_id)
+        
         if project:
             project_name = project.get("projectName")
     else:

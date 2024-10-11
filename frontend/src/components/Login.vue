@@ -186,7 +186,7 @@ export default {
         )
         .then((response) => {
           if (response.data.success === true) {
-            localStorage.setItem("csrfToken", response.data.csrf_token);
+            localStorage.setItem("csrfToken", response.data.csrfToken);
             this.signUpSuccess = true;
             this.$router.push({
               name: "homeApp",
@@ -204,12 +204,20 @@ export default {
         .post(path, {
           email,
           password,
-        })
+        }, { withCredentials: true })
         .then((response) => {
-          console.log(response);
+          if (response.data.success === true) {
+            localStorage.setItem("csrfToken", response.data.csrfToken);  // Store the token
+            this.$router.push({
+              name: "homeApp", 
+            });
+          } else {
+            this.signInError = response.data.result;  // Show the error message if login fails
+          }
         })
         .catch(() => {
           console.log("Error when signing in. Please try again...");
+          this.signInError = "Error during sign-in. Please try again.";
         });
     },
   },

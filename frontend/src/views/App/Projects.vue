@@ -396,4 +396,13 @@ swiper-container {
   font-weight: 600;
   color: $dark-gray;
 }
+
+.dashboard__heading {
+  color: #596380;
+}
+
+.dashboard__icons {
+  filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
+}
+
 </style>

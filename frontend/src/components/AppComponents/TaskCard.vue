@@ -25,7 +25,7 @@ export default {
   width: 250px;
   height: 200px;
   border-radius: 6px 8px 6px 6px;
-  border: 2px solid $light-gray;
+  border: 2px solid #bfd0ff;
   padding: 12px 14px;
   cursor: pointer;
   font-size: 16px;
@@ -36,7 +36,7 @@ export default {
   background: transparent;
 
   &:hover {
-    border-color: $dark-gray;
+    border-color: #bfd0ff;
   }
 
   &__body {
@@ -56,6 +56,15 @@ export default {
   .task-name {
     padding-top: 1px;
     line-height: 20px;
+    color: #596380;
+  }
+
+  .file-icon--charcoal {
+    filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
+  }
+
+  .trash-icon--black {
+    filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
   }
 
   .last-access {

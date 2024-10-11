@@ -6,50 +6,62 @@ from datetime import timedelta
 from backend.app.db.models import session, User
 from backend.app import app
 
-from flask_jwt_extended import create_access_token, get_csrf_token, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import (
+    create_access_token,
+    get_csrf_token,
+    get_jwt_identity,
+    verify_jwt_in_request,
+)
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
 
 jwt = JWTManager(app)
 
+
 def hash_password(password: str):
-    # Create a salt
+    # Create a 16-byte salt
     salt = os.urandom(16)
 
     # Hash the password with the salt
-    hashed_password = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    hashed_password = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 100000)
 
-    return salt + hashed_password
+    # Return the salt and hashed password combined, both encoded as hex
+    return salt.hex() + hashed_password.hex()
 
 
 def verify_password(stored_password: str, provided_password: str):
-    stored_password = stored_password.decode()
+    # Extract the salt from the first 32 characters (16 bytes in hex form)
+    salt = bytes.fromhex(stored_password[:32])
 
-    # Extract the salt from the stored password
-    salt = stored_password[:16]
+    # Extract the hashed password
+    stored_hashed_password = stored_password[32:]
 
-    # Extract the hashed password from the stored password
-    stored_hashed_password = stored_password[16:]
+    # Hash the provided password using the extracted salt
+    hashed_password = hashlib.pbkdf2_hmac(
+        "sha256", provided_password.encode(), salt, 100000
+    )
 
-    # Hash the provided password with the same salt
-    hashed_password = hashlib.pbkdf2_hmac('sha256', provided_password.encode(), salt, 100000)
+    # Convert hashed password to hex for comparison
+    hashed_password_hex = hashed_password.hex()
 
-    # Compare the hashed passwords
-    return hashed_password == stored_hashed_password
+    # Compare the stored hashed password with the newly hashed password
+    return hashed_password_hex == stored_hashed_password
 
 
-@app.route("/register-user", methods=['POST'])
+@app.route("/register-user", methods=["POST"])
 def register_user():
     post_data = request.get_json()
-    firstName = post_data['firstName']
-    lastName = post_data['lastName']
-    email = post_data['email']
-    password = post_data['password']
+    firstName = post_data["firstName"]
+    lastName = post_data["lastName"]
+    email = post_data["email"]
+    password = post_data["password"]
 
     # hash the password using hashlib
     hashed_password = hash_password(password)
 
-    new_user = User(first_name=firstName, last_name=lastName, email=email, password=hashed_password)
+    new_user = User(
+        first_name=firstName, last_name=lastName, email=email, password=hashed_password
+    )
 
     session.add(new_user)
 
@@ -60,12 +72,23 @@ def register_user():
     except Exception as e:
         session.rollback()
         session.flush()
-        response = {"result": "User not registered, error: " + str(e) + "!", "success": False}
+        response = {
+            "result": "User not registered, error: " + str(e) + "!",
+            "success": False,
+        }
     else:
-        token = create_access_token(identity=str(new_user.user_id), expires_delta=timedelta(weeks=1))
+        token = create_access_token(
+            identity=str(new_user.user_id), expires_delta=timedelta(weeks=1)
+        )
 
-        response = jsonify({"result": "User registered!", "userID": new_user.user_id, "success": True,
-                            "csrf_token": get_csrf_token(token)})
+        response = jsonify(
+            {
+                "result": "User registered!",
+                "userID": new_user.user_id,
+                "success": True,
+                "csrfToken": get_csrf_token(token),
+            }
+        )
 
         projects = flask_session.get("projects")
         if projects is not None:
@@ -76,21 +99,33 @@ def register_user():
     return response
 
 
-@app.route("/sign-in", methods=['POST'])
+@app.route("/sign-in", methods=["POST"])
 def sign_in():
     post_data = request.get_json()
-    email = post_data['email']
-    password = post_data['password']
+    email = post_data["email"]
+    password = post_data["password"]
 
     user = session.query(User).filter_by(email=email).first()
     if user and verify_password(user.password, password):
-        response = {"result": "User signed in!", "userID": user.user_id, "success": True}
+        token = create_access_token(
+            identity=str(user.user_id), expires_delta=timedelta(weeks=1)
+        )
+
+        response = jsonify({
+            "result": "User signed in!",
+            "userID": user.user_id,
+            "success": True,
+            "csrfToken": get_csrf_token(token),
+        })
+        
+        set_access_cookies(response, token)
     else:
-        response = {"result": "Invalid email or password", "success": False}
+        response = jsonify({"result": "Invalid email or password", "success": False})
 
-    return jsonify(response)
+    return response
 
-@app.route("/is-logged-in", methods=['GET'])
+
+@app.route("/is-logged-in", methods=["GET"])
 def is_logged_in():
     token = verify_jwt_in_request(optional=True)
 
