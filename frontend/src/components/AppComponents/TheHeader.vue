@@ -1,5 +1,6 @@
 <template>
   <header>
+    <div class="empty-container"></div>
     <nav>
       <router-link :to="{ name: 'homeApp' }" class="link">
         <span class="home-btn"><span class="home-btn__img"></span></span>
@@ -12,12 +13,42 @@
         <span class="text">Projects</span>
       </router-link>
     </nav>
+    <nav>
+      <span @click="signOut" class="sign-out">Sign Out</span>
+    </nav>
   </header>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "TheHeader",
+  methods: {
+    signOut() {
+      const path = "http://127.0.0.1:5000/sign-out";
+      const axiosPromise = axios.get(
+          path,
+          {
+            withCredentials: true,
+            headers: {
+              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+            },
+          }
+      );
+
+      axiosPromise
+          .then((response) => {
+            localStorage.removeItem("csrfToken");
+            this.$router.push({
+              name: "home",
+            });
+          })
+          .catch(() => {
+            console.log("Error when signing out...");
+          });
+    }
+  }
 };
 </script>
 
@@ -31,7 +62,7 @@ header {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 nav {
@@ -70,6 +101,11 @@ nav {
     width: 25px;
     height: 25px;
   }
+}
+
+.sign-out {
+  color: #fff;
+  cursor: pointer;
 }
 
 .link {

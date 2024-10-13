@@ -11,6 +11,7 @@ from flask_jwt_extended import (
     get_csrf_token,
     get_jwt_identity,
     verify_jwt_in_request,
+    unset_jwt_cookies,
 )
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
@@ -133,5 +134,16 @@ def is_logged_in():
         response = {"success": True}
     else:
         response = {"success": False, "result": "Token not present"}
+
+    return response
+
+@app.route("/sign-out", methods=["GET"])
+def sign_out():
+    response = jsonify({"result": "User signed out!", "success": True})
+
+    flask_session.get("projects").clear()
+    flask_session.modified = True
+
+    unset_jwt_cookies(response)
 
     return response
