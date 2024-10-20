@@ -103,7 +103,6 @@ def save_alt_in_session(project_id: int, task_id: int, alt_id: int, alt_name: st
                 "name": alt_name,
                 "alternativeID": alt_id,
                 "description": alt_description,
-                # "taskID": task_id # TODO should remove later; redundant
             }
         })
 

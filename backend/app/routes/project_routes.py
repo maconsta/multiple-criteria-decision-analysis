@@ -57,7 +57,6 @@ def get_project(project_id):
 @jwt_required()
 def get_projects_by_user_id():
 
-    # TODO: remove session when user logs out, also when registering;
     projects = flask_session.get("projects")
     if projects:
         result = [value for value in projects.values()]

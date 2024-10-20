@@ -11,70 +11,72 @@
           </div>
         </div>
         <div class="dashboard__bot">
-          <CardFolder
-              @click="openNewProjectModal"
-              size="folder--small"
-              background-color="folder--gray"
-              :have-plus="true"
-              :bottom-text="{ show: true, text: 'Blank' }"
-          />
-          <div class="vertical-spacer"></div>
-          <swiper-container loop="true" slidesPerView="5" spaceBetween="30">
-            <swiper-slide>
-              <CardFolder
-                  size="folder--small"
-                  background-color="folder--gray"
-                  :show-description="true"
-                  project-name="World Geography"
-                  :bottomText="{ show: true, text: 'Public Template 1' }"
-              />
-            </swiper-slide>
-            <swiper-slide>
-              <CardFolder
-                  size="folder--small"
-                  background-color="folder--gray"
-                  :show-description="true"
-                  project-name="Real Estate"
-                  :bottomText="{ show: true, text: 'Public Template 2' }"
-              />
-            </swiper-slide>
-            <swiper-slide>
-              <CardFolder
-                  size="folder--small"
-                  background-color="folder--gray"
-                  :show-description="true"
-                  project-name="Best Economy Vehicle"
-                  :bottomText="{ show: true, text: 'Public Template 3' }"
-              />
-            </swiper-slide>
-            <swiper-slide>
-              <CardFolder
-                  size="folder--small"
-                  background-color="folder--gray"
-                  :show-description="true"
-                  project-name="Social Media Marketing"
-                  :bottomText="{ show: true, text: 'Public Template 4' }"
-              />
-            </swiper-slide>
-            <swiper-slide>
-              <CardFolder
-                  size="folder--small"
-                  background-color="folder--gray"
-                  :show-description="true"
-                  project-name="New House"
-                  :bottomText="{ show: true, text: 'Public Template 5' }"
-              />
-            </swiper-slide>
-            <swiper-slide>
-              <CardFolder
-                  size="folder--small"
-                  background-color="folder--gray"
-                  :show-description="true"
-                  project-name="Popular Trends"
-                  :bottomText="{ show: true, text: 'Public Template 6' }"
-              />
-            </swiper-slide>
-          </swiper-container>
+            <CardFolder
+                @click="openNewProjectModal"
+                size="folder--small"
+                background-color="folder--gray"
+                :have-plus="true"
+                :bottom-text="{ show: true, text: 'Blank' }"
+            />
+            <div class="vertical-spacer"></div>
+          <Flicking :options="{ circular: true, align: 'prev' , circularFallback: 'bound'}" ref="flicking">
+            <CardFolder
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="World Geography"
+                :bottomText="{ show: true, text: 'Public Template 1' }"
+                :key="0"
+            />
+            <CardFolder
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Real Estate"
+                :bottomText="{ show: true, text: 'Public Template 2' }"
+                :key="1"
+            />
+            <CardFolder
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Best Economy Vehicle"
+                :bottomText="{ show: true, text: 'Public Template 3' }"
+                :key="2"
+            />
+            <CardFolder
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Social Media Marketing"
+                :bottomText="{ show: true, text: 'Public Template 4' }"
+                :key="3"
+            />
+            <CardFolder
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="New House"
+                :bottomText="{ show: true, text: 'Public Template 5' }"
+                :key="4"
+            />
+            <CardFolder
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Popular Trends"
+                :bottomText="{ show: true, text: 'Public Template 6' }"
+                :key="5"
+            />
+            <CardFolder
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Lorem Ipsum"
+                :bottomText="{ show: true, text: 'Public Template 7' }"
+                :key="6"
+            />
+          </Flicking>
         </div>
       </nav>
       <nav class="dashboard">
@@ -112,24 +114,23 @@
 
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import CardFolder from "@/components/AppComponents/CardFolder.vue";
-import {register} from "swiper/element/bundle";
 import Swal from "sweetalert2/dist/sweetalert2.all.min.js";
 import axios from "axios";
+import Flicking from "@egjs/vue3-flicking";
 
 export default {
   name: "Projects",
   components: {
     TheHeader,
     CardFolder,
+    Flicking: Flicking,
   },
   methods: {
-    handleNext() {
-      const swiperElement = document.querySelector("swiper-container");
-      swiperElement.swiper.slideNext();
-    },
     handlePrev() {
-      const swiperElement = document.querySelector("swiper-container");
-      swiperElement.swiper.slidePrev();
+      this.$refs.flicking.prev().catch(() => void 0);
+    },
+    handleNext() {
+      this.$refs.flicking.next().catch(() => void 0);
     },
     saveProjectToDatabase(projectName) {
       // TODO: Change to a dynamic url to switch between prod/local
@@ -251,46 +252,21 @@ export default {
         params: {projectID: id},
       });
     },
-    handleSwiperSize() {
-      const displayWidth = window.innerWidth;
-      const swiperElement = document.querySelector("swiper-container").swiper;
-
-      if (displayWidth >= 1200) {
-        swiperElement.params.slidesPerView = 5;
-      } else if (displayWidth <= 1200 && displayWidth > 1000) {
-        swiperElement.params.slidesPerView = 4;
-      } else if (displayWidth <= 1000 && displayWidth > 800) {
-        swiperElement.params.slidesPerView = 3;
-      } else if (displayWidth <= 800 && displayWidth > 600) {
-        swiperElement.params.slidesPerView = 2;
-      } else if (displayWidth <= 600) {
-        swiperElement.params.slidesPerView = 1;
-      }
-
-      swiperElement.update();
-    }
   },
   created() {
-    register();
     this.getAllProjects();
-    window.addEventListener("resize", this.handleSwiperSize);
-
-    // fire an event to make swiper redraw and update slidesPerView
-    setTimeout(function () {
-      window.dispatchEvent(new Event('resize'));
-
-    }, 500);
   },
   data() {
     return {
       projects: [],
     };
-  },
+  }
 };
 </script>
 
 <style lang="scss">
 @import url("sweetalert2/dist/sweetalert2.css");
+@import url("@egjs/vue3-flicking/dist/flicking.css");
 
 .dashboard {
   padding-bottom: 30px;
@@ -325,17 +301,10 @@ export default {
   border-left: 1px solid $light-gray;
 }
 
-swiper-container {
-  width: 100%;
-  max-width: 100%;
-  max-height: 100vh;
-  min-height: 0;
-  min-width: 0;
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  opacity: 0 !important;
+.flicking-camera {
+  .folder-wrapper {
+    margin-right: 15px;
+  }
 }
 
 .dashboard__icons {
