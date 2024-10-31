@@ -1,8 +1,8 @@
 from flask import request, jsonify, session as flask_session
 from datetime import timedelta
 
-from backend.app.db.models import session, User, Alternative
-from backend.app.routes.utils import save_alt_in_session
+from backend.app.db.models import session as sql_session, User, Alternative
+from backend.app.routes.utils import save_alt_in_session, get_alts_from_session
 from backend.app import app
 
 from flask_jwt_extended import create_access_token, get_csrf_token, jwt_required
@@ -19,20 +19,21 @@ def save_alternative_to_db():
     alternative_name = post_data['name']
     alternative_description = post_data['description']
     task_id = post_data['taskID']
+    # project_id = post_data['projectID']
 
     new_alternative = Alternative(alternative_name=alternative_name,
                                   description=alternative_description, task_id=task_id)
-    session.add(new_alternative)
+    sql_session.add(new_alternative)
 
     try:
-        session.commit()
+        sql_session.commit()
     except Exception as e:
-        session.rollback()
-        session.flush()
+        sql_session.rollback()
+        sql_session.flush()
         response = {"result": "Alternative not saved, error: " + str(e) + "!"}
     else:
         response = {"result": "Alternative Saved!", "alternative_id": new_alternative.alternative_id}
-        save_alt_in_session()
+        # save_alt_in_session(project_id=project_id, task_id=task_id, alt_name=alternative_name, alt_id=new_alternative.alternative_id, alt_description=alternative_description)
 
     return jsonify(response)
 
@@ -41,9 +42,12 @@ def save_alternative_to_db():
 def get_alternatives_by_task_id():
     post_data = request.get_json()
     task_id = post_data['taskID']
+    # project_id = post_data['projectID']
+
+    # print(get_alts_from_session(project_id=project_id, task_id=task_id))
 
     alternatives = (
-        session
+        sql_session
         .query(Alternative.task_id, Alternative.alternative_name, Alternative.alternative_id, Alternative.description,
                )
         .filter(Alternative.task_id == task_id)
@@ -68,14 +72,14 @@ def delete_alternatives_by_id():
         alt = Alternative.query.get(alt_id)
 
         if alt:
-            session.delete(alt)
+            sql_session.delete(alt)
 
     response = {}
     try:
-        session.commit()
+        sql_session.commit()
     except Exception as e:
-        session.rollback()
-        session.flush()
+        sql_session.rollback()
+        sql_session.flush()
         response = {"result": "Alternatives not deleted, error: " + str(e) + "!"}
     else:
         response = {"result": "success"}

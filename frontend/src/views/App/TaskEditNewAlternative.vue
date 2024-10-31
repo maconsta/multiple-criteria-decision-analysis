@@ -1,5 +1,3 @@
-<!-- TODO add value selector dropdown (decimal, string, etc) then an input field for the actual value -->
-
 <template>
   <div class="w-100 mt-30">
     <div class="topbar w-100">
@@ -44,10 +42,6 @@
 import {useRoute} from "vue-router";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {
-  alternatives as storedAlternatives,
-  criteria as storedCriteria,
-} from "@/store/store";
 
 export default {
   name: "TaskEditNewAlternative",
@@ -56,12 +50,14 @@ export default {
       const name = document.getElementById("name").value;
       const description = document.getElementById("description").value;
       const taskID = this.route.params.taskID;
+      const projectID = this.route.params.projectID;
 
       const path = "http://127.0.0.1:5000/save-alternative-to-db";
       const axiosPromise = axios.post(path, {
         name: name,
         description: description,
         taskID: taskID,
+        projectID: projectID
       }, {
         withCredentials: true,
         headers: {
@@ -80,9 +76,6 @@ export default {
               showConfirmButton: false,
               timer: 3000,
             });
-
-            // set stored alts to blank so that a DB call is triggered
-            storedAlternatives.alternatives = [];
 
             router.push({
               name: "taskEditAlternatives",
@@ -105,8 +98,7 @@ export default {
   },
   data() {
     return {
-      route: null,
-      criteria: storedCriteria.criteria,
+      route: null
     };
   },
 };

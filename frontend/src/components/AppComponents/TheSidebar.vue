@@ -15,15 +15,15 @@
         @click="openSidebar"
       />
       <SidebarButton
-        image-url="triangle.svg"
-        route-name="taskEditMethod"
-        button-text="Method"
-        @click="openSidebar"
-      />
-      <SidebarButton
         image-url="circle.svg"
         route-name="taskEditCriteria"
         button-text="Criteria"
+        @click="openSidebar"
+      />
+      <SidebarButton
+        image-url="triangle.svg"
+        route-name="taskEditMethod"
+        button-text="Method"
         @click="openSidebar"
       />
       <div class="line mt-10 mb-10"></div>

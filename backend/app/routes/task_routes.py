@@ -28,7 +28,7 @@ def save_task_to_db():
         sql_session.flush()
         response = {"result": "Criteria not deleted, error: " + str(e) + "!"}
     else:
-        save_task_in_session(task_id=new_task.task_id, task_name=new_task.task_name, project_id=project_id)
+        # save_task_in_session(task_id=new_task.task_id, task_name=new_task.task_name, project_id=project_id)
 
         response = {"result": "success"}
     return jsonify(response)
@@ -41,13 +41,13 @@ def get_tasks_by_project_id():
     project_id = post_data['projectID']
     result = []
 
-    projects = flask_session.get("projects")
-    if projects:
-        project = projects.get(project_id)
-        if project:
-            tasks = project.get("tasks")
-            if tasks:
-                return jsonify([task for task in tasks.values()])
+    # projects = flask_session.get("projects")
+    # if projects:
+    #     project = projects.get(project_id)
+    #     if project:
+    #         tasks = project.get("tasks")
+    #         if tasks:
+    #             return jsonify([task for task in tasks.values()])
 
     tasks = (
         sql_session
@@ -57,7 +57,7 @@ def get_tasks_by_project_id():
     )
 
     for task in tasks:
-        save_task_in_session(task_id=task.task_id, task_name=task.task_name, project_id=project_id)
+        # save_task_in_session(task_id=task.task_id, task_name=task.task_name, project_id=project_id)
 
         result.append(
             {"taskID": task.task_id, "taskName": task.task_name, "projectID": project_id})
@@ -81,7 +81,7 @@ def delete_task_by_id():
         sql_session.flush()
         response = {"result": "Project not deleted, error: " + str(e) + "!"}
     else:
-        delete_task_from_session(task_id=task_id, project_id=project_id)
+        # delete_task_from_session(task_id=task_id, project_id=project_id)
         response = {"result": "success"}
 
     return jsonify(response)

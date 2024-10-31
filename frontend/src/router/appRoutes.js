@@ -30,7 +30,7 @@ export default [
     component: ProjectEdit,
   },
   {
-    path: "/app/task/:taskID",
+    path: "/app/project/:projectID/task/:taskID",
     name: "taskEdit",
     component: TaskEdit,
     children: [

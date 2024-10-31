@@ -26,7 +26,7 @@
           v-for="(alternative, index) in alternatives"
           class="alternative"
           :key="index"
-          @click="openAlternative"
+          @click="toggleAlternative"
           :data-alternative-id="alternative.alternativeID"
       >
         <span class="checkbox"></span>
@@ -48,10 +48,6 @@
 import axios from "axios";
 import {useRoute} from "vue-router";
 import Swal from "sweetalert2";
-import {
-  alternatives as storedAlternatives,
-  criteria as storedCriteria,
-} from "@/store/store";
 
 export default {
   name: "TaskEditAlternatives",
@@ -65,12 +61,17 @@ export default {
       const path = "http://127.0.0.1:5000/get-alternatives-by-task-id";
       const axiosPromise = axios.post(path, {
         taskID: this.route.params.taskID,
+        projectID: this.route.params.projectID,
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
       });
 
       axiosPromise
           .then((response) => {
             this.alternatives = response.data;
-            storedAlternatives.alternatives = response.data;
           })
           .catch(() => {
             console.log(
@@ -78,7 +79,22 @@ export default {
             );
           });
     },
-    openAlternative(event) {
+    deselectAllAlternatives() {
+      const checkboxes = document.getElementsByClassName("checkbox");
+      const alts = document.getElementsByClassName("alternative");
+
+      for (const alt of alts) {
+        alt.dataset.seleted = "false";
+      }
+
+      for (const checkbox of checkboxes) {
+        checkbox.classList.remove("checkbox--selected");
+      }
+
+      this.numberOfSelectedAlternatives = 0;
+
+    },
+    toggleAlternative(event) {
       const checkbox = event.currentTarget.querySelector(".checkbox");
       checkbox.classList.toggle("checkbox--selected");
 
@@ -92,16 +108,6 @@ export default {
 
       this.updateDeleteButtonVisibility();
       // Todo: add help text to the help panel (description from the DB/criterion)
-
-      // const inputTable = event.currentTarget.querySelector("table");
-      // if (event.target == inputTable || inputTable.contains(event.target)) {
-      //   return;
-      // }
-      //
-      // event.currentTarget.classList.toggle("alternative--open");
-      // ["chevron--up", "chevron--down"].map((c) => {
-      //   event.currentTarget.querySelector(".chevron").classList.toggle(c);
-      // });
     },
     updateDeleteButtonVisibility() {
       const deleteButton = document.querySelector(".delete-alternatives-btn");
@@ -144,6 +150,8 @@ export default {
             this.alternatives = this.alternatives.filter(
                 (alt) => !selectedAlternativesIDs.includes(alt.alternativeID)
             );
+
+            this.deselectAllAlternatives();
           })
           .catch(() => {
             console.log("Error when deleting alternatives. Please try again...");
@@ -152,17 +160,13 @@ export default {
   },
   created() {
     this.route = useRoute();
-
-    if (!storedAlternatives.alternatives.length) {
-      this.getAlternativesByTaskID();
-    }
+    this.getAlternativesByTaskID();
   },
   data() {
     return {
-      alternatives: storedAlternatives.alternatives,
+      alternatives: [],
       route: null,
       numberOfSelectedAlternatives: 0,
-      criteria: storedCriteria.criteria,
     };
   },
 };

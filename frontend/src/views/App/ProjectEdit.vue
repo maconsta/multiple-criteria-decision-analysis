@@ -213,10 +213,8 @@ export default defineComponent({
     openExistingTask(id) {
       const router = this.$router;
       router.push({
-        name: "taskEditOverview",
+        name: "taskEditAlternatives",
         params: {taskID: id},
-        query: {projectID: this.route.params.projectID},
-        // TODO: pass the projectID to the next route somehow; query is bad, maybe; change route to have be app/projects/projectID/task/taskID.....
       });
     },
   },

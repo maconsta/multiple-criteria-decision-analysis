@@ -31,7 +31,7 @@ def save_project_to_db():
     else:
         response = {"result": "Project saved!", "projectID": new_project.project_id}
 
-        save_project_in_session(project_id=new_project.project_id, project_name=project_name, user_id=user_id)
+        # save_project_in_session(project_id=new_project.project_id, project_name=project_name, user_id=user_id)
 
     return jsonify(response)
 
@@ -40,15 +40,16 @@ def save_project_to_db():
 @jwt_required()
 def get_project(project_id):
     project_name = ""
-    projects = flask_session.get("projects")
-    if projects:
-        project = projects.get(project_id)
-        
-        if project:
-            project_name = project.get("projectName")
-    else:
-        project = Project.query.filter(Project.project_id == project_id).first()
-        project_name = project.project_name
+    # projects = flask_session.get("projects")
+    # if projects:
+    #     project = projects.get(project_id)
+    #
+    #     if project:
+    #         project_name = project.get("projectName")
+    # else:
+
+    project = Project.query.filter(Project.project_id == project_id).first()
+    project_name = project.project_name
 
     return jsonify(project_name)
 
@@ -57,10 +58,10 @@ def get_project(project_id):
 @jwt_required()
 def get_projects_by_user_id():
 
-    projects = flask_session.get("projects")
-    if projects:
-        result = [value for value in projects.values()]
-        return jsonify(result)
+    # projects = flask_session.get("projects")
+    # if projects:
+    #     result = [value for value in projects.values()]
+    #     return jsonify(result)
 
     user_id = get_jwt_identity()
 
@@ -82,8 +83,8 @@ def get_projects_by_user_id():
              "owner": owner}
         )
 
-        save_project_in_session(project_id=p.project_id, project_name=p.project_name, user_id=user_id,
-                               visibility=visibility)
+        # save_project_in_session(project_id=p.project_id, project_name=p.project_name, user_id=user_id,
+        #                        visibility=visibility)
 
     return jsonify(result)
 
@@ -103,7 +104,7 @@ def delete_project():
         sql_session.flush()
         response = {"result": "Project not deleted, error: " + str(e) + "!"}
     else:
-        delete_project_from_session(project_id=project_id)
+        # delete_project_from_session(project_id=project_id)
 
         response = {"result": "success"}
 

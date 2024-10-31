@@ -91,9 +91,9 @@ def register_user():
             }
         )
 
-        projects = flask_session.get("projects")
-        if projects is not None:
-            projects.clear()
+        # projects = flask_session.get("projects")
+        # if projects is not None:
+        #     projects.clear()
 
         set_access_cookies(response, token)
 
@@ -141,8 +141,8 @@ def is_logged_in():
 def sign_out():
     response = jsonify({"result": "User signed out!", "success": True})
 
-    flask_session.get("projects").clear()
-    flask_session.modified = True
+    # flask_session.get("projects").clear()
+    # flask_session.modified = True
 
     unset_jwt_cookies(response)
 
