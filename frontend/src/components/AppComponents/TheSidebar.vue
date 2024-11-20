@@ -9,21 +9,21 @@
 <!--      />-->
 <!--      <div class="line mt-10 mb-10"></div>-->
       <SidebarButton
-        image-url="square.svg"
+        :image-url="alt_image"
         route-name="taskEditAlternatives"
         button-text="Alternatives"
         @click="openSidebar"
       />
       <SidebarButton
-        image-url="circle.svg"
+        :image-url="crit_image"
         route-name="taskEditCriteria"
         button-text="Criteria"
         @click="openSidebar"
       />
       <SidebarButton
-        image-url="triangle.svg"
-        route-name="taskEditMethod"
-        button-text="Method"
+        :image-url="trade_offs_image"
+        route-name="taskEditTradeOffs"
+        button-text="Trade-Offs"
         @click="openSidebar"
       />
       <div class="line mt-10 mb-10"></div>
@@ -95,6 +95,13 @@ export default {
       }
     },
   },
+  data() {
+    return {
+      alt_image: "square.svg",
+      crit_image: "square.svg",
+      trade_offs_image: "square.svg",
+    };
+  }
 };
 </script>
 

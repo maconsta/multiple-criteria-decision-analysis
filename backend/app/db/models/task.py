@@ -17,6 +17,7 @@ class Task(TimeStampedModel):
     project = Relationship("Project", back_populates="tasks")
     alternatives = Relationship("Alternative", back_populates="task", passive_deletes=True)
     criteria = Relationship("Criterion", back_populates="task", passive_deletes=True)
+    trade_offs = Relationship("TradeOff", back_populates="task", passive_deletes=True)
 
     # ranking = Column(PickleType) # is this needed ?
 

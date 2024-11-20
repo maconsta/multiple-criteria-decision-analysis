@@ -27,5 +27,3 @@ from backend.app.routes import project_routes
 from backend.app.routes import task_routes
 from backend.app.routes import authentication_routes
 from backend.app.routes import alternative_routes
-from backend.app.routes import criterion_routes
-from backend.app.routes import tradeoff_routes

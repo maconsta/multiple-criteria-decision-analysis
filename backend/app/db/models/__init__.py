@@ -24,3 +24,5 @@ from backend.app.db.models.task import Task
 from backend.app.db.models.alternative import Alternative
 from backend.app.db.models.criterion import Criterion
 from backend.app.db.models.decision_matrix import DecisionMatrix
+from backend.app.db.models.trade_off import TradeOff
+

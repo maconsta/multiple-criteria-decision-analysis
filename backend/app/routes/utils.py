@@ -99,11 +99,22 @@ def save_alt_in_session(project_id: int, task_id: int, alt_id: int, alt_name: st
         task["alternatives"] = {}
 
         task["alternatives"].update({
-            alt_id: {
+            str(alt_id): {
                 "name": alt_name,
                 "alternativeID": alt_id,
                 "description": alt_description,
+                "task_id": task_id,
             }
         })
 
     flask_session.modified = True
+
+
+def get_alts_from_session(project_id: int, task_id: int):
+    task = flask_session.get("projects")
+    print(task)
+    return
+
+    if task.get("alternatives") is not None:
+        result = [value for value in task.get("alternatives").values()]
+        return result

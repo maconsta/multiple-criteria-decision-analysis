@@ -13,43 +13,59 @@
       <div class="criterion__name">
         <label for="name">Name (Required)</label>
         <input
-          type="text"
-          name="name"
-          id="name"
-          required
-          minlength="3"
-          maxlength="70"
-          placeholder="Criterion Name"
+            type="text"
+            name="name"
+            id="name"
+            required
+            minlength="3"
+            maxlength="70"
+            placeholder="Criterion Name"
         />
       </div>
-      <div class="criterion__beneficiality mt-15">
+      <div class="criterion__dropdown mt-15">
         <label for="beneficiality">Beneficiality (Required)</label>
         <select id="beneficiality">
           <option value="max">Beneficial</option>
           <option value="min">Non-beneficial</option>
         </select>
       </div>
+      <div class="criterion__dropdown mt-15">
+        <label for="type">Criterion Type (Required)</label>
+        <select id="type">
+          <option value="min">Quantitative</option>
+          <option value="max">Ranking</option>
+          <option value="min">Qualitative</option>
+          <option value="min">Weighting</option>
+        </select>
+      </div>
       <div class="criterion__description mt-15">
         <label for="description">Description (Required)</label>
         <textarea
-          type="text"
-          name="description"
-          id="description"
-          minlength="3"
-          maxlength="80"
-          placeholder="..."
-          required
+            type="text"
+            name="description"
+            id="description"
+            minlength="3"
+            maxlength="80"
+            placeholder="..."
+            required
         />
+      </div>
+      <div class="line mb-30 mt-30"></div>
+      <span>Alternative Values (Required)</span>
+      <div v-for="(alternative, index) in alternatives" :key="index" class="alternative mt-15">
+        <label for="{{ alternative.name }}">{{ alternative.name }}</label>
+        <input id="{{ alternative.name }}" name="{{ alternative.name }}" required type="number"
+               placeholder="Enter a value"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { criteria as storedCriteria } from "@/store/store";
+import {criteria as storedCriteria} from "@/store/store";
 
 export default {
   name: "TaskEditNewCriterion",
@@ -60,42 +76,77 @@ export default {
       const description = document.getElementById("description").value;
       const taskID = this.route.params.taskID;
 
+      const values = [];
+      document.querySelectorAll(".alternative input").forEach(input => {
+        values.push(parseFloat(input.value));
+      });
+
       const path = "http://127.0.0.1:5000/save-criterion-to-db";
       const axiosPromise = axios.post(path, {
         name: name,
         beneficiality: beneficiality,
         description: description,
         taskID: taskID,
+        values: values,
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        }
       });
 
       const router = this.$router;
       axiosPromise
-        .then(() => {
-          Swal.fire({
-            position: "top-end",
-            toast: true,
-            icon: "success",
-            title: "Criterion has been saved",
-            showConfirmButton: false,
-            timer: 3000,
-          });
+          .then(() => {
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: "Criterion has been saved",
+              showConfirmButton: false,
+              timer: 3000,
+            });
 
-          // set stored crit to an empty arr to trigger a DB call
-          storedCriteria.criteria = [];
+            // set stored crit to an empty arr to trigger a DB call
+            storedCriteria.criteria = [];
 
-          router.push({
-            name: "taskEditCriteria",
+            router.push({
+              name: "taskEditCriteria",
+            });
+          })
+          .catch(() => {
+            console.log(
+                "Error when creating a new criterion. Please try again..."
+            );
           });
-        })
-        .catch(() => {
-          console.log(
-            "Error when creating a new criterion. Please try again..."
-          );
-        });
     },
+    getAlternativesByTaskID() {
+      const path = "http://127.0.0.1:5000/get-alternatives-by-task-id";
+      const axiosPromise = axios.post(path, {
+        taskID: this.route.params.taskID,
+        projectID: this.route.params.projectID,
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      });
+
+      axiosPromise
+          .then((response) => {
+            this.alternatives = response.data;
+          })
+          .catch(() => {
+            console.log(
+                "Error when querying for alternatives. Please try again..."
+            );
+          });
+    }
+    ,
   },
   created() {
     this.route = useRoute();
+    this.getAlternativesByTaskID()
   },
   mounted() {
     // clear the text fields
@@ -105,6 +156,7 @@ export default {
   data() {
     return {
       route: null,
+      alternatives: []
     };
   },
 };
@@ -161,13 +213,6 @@ export default {
     flex-direction: column;
     gap: 5px;
 
-    label {
-      width: fit-content;
-      font-size: 0.875rem;
-      font-weight: 300;
-      font-style: italic;
-    }
-
     input {
       border: 1px solid $light-gray;
       border-radius: 8px;
@@ -180,17 +225,10 @@ export default {
     }
   }
 
-  &__beneficiality {
+  &__dropdown {
     display: flex;
     flex-direction: column;
     gap: 5px;
-
-    label {
-      width: fit-content;
-      font-size: 0.875rem;
-      font-weight: 300;
-      font-style: italic;
-    }
 
     select {
       border: 1px solid #e7e7e9;
@@ -205,7 +243,7 @@ export default {
 
       &:focus {
         outline: 2px solid $main-blue-20;
-        background-image: url("@/assets/images/chevron-up.svg");
+        //background-image: url("@/assets/images/chevron-up.svg");
       }
     }
   }
@@ -214,13 +252,6 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 5px;
-
-    label {
-      width: fit-content;
-      font-size: 0.875rem;
-      font-weight: 300;
-      font-style: italic;
-    }
 
     textarea {
       border: 1px solid $light-gray;
@@ -234,6 +265,25 @@ export default {
         outline: 2px solid $main-blue-20;
       }
     }
+  }
+
+  label {
+    width: fit-content;
+    font-size: 0.875rem;
+    font-weight: 300;
+    font-style: italic;
+  }
+}
+
+.alternative {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  input {
+    border: 1px solid #e7e7e9;
+    border-radius: 8px;
+    padding: 8px;
   }
 }
 </style>

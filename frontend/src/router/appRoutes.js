@@ -5,13 +5,14 @@ import Projects from "@/views/App/Projects.vue";
 import ProjectEdit from "@/views/App/ProjectEdit.vue";
 import TaskEdit from "@/views/App/TaskEdit.vue";
 import TaskEditOverview from "@/views/App/TaskEditOverview.vue";
-import TaskEditMethod from "@/views/App/TaskEditMethod.vue";
+import TaskEditTradeOffs from "@/views/App/TaskEditTradeOffs.vue";
 import TaskEditCriteria from "@/views/App/TaskEditCriteria.vue";
 import TaskEditAlternatives from "@/views/App/TaskEditAlternatives.vue";
 import TaskEditWeights from "@/views/App/TaskEditWeights.vue";
 import TaskEditNewCriterion from "@/views/App/TaskEditNewCriterion.vue";
 import TaskEditNewAlternative from "@/views/App/TaskEditNewAlternative.vue";
 import TaskEditCalculate from "@/views/App/TaskEditCalculate.vue";
+import TaskEditNewTradeOff from "@/views/App/TaskEditNewTradeOff.vue";
 
 export default [
   {
@@ -40,9 +41,9 @@ export default [
         component: TaskEditOverview,
       },
       {
-        path: "method",
-        name: "taskEditMethod",
-        component: TaskEditMethod,
+        path: "trade-offs",
+        name: "taskEditTradeOffs",
+        component: TaskEditTradeOffs,
       },
       {
         path: "criteria",
@@ -68,6 +69,10 @@ export default [
         path: "new-alternative",
         name: "taskEditNewAlternative",
         component: TaskEditNewAlternative,
+      },{
+        path: "new-trade-off",
+        name: "taskEditNewTradeOff",
+        component: TaskEditNewTradeOff,
       },
       {
         path: "calculate",

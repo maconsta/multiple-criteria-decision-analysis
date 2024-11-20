@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import Relationship
+from sqlalchemy.dialects import postgresql as pg
 
 from backend.app.db.models.base import TimeStampedModel
 
@@ -10,6 +11,7 @@ class Criterion(TimeStampedModel):
     criterion_id = Column(Integer, primary_key=True, autoincrement=True)
     criterion_name = Column(String(80), nullable=False)
     min_max = Column(String(3), nullable=False)
+    alternatives_values = Column(pg.ARRAY(Integer))
     description = Column(String(500))
     task_id = Column(Integer, ForeignKey("tasks.task_id", ondelete="Cascade"), nullable = False, index = True)
 
