@@ -14,7 +14,13 @@
       </router-link>
     </nav>
     <nav>
-      <span @click="signOut" class="sign-out">Sign Out</span>
+      <div class="dropdown">
+        <span class="profile-icon" @click="toggleDropdown"></span>
+        <div v-if="isDropdownOpen" class="dropdown-menu">
+          <span @click="navigateToProfile" class="dropdown-item">Profile</span>
+          <span @click="signOut" class="dropdown-item">Sign Out</span>
+        </div>
+      </div>
     </nav>
   </header>
 </template>
@@ -24,35 +30,43 @@ import axios from "axios";
 
 export default {
   name: "TheHeader",
+  data() {
+    return {
+      isDropdownOpen: false,
+    };
+  },
   methods: {
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+    },
+    navigateToProfile() {
+      this.$router.push({ name: "userProfile" });
+      this.isDropdownOpen = false;
+    },
     signOut() {
       const path = "http://127.0.0.1:5000/sign-out";
-      const axiosPromise = axios.get(
-          path,
-          {
-            withCredentials: true,
-            headers: {
-              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-            },
-          }
-      );
-
-      axiosPromise
-          .then((response) => {
-            localStorage.removeItem("csrfToken");
-            this.$router.push({
-              name: "home",
-            });
-          })
-          .catch(() => {
-            console.log("Error when signing out...");
+      axios
+        .get(path, {
+          withCredentials: true,
+          headers: {
+            "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+          },
+        })
+        .then((response) => {
+          localStorage.removeItem("csrfToken");
+          this.$router.push({
+            name: "home",
           });
-    }
-  }
+        })
+        .catch(() => {
+          console.log("Error when signing out...");
+        });
+      this.isDropdownOpen = false;
+    },
+  },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 header {
   background-color: $main-blue;
@@ -75,13 +89,12 @@ nav {
   }
 }
 
-.home-btn {
+.home-btn, .projects-btn {
   display: flex;
   align-items: center;
   justify-content: center;
 
   &__img {
-    background: url("../../assets/images/home.svg");
     background-repeat: no-repeat;
     background-size: 25px;
     width: 25px;
@@ -89,23 +102,12 @@ nav {
   }
 }
 
-.projects-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &__img {
-    background-image: url("../../assets/images/folder.svg");
-    background-repeat: no-repeat;
-    background-size: 25px;
-    width: 25px;
-    height: 25px;
-  }
+.home-btn__img {
+  background-image: url("../../assets/images/home.svg");
 }
 
-.sign-out {
-  color: #fff;
-  cursor: pointer;
+.projects-btn__img {
+  background-image: url("../../assets/images/folder.svg");
 }
 
 .link {
@@ -131,7 +133,63 @@ nav {
   }
 }
 
-.router-link-exact-active {
-  //background-color: $main-green;
+.profile-icon {
+  width: 35px;
+  height: 35px;
+  background-color: #ffffff; /* Placeholder color for profile icon */
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #2c64ff;
+  /* Placeholder initial - replace with image later */
+  &::after {
+    content: "U";
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: #2c64ff;
+  border-radius: 8px;
+  padding: 10px 0;
+  min-width: 150px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-item {
+  color: #fff;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
