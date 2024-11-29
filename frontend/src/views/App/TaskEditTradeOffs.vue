@@ -1,6 +1,7 @@
 <script>
 import axios from "axios";
 import {useRoute} from "vue-router";
+import Swal from "sweetalert2";
 
 export default {
   name: "TaskEditTradeOffs",
@@ -33,12 +34,49 @@ export default {
 
       axiosPromise
           .then((response) => {
-            this.tradeOff = response.data;
+            if (response.data.success) {
+              this.tradeOff = response.data;
+
+              document.getElementsByClassName("delete-trade-off-btn")[0].classList.add("delete-trade-off-btn--active");
+            } else {
+              document.getElementsByClassName("delete-trade-off-btn")[0].classList.remove("delete-trade-off-btn--active");
+            }
           })
           .catch(() => {
             console.log("Error when querying for criteria. Please try again...");
           });
     },
+    deleteTradeOff() {
+      if (!document.getElementsByClassName("delete-trade-off-btn")[0].classList.contains("delete-trade-off-btn--active")) {
+        return;
+      }
+
+      const path = `http://127.0.0.1:5000/delete-trade-off-by-task-id`;
+      const axiosPromise = axios.post(path, {
+        taskID: this.route.params.taskID,
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      });
+
+      axiosPromise.then((response) => {
+        Swal.fire({
+          position: "top-end",
+          toast: true,
+          icon: "success",
+          title: "Trade-Off has been deleted",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+
+        this.tradeOff = null
+        document.getElementsByClassName("delete-trade-off-btn")[0].classList.remove("delete-trade-off-btn--active");
+      }).catch((response) => {
+        console.log("Error when deleting project.");
+      });
+    }
   }
 }
 </script>

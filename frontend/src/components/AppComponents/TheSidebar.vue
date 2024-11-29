@@ -28,18 +28,11 @@
       />
       <div class="line mt-10 mb-10"></div>
       <SidebarButton
-        image-url="scale2.png"
-        route-name="taskEditWeights"
-        button-text="Weigh & Calculate"
+        image-url="cpu.svg"
+        route-name="result"
+        button-text="Calculate"
         @click="openSidebar"
       />
-<!--      <div class="line mt-10 mb-10"></div>-->
-<!--      <SidebarButton-->
-<!--        image-url="cpu.svg"-->
-<!--        route-name="taskEditCalculate"-->
-<!--        button-text="Calculate"-->
-<!--        @click="openSidebar"-->
-<!--      />-->
     </div>
 
     <div

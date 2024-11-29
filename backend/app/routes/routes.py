@@ -22,31 +22,31 @@ def greetings():
 
 # TODO: add jwt_required decorator and fix routes logic
 
-
-@app.route("/calculate-results", methods=['POST'])
-def calculate_results():
-    post_data = request.get_json()
-    weight_matrix_raw = post_data['weightMatrix']
-    alternatives_raw = post_data['alternatives']
-    criteria_raw = post_data['criteria']
-
-    # print(weight_matrix_raw)
-    # print(alternatives_raw)
-    # print(criteria_raw)
-
-    criteria = []
-    for crit in criteria_raw:
-        c = Crit(name=crit['name'], min_max=crit['beneficiality'])
-        criteria.append(c)
-
-    alternatives = []
-    # for alt in alternatives_raw:
-    # alternatives need values, fix that first and come back
-    # a = Alt()
-
-    # print(criteria)
-
-    return jsonify("test")
-
-
+#
+# @app.route("/calculate-results", methods=['POST'])
+# def calculate_results():
+#     post_data = request.get_json()
+#     weight_matrix_raw = post_data['weightMatrix']
+#     alternatives_raw = post_data['alternatives']
+#     criteria_raw = post_data['criteria']
+#
+#     # print(weight_matrix_raw)
+#     # print(alternatives_raw)
+#     # print(criteria_raw)
+#
+#     criteria = []
+#     for crit in criteria_raw:
+#         c = Crit(name=crit['name'], min_max=crit['beneficiality'])
+#         criteria.append(c)
+#
+#     alternatives = []
+#     # for alt in alternatives_raw:
+#     # alternatives need values, fix that first and come back
+#     # a = Alt()
+#
+#     # print(criteria)
+#
+#     return jsonify("test")
+#
+#
 

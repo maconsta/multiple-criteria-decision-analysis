@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import unittest
-from mcda.methods.weightedSum import WeightedSum
-from mcda.core.core import Criterion, Alternative, DecisionMatrix
+from backend.mcda.methods.weightedSum import WeightedSum
+from backend.mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class WeightedSumTest (unittest.TestCase):
@@ -13,7 +13,7 @@ class WeightedSumTest (unittest.TestCase):
         c4 = Criterion("flexibility","max")
         criteria2 = [c1,c2,c3,c4]
         
-        a1 = Alternative("X", [0.751,0.480, 0.077,0.066])        
+        a1 = Alternative("X", [0.751,0.480, 0.077,0.066])
         a2 = Alternative("Y", [0.178,0.406,0.231,0.615])
         a3 = Alternative("Z", [0.071,0.114,0.692,0.319])
         w = [0.232, 0.402, 0.061, 0.305]
@@ -33,7 +33,7 @@ class WeightedSumTest (unittest.TestCase):
         self.assertEqual(decisionmatrix.matrix[2][2], 0.692, "DM[2][2] is not OK")
         self.assertEqual(decisionmatrix.matrix[2][3], 0.319, "DM[2][3] is not OK")
         
-        # wh = WeightedSum(decisionmatrix, w)        
+        # wh = WeightedSum(decisionmatrix, w)
         # wh.calculate_weighted_sum()
         # ADD TESTS FOR THE RESULT OF WH.CALCULATE_WEIGHTED_SUM
 

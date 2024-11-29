@@ -147,3 +147,4 @@ def sign_out():
     unset_jwt_cookies(response)
 
     return response
+

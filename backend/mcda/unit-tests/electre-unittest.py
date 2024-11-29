@@ -1,6 +1,6 @@
 import unittest
-from mcda.methods.electre import Electre 
-from mcda.core.core import Criterion, Alternative, DecisionMatrix
+from backend.mcda.methods.electre import Electre
+from backend.mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class ElectreTest(unittest.TestCase):

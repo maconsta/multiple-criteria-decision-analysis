@@ -11,74 +11,75 @@ import TaskEditAlternatives from "@/views/App/TaskEditAlternatives.vue";
 import TaskEditWeights from "@/views/App/TaskEditWeights.vue";
 import TaskEditNewCriterion from "@/views/App/TaskEditNewCriterion.vue";
 import TaskEditNewAlternative from "@/views/App/TaskEditNewAlternative.vue";
-import TaskEditCalculate from "@/views/App/TaskEditCalculate.vue";
 import TaskEditNewTradeOff from "@/views/App/TaskEditNewTradeOff.vue";
+import Result from "@/views/App/Result.vue"
 
 export default [
-  {
-    path: "/app",
-    name: "homeApp",
-    component: HomeApp,
-  },
-  {
-    path: "/app/projects",
-    name: "projects",
-    component: Projects,
-  },
-  {
-    path: "/app/project/:projectID/edit",
-    name: "projectEdit",
-    component: ProjectEdit,
-  },
-  {
-    path: "/app/project/:projectID/task/:taskID",
-    name: "taskEdit",
-    component: TaskEdit,
-    children: [
-      {
-        path: "overview",
-        name: "taskEditOverview",
-        component: TaskEditOverview,
-      },
-      {
-        path: "trade-offs",
-        name: "taskEditTradeOffs",
-        component: TaskEditTradeOffs,
-      },
-      {
-        path: "criteria",
-        name: "taskEditCriteria",
-        component: TaskEditCriteria,
-      },
-      {
-        path: "alternatives",
-        name: "taskEditAlternatives",
-        component: TaskEditAlternatives,
-      },
-      {
-        path: "weights",
-        name: "taskEditWeights",
-        component: TaskEditWeights,
-      },
-      {
-        path: "new-criterion",
-        name: "taskEditNewCriterion",
-        component: TaskEditNewCriterion,
-      },
-      {
-        path: "new-alternative",
-        name: "taskEditNewAlternative",
-        component: TaskEditNewAlternative,
-      },{
-        path: "new-trade-off",
-        name: "taskEditNewTradeOff",
-        component: TaskEditNewTradeOff,
-      },
-      {
-        path: "calculate",
-        name: "taskEditCalculate",
-        component: TaskEditCalculate,
-      },
-    ],
-  },
+    {
+        path: "/app",
+        name: "homeApp",
+        component: HomeApp,
+    },
+    {
+        path: "/app/projects",
+        name: "projects",
+        component: Projects,
+    },
+    {
+        path: "/app/project/:projectID/edit",
+        name: "projectEdit",
+        component: ProjectEdit,
+    },
+    {
+        path: "/app/project/:projectID/task/:taskID",
+        name: "taskEdit",
+        component: TaskEdit,
+        children: [
+            {
+                path: "overview",
+                name: "taskEditOverview",
+                component: TaskEditOverview,
+            },
+            {
+                path: "trade-offs",
+                name: "taskEditTradeOffs",
+                component: TaskEditTradeOffs,
+            },
+            {
+                path: "criteria",
+                name: "taskEditCriteria",
+                component: TaskEditCriteria,
+            },
+            {
+                path: "alternatives",
+                name: "taskEditAlternatives",
+                component: TaskEditAlternatives,
+            },
+            {
+                path: "weights",
+                name: "taskEditWeights",
+                component: TaskEditWeights,
+            },
+            {
+                path: "new-criterion",
+                name: "taskEditNewCriterion",
+                component: TaskEditNewCriterion,
+            },
+            {
+                path: "new-alternative",
+                name: "taskEditNewAlternative",
+                component: TaskEditNewAlternative,
+            },
+            {
+                path: "new-trade-off",
+                name: "taskEditNewTradeOff",
+                component: TaskEditNewTradeOff,
+            }
+        ],
+    },
+    {
+        path: "/app/project/:projectID/task/:taskID/result",
+        name: "result",
+        component: Result,
+    }
 ];
