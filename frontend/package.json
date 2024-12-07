@@ -17,6 +17,7 @@
     "nouislider": "^15.8.0",
     "progressbar.js": "^1.1.1",
     "react-router-dom": "^6.23.1",
+    "sortablejs": "^1.15.6",
     "sweetalert2": "^11.10.7",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"

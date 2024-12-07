@@ -31,11 +31,11 @@
       </div>
       <div class="criterion__dropdown mt-15">
         <label for="type">Criterion Type (Required)</label>
-        <select id="type">
-          <option value="min">Quantitative</option>
-          <option value="max">Ranking</option>
-          <option value="min">Qualitative</option>
-          <option value="min">Weighting</option>
+        <select id="type" @change="onCritTypeChange($event)">
+          <option value="section-quantitative">Quantitative</option>
+          <option value="section-ranking">Ranking</option>
+          <option value="section-qualitative">Qualitative</option>
+          <option value="section-weighting">Weighting</option>
         </select>
       </div>
       <div class="criterion__description mt-15">
@@ -50,12 +50,76 @@
             required
         />
       </div>
+
       <div class="line mb-30 mt-30"></div>
       <span>Alternative Values (Required)</span>
-      <div v-for="(alternative, index) in alternatives" :key="index" class="alternative mt-15">
-        <label for="{{ alternative.name }}">{{ alternative.name }}</label>
-        <input id="{{ alternative.name }}" name="{{ alternative.name }}" required type="number"
-               placeholder="Enter a value"/>
+
+      <div id="section-quantitative" class="section">
+        <div v-for="(alternative, index) in alternatives" :key="index" class="alternative mt-15">
+          <label for="{{ alternative.name }}">{{ alternative.name }}</label>
+          <input id="{{ alternative.name }}" name="{{ alternative.name }}" required type="number"
+                 placeholder="Enter a value"/>
+        </div>
+      </div>
+
+      <div id="section-ranking" class="section disabled">
+        <ul id="draggable" class="mt-15">
+          <li v-for="(alternative, index) in alternatives" :key="index">
+            <span>{{ alternative.name }}</span>
+            <span class="order-number">{{ index + 1 }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div id="section-qualitative" class="section disabled mt-15">
+        <div id="radio-buttons">
+          <div v-for="(alternative, index) in alternatives" :key="index" class="">
+            <span class="mt-10">{{ alternative.name }}</span>
+            <div class="radio-container mt-10">
+              <label :for="'terrible' + index">Terrible</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'terrible' + index" value="1">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'very-bad-' + index">Very Bad</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'very-bad-' + index" value="2">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'bad-' + index">Bad</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'bad-' + index" value="3">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'subpar-' + index">Subpar</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'subpar-' + index" value="4">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'average-' + index">Average</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'average-' + index" value="5">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'fair-' + index">Fair</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'fair-' + index" value="6">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'good-' + index">Good</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'good-' + index" value="7">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'very-good-' + index">Very Good</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'very-good-' + index" value="8">
+            </div>
+            <div class="radio-container mt-5">
+              <label :for="'excellent-' + index">Excellent</label>
+              <input type="radio" :name="'qualitative-value-' + index" :id="'excellent-' + index" value="9">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="section-weighting" class="section disabled">
+        <div v-for="i in alternatives.length">{{ alternatives[i - 1].name }}</div>
+        <div class="slidercontainer">
+          <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+        </div>
       </div>
     </div>
   </div>
@@ -65,7 +129,8 @@
 import {useRoute} from "vue-router";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {criteria as storedCriteria} from "@/store/store";
+import {alternatives, criteria as storedCriteria} from "@/store/store";
+import Sortable from "sortablejs";
 
 export default {
   name: "TaskEditNewCriterion",
@@ -75,11 +140,23 @@ export default {
       const beneficiality = document.getElementById("beneficiality").value;
       const description = document.getElementById("description").value;
       const taskID = this.route.params.taskID;
+      const section = document.querySelector(".section:not(.disabled)").id;
 
       const values = [];
-      document.querySelectorAll(".alternative input").forEach(input => {
-        values.push(parseFloat(input.value));
-      });
+      if (section === "section-quantitative") {
+        document.querySelectorAll(".alternative input").forEach(input => {
+          values.push(parseFloat(input.value));
+        });
+      } else if (section === "section-ranking") {
+        // how to get the values here?
+      } else if (section === "section-qualitative") {
+        for (let i = 0; i < this.alternatives.length; i++) {
+          let val = parseInt(document.querySelector("input[name='qualitative-value-" + i + "']:checked").value);
+          values.push(val);
+        }
+      } else if (section === "section-weighting") {
+        // how to set values here?
+      }
 
       const path = "http://127.0.0.1:5000/save-criterion-to-db";
       const axiosPromise = axios.post(path, {
@@ -135,14 +212,31 @@ export default {
       axiosPromise
           .then((response) => {
             this.alternatives = response.data;
+            // this.fillWeightingAlternatives();
           })
           .catch(() => {
             console.log(
                 "Error when querying for alternatives. Please try again..."
             );
           });
+    },
+    onCritTypeChange(event) {
+      const selectedSection = document.getElementById(event.target.value);
+      const allSections = document.getElementsByClassName("section");
+      for (const section of allSections) {
+        section.classList.add("disabled");
+      }
+      selectedSection.classList.remove("disabled");
+    },
+    fillWeightingAlternatives() {
+      // console.log(this.alternatives.length)
+      // for (let i = 0; i < this.alternatives.length; i++) {
+      //   for (let j = 0; j < this.alternatives.length; j++) {
+      //     //  fix weights
+      //     this.weightingAlternatives[i][j] =
+      //   }
+      // }
     }
-    ,
   },
   created() {
     this.route = useRoute();
@@ -152,11 +246,30 @@ export default {
     // clear the text fields
     document.getElementById("name").value = "";
     document.getElementById("description").value = "";
+
+    const updateOrder = () => {
+      const orderNumbers = document.getElementsByClassName("order-number");
+      for (let i = 0; i < orderNumbers.length; i++) {
+        const orderNumber = orderNumbers[i];
+        orderNumber.innerHTML = i + 1;
+      }
+    };
+
+    // create a draggable component
+    const el = document.getElementById("draggable");
+    let sortable = Sortable.create(el, {
+      onEnd: (evt) => {
+        updateOrder();
+      }
+    });
+
+    updateOrder();
   },
   data() {
     return {
       route: null,
-      alternatives: []
+      alternatives: [],
+      weightingAlternatives: []
     };
   },
 };
@@ -286,4 +399,67 @@ export default {
     padding: 8px;
   }
 }
+
+#draggable {
+  li {
+    border: 1px solid $light-gray;
+    padding: 12px 20px;
+    margin: 5px 0;
+    cursor: move;
+    cursor: -webkit-grabbing;
+    display: flex;
+    justify-content: space-between;
+
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+  }
+
+  .sortable-ghost {
+    background-color: $main-blue;
+    opacity: 0.1;
+  }
+
+  .order-number {
+    border-radius: 50%;
+    background-color: $light-gray;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+  }
+}
+
+.section {
+  &.disabled {
+    display: none;
+  }
+}
+
+#radio-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 15px;
+  column-gap: 25px;
+
+  .radio-container {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 5px;
+
+    input {
+      appearance: auto;
+    }
+  }
+}
+
 </style>
