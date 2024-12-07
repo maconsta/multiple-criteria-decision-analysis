@@ -65,7 +65,7 @@
       <div id="section-ranking" class="section disabled">
         <ul id="draggable" class="mt-15">
           <li v-for="(alternative, index) in alternatives" :key="index">
-            <span>{{ alternative.name }}</span>
+            <span class="alt-name">{{ alternative.name }}</span>
             <span class="order-number">{{ index + 1 }}</span>
           </li>
         </ul>
@@ -142,13 +142,25 @@ export default {
       const taskID = this.route.params.taskID;
       const section = document.querySelector(".section:not(.disabled)").id;
 
-      const values = [];
+      let values = [];
       if (section === "section-quantitative") {
         document.querySelectorAll(".alternative input").forEach(input => {
           values.push(parseFloat(input.value));
         });
       } else if (section === "section-ranking") {
-        // how to get the values here?
+        // FORMULA FOR CALCULATING THE RANKING SCORE FOR EACH INDIVIDUAL ALTERNATIVE
+        // score = alternatives_length - current_order_number + 1
+
+        document.querySelectorAll("#draggable li").forEach(li => {
+          const name = li.getElementsByClassName("alt-name")[0].innerHTML;
+          const order = parseInt(li.getElementsByClassName("order-number")[0].innerHTML);
+
+          for (let i = 0; i < this.alternatives.length; i++) {
+            if (name === this.alternatives[i].name) {
+              values[i] = this.alternatives.length - order + 1;
+            }
+          }
+        })
       } else if (section === "section-qualitative") {
         for (let i = 0; i < this.alternatives.length; i++) {
           let val = parseInt(document.querySelector("input[name='qualitative-value-" + i + "']:checked").value);
