@@ -16,14 +16,19 @@ app.config["JWT_COOKIE_SAMESITE"] = "None"
 app.config["JWT_COOKIE_SECURE"] = "Secure"
 
 # FLASK CONFIG
-app.config["SECRET_KEY"] = env.get("JWT_SECRET_KEY") # same secret key as jwt
+app.config["SECRET_KEY"] = env.get("JWT_SECRET_KEY")  # same secret key as jwt
 app.config["SESSION_COOKIE_SECURE"] = "Secure"
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
-CORS(app, origins=["http://localhost:8080", "http://www.localhost:8080"], supports_credentials=True, allow_headers=["x-csrf-token", "content-type"
-                                                                                         ])  # allows CORS from localhost only
+CORS(
+    app,
+    origins=["http://localhost:8080", "http://www.localhost:8080"],
+    supports_credentials=True,
+    allow_headers=["x-csrf-token", "content-type"],
+)  # allows CORS from localhost only
 
 from backend.app.routes import project_routes
 from backend.app.routes import task_routes
 from backend.app.routes import authentication_routes
 from backend.app.routes import alternative_routes
+from backend.app.routes import user_profile_routes

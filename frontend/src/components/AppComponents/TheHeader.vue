@@ -15,7 +15,11 @@
     </nav>
     <nav>
       <div class="dropdown">
-        <span class="profile-icon" @click="toggleDropdown"></span>
+        <span
+          class="profile-icon"
+          :style="{ backgroundImage: `url(${profileImage})` }"
+          @click="toggleDropdown"
+        ></span>
         <div v-if="isDropdownOpen" class="dropdown-menu">
           <span @click="navigateToProfile" class="dropdown-item">Profile</span>
           <span @click="signOut" class="dropdown-item">Sign Out</span>
@@ -25,6 +29,7 @@
   </header>
 </template>
 
+
 <script>
 import axios from "axios";
 
@@ -33,6 +38,7 @@ export default {
   data() {
     return {
       isDropdownOpen: false,
+      profileImage: "/default-avatar.png", // Default profile image
     };
   },
   methods: {
@@ -63,9 +69,27 @@ export default {
         });
       this.isDropdownOpen = false;
     },
+    fetchProfileImage() {
+      axios
+        .get("http://127.0.0.1:5000/api/user-profile-image", {
+          withCredentials: true,
+        })
+        .then((response) => {
+          if (response.data.success && response.data.imageUrl) {
+            this.profileImage = response.data.imageUrl;
+          }
+        })
+        .catch(() => {
+          console.log("Error fetching profile image.");
+        });
+    },
+  },
+  created() {
+    this.fetchProfileImage();
   },
 };
 </script>
+
 
 <style scoped lang="scss">
 header {
@@ -181,6 +205,23 @@ nav {
     background-color: rgba(255, 255, 255, 0.1);
   }
 }
+
+.profile-icon {
+  width: 35px;
+  height: 35px;
+  background-color: #ffffff; /* Placeholder color for profile icon */
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #2c64ff;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 
 @keyframes fadeIn {
   from {

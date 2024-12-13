@@ -17,4 +17,3 @@ class User(TimeStampedModel):
 
     def __repr__(self):
         return f"{self.__class__.__name__}, name: {self.first_name} {self.last_name}, email: {self.email}"
-
