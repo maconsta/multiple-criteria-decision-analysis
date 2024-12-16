@@ -1,3 +1,4 @@
+import math
 import numpy as np
 
 
@@ -18,11 +19,13 @@ class Criterion:
     sub_criteria
         adding sub criteria for AHP method
     """
-    
-    def __init__(self, name: str, min_max: str,sub_criteria = None):
+
+    def __init__(self, name: str, min_max: str, sub_criteria=None):
         self.name = name
         self.min_max = min_max
         self.sub_criteria = sub_criteria if sub_criteria else []
+
+
 # ---------------------------------------------CLASS_CRITERION_END------------------------------------------------------
 
 # ---------------------------------------------CLASS_ALTERNATIVE_START------------------------------------------------------
@@ -45,6 +48,8 @@ class Alternative:
     def __init__(self, name: str, values: list):
         self.name = name
         self.values = values
+
+
 # ---------------------------------------------CLASS_ALTERNATIVE_END------------------------------------------------------
 
 # ---------------------------------------------CLASS_DECISION_MATRIX_START----------------------------------------------
@@ -52,15 +57,15 @@ class Alternative:
 
 class DecisionMatrix:
     def __init__(self, criteria: list, alternatives: list, normalization_method):
-        
-        self.criteria = criteria #this is the old one
+
+        self.criteria = criteria  # this is the old one
         self.alternatives = alternatives
         self.crit_count = len(criteria)
         self.alt_count = len(alternatives)
         self.matrix = np.array([alt.values for alt in alternatives])
         self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
         normalization_method(self)
-        
+
         # self.criteria = criteria #this is new one made for both topsis and ahp.
         # self.alternatives = alternatives
         # self.crit_count = sum([1 + len(crit.sub_criteria) for crit in self.criteria])
@@ -91,11 +96,11 @@ class DecisionMatrix:
             for j in range(self.crit_count):
                 if (self.criteria[j].min_max == "max"):
                     self.normalized_matrix[i][j] = self.matrix[i][j] / \
-                        max_values[j]
+                                                   max_values[j]
                 elif (self.criteria[j].min_max == "min"):
                     self.normalized_matrix[i][j] = (
-                        self.matrix[i][j] * -1) / absolute_max_values[j]
-                    
+                                                           self.matrix[i][j] * -1) / absolute_max_values[j]
+
     def normalize_l1(self):
         '''
         Normalize the decision matrix using L1 normalization
@@ -104,14 +109,13 @@ class DecisionMatrix:
         --------
             None
         '''
-        column_sums = np.sum(np.abs(self.matrix), axis=0) #calculate the sum of absolute values in each column
-        self.normalized_matrix = self.matrix / column_sums #divide each element in the matrix by the corresponding column sum 
+        column_sums = np.sum(np.abs(self.matrix), axis=0)  # calculate the sum of absolute values in each column
+        self.normalized_matrix = self.matrix / column_sums  # divide each element in the matrix by the corresponding column sum
 
         for j in range(self.crit_count):
             if self.criteria[j].min_max == 'min':
                 self.normalized_matrix[:, j] *= -1
 
-    
     def normalize_l2(self):
         '''
         Normalize the decision matrix using the L2 vector norm
@@ -120,10 +124,11 @@ class DecisionMatrix:
         --------
             None
         '''
-        
+
         if self.crit_count != self.matrix.shape[1]:
-            raise ValueError("Dimension mismatch: number of criteria must match the number of columns in the decision matrix")
-        
+            raise ValueError(
+                "Dimension mismatch: number of criteria must match the number of columns in the decision matrix")
+
         norm = np.linalg.norm(self.matrix, axis=0)
         self.normalized_matrix = self.matrix / norm
 
@@ -133,9 +138,8 @@ class DecisionMatrix:
                     self.normalized_matrix[:, j] *= -1
             except IndexError:
                 raise IndexError(f"Criteria index {j} is out of range. Length of criteria list: {len(self.criteria)}")
-    
 
-    
+
 # ---------------------------------------------CLASS_DECISION_MATRIX_END-----------------------------------------------
 
 
@@ -143,61 +147,76 @@ class DecisionMatrix:
 
 class Pairwise:
     """
-    Class Pairwise, contains the pairwise matrix and a procedure to return the eigenvector
+    Returns an eigenvector from a list of values.
+    The values list is a list of the results of the pairwise comparison of all alternatives/criteria pairs.
 
     Attributes
     ==========
 
-    criteria : list 
-        a list of Criterion objects
+    values : list
+        a list of values
 
-    pairwise_matrix: numpy 2d array (list of lists)
+    entries_count: integer
+        number of alternatives/criteria, used in the comparison
+
+    pairwise_matrix: numpy 2d array
         the pairwise matrix
     """
-    
-    def __init__(self, criteria: list):
-        self.criteria = criteria
-        self.crit_count = len(criteria)
-        self.pairwise_matrix = np.zeros((self.crit_count, self.crit_count))
-    
-    def fill_matrix(self):
-        for row in range(self.crit_count):
-            for col in range(self.crit_count):
-                if row == col:
-                    self.pairwise_matrix[row][col] = 1
-                    continue
 
-                if self.pairwise_matrix[row][col] == 0:
-                    print("How important is", self.criteria[row].name, "with respect to", self.criteria[col].name)
-                    user_input = float(input("Enter: "))
-                    if user_input == 0:
-                        continue
-                    self.pairwise_matrix[row][col] = user_input
-                    self.pairwise_matrix[col][row] = 1 / user_input
+    def __init__(self, values: list):
+        self.values = values
+        self.entries_count = self.__find_n_choose_k(len(values))
+        self.pairwise_matrix = self.__construct_matrix(values)
+
+    def __find_n_choose_k(self, binomial_coefficient):
+        """
+            The total number of pairwise comparisons is always the binomial coefficient of 'n choose k', where
+            'n' is the size of the set (alternatives or criteria) and
+            k is number of the selected items (pairs of comparisons)\n
+
+            In the current implementation, 'k' will always be 2 (it is a pairwise comparison!)\n
+
+            Returns 'n'
+        """
+
+        k = 2
+        for n in range(k, 100):
+            if math.comb(n, k) == binomial_coefficient:
+                return n
+
+    def __construct_matrix(self, values):
+        matrix = np.zeros((self.entries_count, self.entries_count))
+
+        values_index = 0
+        for row in range(self.entries_count):
+            for col in range(self.entries_count):
+                if row == col:
+                    matrix[row][col] = 1
+                    continue
+                elif matrix[row][col] == 0:
+                    matrix[row][col] = values[values_index]
+                    matrix[col][row] = 1 / values[values_index]
+                    values_index += 1
+
+        return matrix
 
     def calculate_eigenvector(self):
-        eigenvector = np.zeros(self.crit_count)
+        eigenvector = np.zeros(self.entries_count)
         temp_matrix = self.pairwise_matrix
-        while(True):
+        while True:
             temp_matrix = np.matmul(temp_matrix, temp_matrix)
             row_sums = np.sum(temp_matrix, axis=1)
             row_sum_totals = np.sum(row_sums)
             new_eigenvector = row_sums / row_sum_totals
             if np.all(np.isclose(eigenvector, new_eigenvector)):
                 return eigenvector
-            
+
             eigenvector = new_eigenvector
 
-        
-                
-
-# c1 = Criterion("c1", "max")
-# c2 = Criterion("c2", "max")
-# c3 = Criterion("c3", "max")
-# criteria = [c1, c2, c3]
-
-# pw = Pairwise(criteria)
-# pw.fill_matrix()
-# weights = pw.calculate_eigenvector()
+# TEST FROM THE AHP PRESENTATION
+# vals = [0.5, 3, 4]
+# pw = Pairwise(vals)
+# print(pw.calculate_eigenvector())
+# EXPECTED RESULT [0.3194, 0.5595, 0.1211]
 
 # ---------------------------------------------CLASS_PAIRWISE_END-----------------------------------------------------

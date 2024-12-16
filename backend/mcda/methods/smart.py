@@ -1,5 +1,5 @@
 import numpy as np
-import mcda.core.core as core
+import backend.mcda.core.core as core
 
 class SMART:
     def __init__(self, decision_matrix: core.DecisionMatrix, weights):

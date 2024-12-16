@@ -1,11 +1,11 @@
-from mcda.core.core import Criterion, Alternative
-from mcda.core.core import DecisionMatrix, Pairwise
-from mcda.methods.ahp import AHP
-from mcda.methods.electre import Electre
-from mcda.methods.promethee import Promethee
-from mcda.methods.smart import SMART
-from mcda.methods.topsis import Topsis
-from mcda.methods.weightedSum import WeightedSum
+from backend.mcda.core.core import Criterion, Alternative
+from backend.mcda.core.core import DecisionMatrix, Pairwise
+from backend.mcda.methods.ahp import AHP
+from backend.mcda.methods.electre import Electre
+from backend.mcda.methods.promethee import Promethee
+from backend.mcda.methods.smart import SMART
+from backend.mcda.methods.topsis import Topsis
+from backend.mcda.methods.weightedSum import WeightedSum
 
 
 def input_criteria():
@@ -58,26 +58,45 @@ def input_weights(criteria):
     print("+---------+------------------------+---------------------------------------------------------------------------------------+")
     print("|  Value  |       Definition       |                            Description                                                |")
     print("+---------+------------------------+---------------------------------------------------------------------------------------+")
-    print("|       0 | Skip Comparison        | Use this when the second criteria is more important; The program will ask again later |")
-    print("|       1 | Equal Importance       | Both criteria have equal importance                                                   |")
-    print("|       3 | Low Importance         | First criteria is slightly more important                                             |")
-    print("|       5 | Substantial Importance | First criteria is substantially more important                                        |")
-    print("|       7 | Significant Importance | First criteria is significantly more important                                        |")
-    print("|       9 | Absolute Importance    | First criteria is of the most importance; Not subject of any doubt                    |")
-    print("| 2,4,6,8 | Intermediate values    | Necessary intermediate values                                                         |")
+    print("|      -8 | Absolute Importance    | First criteria is of the least importance; Not subject of any doubt                    |")
+    print("|      -6 | Significant Importance | First criteria is significantly less important                                        |")
+    print("|      -4 | Substantial Importance | First criteria is substantially less important                                        |")
+    print("|      -2 | Low Importance         | First criteria is slightly less important                                             |")
+    print("|       0 | Equal Importance       | Both criteria have equal importance                                                   |")
+    print("|       2 | Low Importance         | First criteria is slightly more important                                             |")
+    print("|       4 | Substantial Importance | First criteria is substantially more important                                        |")
+    print("|       6 | Significant Importance | First criteria is significantly more important                                        |")
+    print("|       8 | Absolute Importance    | First criteria is of the most importance; Not subject of any doubt                    |")
+    print("| 1,3,5,7 | Intermediate values    | Necessary intermediate values                                                         |")
     print("+---------+------------------------+---------------------------------------------------------------------------------------+")
 
-    pairwise = Pairwise(criteria)
-    pairwise.fill_matrix()
+    values = []
+    for row in range(len(criteria)):
+        for col in range(row + 1, len(criteria)):
+            if row == col:
+                continue
+            else:
+                print("How important is", criteria[row].name, "with respect to", criteria[col].name)
+                user_input = float(input("Enter: "))
+                if user_input < 0:
+                    user_input *= -1
+                    user_input += 1
+                    user_input = 1 / user_input
+                else:
+                    user_input += 1
+
+                values.append(user_input)
+
+    pairwise = Pairwise(values)
     return pairwise.calculate_eigenvector()
 
 def main_menu():
     print("\n===== PROGRAM STARTED =====\n")
 
     criteria = input_criteria()
-    alternaties = input_alternatives(criteria)
+    alternatives = input_alternatives(criteria)
     weights = input_weights(criteria)
-    decision_matrix = DecisionMatrix(criteria, alternaties, DecisionMatrix.normalize_l2)
+    decision_matrix = DecisionMatrix(criteria, alternatives, DecisionMatrix.normalize_l2)
 
     while (True):
         print(

@@ -40,7 +40,9 @@ export default {
           name: "homeApp",
         });
       }
-    })
+    }).catch((result) => {
+      
+    });
 
   }
 };

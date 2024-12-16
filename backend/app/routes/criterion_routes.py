@@ -3,6 +3,8 @@ from flask import request, jsonify, session as flask_session
 from backend.app.db.models import session as sql_session, User, Project, Criterion
 from backend.app import app
 
+from backend.mcda.core.core import Pairwise
+
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
@@ -23,8 +25,11 @@ def save_criterion_to_db():
     criterion_description = post_data['description']
     task_id = post_data['taskID']
     values = post_data['values']
+    pairwise = post_data['pairwise']
 
-    print(values)
+    if pairwise:
+        pw = Pairwise(values)
+        values = pw.calculate_eigenvector()
 
     # add criterion
     new_criterion = Criterion(criterion_name=criterion_name, min_max=criterion_beneficiality,
@@ -63,6 +68,7 @@ def get_criteria_by_task_id():
              "description": crit.description, "beneficiality": crit.min_max})
 
     return jsonify(result)
+
 
 @app.route("/delete-criteria-by-id", methods=['POST'])
 @jwt_required()

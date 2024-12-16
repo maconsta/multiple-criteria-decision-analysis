@@ -120,7 +120,6 @@ table {
       }
 
       &:hover {
-        font-weight: 600;
         color: $plant-green;
       }
     }

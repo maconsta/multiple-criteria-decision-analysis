@@ -16,10 +16,9 @@
     <nav>
       <div class="dropdown">
         <span
-          class="profile-icon"
-          :style="{ backgroundImage: `url(${profileImage})` }"
-          @click="toggleDropdown"
-        ></span>
+            class="profile-icon"
+            @click="toggleDropdown"
+        >{{ abbreviation }}</span>
         <div v-if="isDropdownOpen" class="dropdown-menu">
           <span @click="navigateToProfile" class="dropdown-item">Profile</span>
           <span @click="signOut" class="dropdown-item">Sign Out</span>
@@ -38,7 +37,7 @@ export default {
   data() {
     return {
       isDropdownOpen: false,
-      profileImage: "/default-avatar.png", // Default profile image
+      abbreviation: "",
     };
   },
   methods: {
@@ -46,46 +45,42 @@ export default {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
     navigateToProfile() {
-      this.$router.push({ name: "userProfile" });
+      this.$router.push({name: "userProfile"});
       this.isDropdownOpen = false;
     },
     signOut() {
       const path = "http://127.0.0.1:5000/sign-out";
       axios
+          .get(path, {
+            withCredentials: true,
+            headers: {
+              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+            },
+          })
+          .then((response) => {
+            localStorage.removeItem("csrfToken");
+            this.$router.push({
+              name: "home",
+            });
+          })
+          .catch(() => {
+            console.log("Error when signing out...");
+          });
+      this.isDropdownOpen = false;
+    },
+  },
+  created() {
+    const path = "http://127.0.0.1:5000/get-user-abbreviation";
+    axios
         .get(path, {
           withCredentials: true,
           headers: {
             "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
           },
         })
-        .then((response) => {
-          localStorage.removeItem("csrfToken");
-          this.$router.push({
-            name: "home",
-          });
-        })
-        .catch(() => {
-          console.log("Error when signing out...");
+        .then((result) => {
+          this.abbreviation = result.data.abbreviation;
         });
-      this.isDropdownOpen = false;
-    },
-    fetchProfileImage() {
-      axios
-        .get("http://127.0.0.1:5000/api/user-profile-image", {
-          withCredentials: true,
-        })
-        .then((response) => {
-          if (response.data.success && response.data.imageUrl) {
-            this.profileImage = response.data.imageUrl;
-          }
-        })
-        .catch(() => {
-          console.log("Error fetching profile image.");
-        });
-    },
-  },
-  created() {
-    this.fetchProfileImage();
   },
 };
 </script>
@@ -160,7 +155,7 @@ nav {
 .profile-icon {
   width: 35px;
   height: 35px;
-  background-color: #ffffff; /* Placeholder color for profile icon */
+  background-color: #ffffff;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -168,12 +163,6 @@ nav {
   justify-content: center;
   font-size: 16px;
   color: #2c64ff;
-  /* Placeholder initial - replace with image later */
-  &::after {
-    content: "U";
-    font-weight: bold;
-    font-size: 18px;
-  }
 }
 
 .dropdown {
@@ -193,6 +182,7 @@ nav {
   flex-direction: column;
   gap: 8px;
   animation: fadeIn 0.2s ease-in-out;
+  z-index: 100;
 }
 
 .dropdown-item {

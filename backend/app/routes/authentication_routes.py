@@ -11,7 +11,7 @@ from flask_jwt_extended import (
     get_csrf_token,
     get_jwt_identity,
     verify_jwt_in_request,
-    unset_jwt_cookies,
+    unset_jwt_cookies, jwt_required,
 )
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
@@ -148,3 +148,14 @@ def sign_out():
 
     return response
 
+@app.route("/get-user-abbreviation", methods=["GET"])
+@jwt_required()
+def get_user_abbreviation():
+    user_id = get_jwt_identity()
+    user = session.query(User).filter_by(user_id=user_id).first()
+
+    abbr = user.first_name[0] + user.last_name[0]
+
+    result = {"success": True, "abbreviation": abbr.upper()}
+
+    return result

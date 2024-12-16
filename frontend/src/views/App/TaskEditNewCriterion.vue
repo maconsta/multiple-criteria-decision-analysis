@@ -116,9 +116,29 @@
       </div>
 
       <div id="section-weighting" class="section disabled">
-        <div v-for="i in alternatives.length">{{ alternatives[i - 1].name }}</div>
-        <div class="slidercontainer">
-          <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+        <div v-for="(pair, index) in weightingAlternatives" class="mt-15" :key="index">
+          <div class="slider-container">
+            <div class="top-bar">
+              <span>{{ pair[0] }}</span>
+              <span>{{ pair[1] }}</span>
+            </div>
+            <input type="range" min="-8" max="8" value="0" class="slider" :id="'input-slider-' + index"
+                   @input="updateValue($event)" list="markers">
+            <datalist id="markers">
+              <option value="-8"></option>
+              <option value="-6"></option>
+              <option value="-4"></option>
+              <option value="-2"></option>
+              <option value="0"></option>
+              <option value="2"></option>
+              <option value="4"></option>
+              <option value="6"></option>
+              <option value="8"></option>
+            </datalist>
+            <label class="value-container" :for="'input-slider-' + index">Value:
+              <output class="value">Equal Importance</output>
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -142,6 +162,7 @@ export default {
       const taskID = this.route.params.taskID;
       const section = document.querySelector(".section:not(.disabled)").id;
 
+      let pairwise = false;
       let values = [];
       if (section === "section-quantitative") {
         document.querySelectorAll(".alternative input").forEach(input => {
@@ -167,7 +188,20 @@ export default {
           values.push(val);
         }
       } else if (section === "section-weighting") {
-        // how to set values here?
+        document.querySelectorAll(".slider-container input").forEach(input => {
+          let val = parseInt(input.value);
+          if (val < 0) {
+            val *= -1;
+            val += 1;
+            val = 1 / val;
+          } else {
+            val += 1;
+          }
+
+          values.push(val);
+        });
+
+        pairwise = true;
       }
 
       const path = "http://127.0.0.1:5000/save-criterion-to-db";
@@ -177,6 +211,7 @@ export default {
         description: description,
         taskID: taskID,
         values: values,
+        pairwise: pairwise,
       }, {
         withCredentials: true,
         headers: {
@@ -224,7 +259,7 @@ export default {
       axiosPromise
           .then((response) => {
             this.alternatives = response.data;
-            // this.fillWeightingAlternatives();
+            this.fillWeightingAlternatives();
           })
           .catch(() => {
             console.log(
@@ -241,14 +276,44 @@ export default {
       selectedSection.classList.remove("disabled");
     },
     fillWeightingAlternatives() {
-      // console.log(this.alternatives.length)
-      // for (let i = 0; i < this.alternatives.length; i++) {
-      //   for (let j = 0; j < this.alternatives.length; j++) {
-      //     //  fix weights
-      //     this.weightingAlternatives[i][j] =
-      //   }
-      // }
-    }
+      for (let i = 0; i < this.alternatives.length - 1; i++) {
+        for (let j = i + 1; j < this.alternatives.length; j++) {
+          this.weightingAlternatives.push([this.alternatives[i].name, this.alternatives[j].name]);
+        }
+      }
+    },
+    updateValue(event) {
+      const sliderID = event.target.id;
+
+      let val = parseInt(event.target.value);
+      if (val < 0) {
+        val *= -1;
+      }
+
+      let text = "";
+      if (val === 0) {
+        text = "Equal Importance";
+      } else if (val === 1) {
+        text = "Marginal Importance";
+      } else if (val === 2) {
+        text = "Low Importance";
+      } else if (val === 3) {
+        text = "Moderate Importance";
+      } else if (val === 4) {
+        text = "Substantial Importance";
+      } else if (val === 5) {
+        text = "Considerable Importance";
+      } else if (val === 6) {
+        text = "Significant Importance";
+      } else if (val === 7) {
+        text = "High Importance";
+      } else if (val === 8) {
+        text = "Absolute Importance";
+      }
+
+      document.querySelector("label[for='" + sliderID + "'] output").innerHTML = text;
+
+    },
   },
   created() {
     this.route = useRoute();
@@ -460,6 +525,7 @@ export default {
 #radio-buttons {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   row-gap: 15px;
   column-gap: 25px;
 
@@ -471,6 +537,30 @@ export default {
     input {
       appearance: auto;
     }
+  }
+}
+
+.slider-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 5px;
+  border-radius: 8px;
+  border: 1px solid $light-gray;
+  padding: 8px;
+
+  .top-bar {
+    display: flex;
+    flex: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
+  .slider {
+    width: 100%;
+    opacity: 0.7;
+    appearance: auto;
   }
 }
 
