@@ -11,14 +11,14 @@
           </div>
         </div>
         <div class="dashboard__bot">
-            <CardFolder
-                @click="openNewProjectModal"
-                size="folder--small"
-                background-color="folder--gray"
-                :have-plus="true"
-                :bottom-text="{ show: true, text: 'Blank' }"
-            />
-            <div class="vertical-spacer"></div>
+          <CardFolder
+              @click="openNewProjectModal"
+              size="folder--small"
+              background-color="folder--gray"
+              :have-plus="true"
+              :bottom-text="{ show: true, text: 'Blank' }"
+          />
+          <div class="vertical-spacer"></div>
           <Flicking :options="{ circular: true, align: 'prev' , circularFallback: 'bound'}" ref="flicking">
             <CardFolder
                 size="folder--small"
@@ -81,10 +81,10 @@
       </nav>
       <nav class="dashboard">
         <div class="dashboard__top mt-45">
-          <h3 class="dashboard__heading">Recent Projects</h3>
+          <h3 class="dashboard__heading">All Projects</h3>
           <div class="dashboard__icons">
-            <div class="grid-icon grid-icon--active"></div>
-            <div class="list-icon"></div>
+            <div class="grid-icon grid-icon--active" @click="changeDashboardMode('grid')"></div>
+            <div class="list-icon" @click="changeDashboardMode('list')"></div>
           </div>
         </div>
         <div class="dashboard__bot dashboard__bot--wrap">
@@ -92,6 +92,7 @@
             You don't have any projects.
           </div>
           <CardFolder
+              v-else-if="dashboardMode === 'grid'"
               v-for="(project, index) in projects"
               :key="index"
               size="folder--large"
@@ -103,6 +104,26 @@
               :visibility="project.visibility"
               @click="handleClickOnFolder(project.projectID, $event)"
           />
+          <table v-else-if="dashboardMode === 'list'" class="data-table" ref="dataTable">
+            <thead>
+            <tr>
+              <th>Project</th>
+              <th>Owner</th>
+              <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(project, index) in projects"
+                :key="index">
+              <td @click="handleClickOnFolder(project.projectID, $event)">{{ project.projectName }}</td>
+              <td>{{ project.owner }}</td>
+              <td class="align-right">
+            <span class="trash-icon trash-icon--black" data-folder-action="delete"
+                  @click="handleClickOnFolder(project.projectID, $event)"></span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </nav>
     </div>
@@ -117,6 +138,8 @@ import CardFolder from "@/components/AppComponents/CardFolder.vue";
 import Swal from "sweetalert2/dist/sweetalert2.all.min.js";
 import axios from "axios";
 import Flicking from "@egjs/vue3-flicking";
+import DataTable from 'datatables.net/js/dataTables';
+import 'datatables.net-dt/css/dataTables.dataTables.css';
 
 export default {
   name: "Projects",
@@ -213,6 +236,14 @@ export default {
               }
             }
             this.projects = response.data;
+
+            if (this.dataTable) {
+              this.dataTable.destroy();
+            }
+
+            this.$nextTick(() => {
+              this.createDataTable();
+            });
           })
           .catch(() => {
             console.log(
@@ -252,13 +283,56 @@ export default {
         params: {projectID: id},
       });
     },
+    createDataTable() {
+      this.dataTable = new DataTable(this.$refs.dataTable, this.tableOptions);
+    },
+    changeDashboardMode(mode) {
+      if (this.dashboardMode === mode) {
+        return;
+      }
+
+      localStorage.setItem("dashboardMode", mode);
+      this.dashboardMode = mode;
+
+      if (this.dataTable) {
+        this.dataTable.destroy();
+      }
+
+      if (mode === "list") {
+        this.$nextTick(() => {
+          this.createDataTable();
+        });
+      }
+    },
   },
-  created() {
+  mounted() {
     this.getAllProjects();
+
+    // set default dashboard mode to grid
+    let mode = localStorage.getItem("dashboardMode");
+    if (mode) {
+      this.dashboardMode = mode;
+    } else {
+      this.dashboardMode = "grid";
+    }
   },
   data() {
     return {
       projects: [],
+      dashboardMode: null,
+      dataTable: null,
+      tableOptions: {
+        paging: false,
+        searching: false,
+        ordering: true,
+        responsive: true,
+        info: false,
+        destroy: true,
+        columnDefs: [
+          {targets: [0, 1], width: "40%"},
+          {targets: 2, orderable: false, width: "20%"}
+        ]
+      },
     };
   }
 };
@@ -372,6 +446,51 @@ export default {
 
 .dashboard__icons {
   filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
+}
+
+.dt-container {
+  width: 100%;
+}
+
+.data-table {
+  thead {
+    th {
+      color: #596389;
+      font-size: 1.3rem;
+
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+
+  tbody {
+    td {
+      color: #596389;
+      vertical-align: middle;
+
+      &:first-child {
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      &:last-child {
+        span {
+          cursor: pointer;
+
+        }
+      }
+    }
+
+    tr {
+      &:hover {
+        background-color: $folder-yellow;
+      }
+    }
+  }
 }
 
 </style>
