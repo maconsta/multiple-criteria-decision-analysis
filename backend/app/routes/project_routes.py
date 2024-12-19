@@ -110,6 +110,27 @@ def delete_project():
 
     return jsonify(response)
 
+@app.route("/change-project-name", methods=['POST'])
+@jwt_required()
+def change_project_name():
+    post_data = request.get_json()
+    project_id = post_data['projectID']
+    new_name = post_data['name']
+
+    project = Project.query.filter(Project.project_id == project_id).first()
+
+    project.project_name = new_name
+
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        response = {"result": "Project name not changed, error: " + str(e) + "!", "success": False}
+    else:
+        response = {"success": True}
+
+    return jsonify(response)
 
 @app.route("/test-api", methods=['GET', 'POST'])
 @jwt_required()

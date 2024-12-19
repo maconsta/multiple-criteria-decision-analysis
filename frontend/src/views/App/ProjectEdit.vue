@@ -19,7 +19,11 @@
         </div>
       </div>
       <div class="tasks mt-30">
-        <h3>{{ projectName }}</h3>
+        <div class="project-name" @click="showInputFieldAndHideName()">
+          <h3 class="edit">{{ projectName }}</h3>
+          <span class="edit-icon edit-icon--charcoal edit"></span>
+          <input type="text" :placeholder="projectName" id="change-name" class="hidden"/>
+        </div>
         <div v-if="tasks.length === 0" class="tasks__empty-placeholder mt-30">
           You don't have any tasks yet.
         </div>
@@ -217,11 +221,64 @@ export default defineComponent({
         params: {taskID: id},
       });
     },
+    showInputFieldAndHideName() {
+      document.querySelectorAll(".edit").forEach((element) => {
+        element.classList.add("hidden")
+      });
+
+      const input = document.getElementById("change-name");
+      input.classList.remove("hidden");
+
+      input.focus();
+    },
+    showNameAndHideInputField() {
+      document.querySelectorAll(".edit").forEach((element) => {
+        element.classList.remove("hidden")
+      });
+
+      const input = document.getElementById("change-name");
+      input.classList.add("hidden");
+    },
+    changeProjectName(name) {
+      const path = "http://127.0.0.1:5000/change-project-name";
+
+      const axiosPromise = axios.post(path, {
+        name: name,
+        projectID: this.route.params.projectID,
+      }, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      });
+
+      axiosPromise
+          .then((response) => {
+            this.projectName = name;
+          })
+          .catch(() => {
+            console.log("Error when changing name. Please try again...");
+          });
+    },
   },
   created() {
     this.getProjectName();
     this.route = useRoute();
     this.getTasksByProjectID();
+  },
+  mounted() {
+    const input = document.getElementById("change-name");
+    input.addEventListener("focusout", (event) => {
+      this.changeProjectName(input.value);
+      this.showNameAndHideInputField();
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter"){
+        this.changeProjectName(input.value);
+        this.showNameAndHideInputField();
+      }
+    });
   },
   data() {
     return {
@@ -246,7 +303,6 @@ export default defineComponent({
   width: fit-content;
   color: #808080;
   filter: grayscale(100%) brightness(50%);
-
 
 
   &:hover {
@@ -313,10 +369,32 @@ export default defineComponent({
 }
 
 .tasks {
-  h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #808080;
+  .project-name {
+    display: flex;
+    align-items: flex-end;
+    column-gap: 5px;
+    cursor: pointer;
+    width: fit-content;
+    height: 25px;
+
+    h3 {
+      font-size: 1.25rem;
+      line-height: 1.25rem;
+      font-weight: 600;
+      color: #808080;
+    }
+
+    input {
+      border: 1px solid $light-gray;
+      border-radius: 8px;
+      padding: 8px;
+      height: 25px;
+      font-size: 0.875rem;
+
+      &:focus {
+        outline: 2px solid $main-blue-20;
+      }
+    }
   }
 
   &__empty-placeholder {
