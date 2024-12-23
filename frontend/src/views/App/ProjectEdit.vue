@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import {defineComponent} from "vue";
-import {useRoute} from "vue-router";
+import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -52,49 +52,63 @@ import TaskCard from "@/components/AppComponents/TaskCard.vue";
 
 export default defineComponent({
   name: "ProjectEdit",
-  components: {TheHeader, TaskCard},
+  components: { TheHeader, TaskCard },
   methods: {
-    openShareProjectModal() {
+    async fetchProjects() {
+    try {
+      const response = await axios.get("http://127.0.0.1:5000/api/projects", {
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+        withCredentials: true,
+      });
+      this.projects = response.data;
+      } catch (error) {
+        console.error("Error fetching projects:", error.response?.data?.error || error.message);
+      }
+    },
+    async openShareProjectModal() {
       Swal.fire({
         title: "Share project",
         input: "email",
         inputLabel: "Add collaborators",
         inputPlaceholder: "Enter email...",
         confirmButtonText: "Invite",
-        confirmButtonAriaLabel: "Invite",
         cancelButtonText: "Close",
-        cancelButtonAriaLabel: "Close",
         showCancelButton: true,
+        buttonsStyling: false,
         customClass: {
           confirmButton: "swal-btn swal-btn__confirm",
           cancelButton: "swal-btn swal-btn__cancel",
           input: "swal-input swal-input__text",
         },
-        buttonsStyling: false,
         inputValidator: (value) => {
-          if (!value) {
-            return "Email cannot be empty!";
+          if (!value || !value.includes("@")) {
+            return "Please enter a valid email address!";
           }
         },
-        preConfirm: (value) => {
-          if (value.includes("@")) {
-            document
-                .getElementById("swal2-input")
-                .classList.add("swal2-inputsuccess");
-            Swal.showValidationMessage("Invitation link sent to " + value);
-            document
-                .getElementById("swal2-validation-message")
-                .classList.add("no-before");
-            return false;
-          } else {
-            document
-                .getElementById("swal2-input")
-                .classList.remove("swal2-inputsuccess");
-            document
-                .getElementById("swal2-validation-message")
-                .classList.remove("no-before");
-            Swal.showValidationMessage("Invalid email!");
-            return false;
+        preConfirm: async (email) => {
+          try {
+            const response = await axios.post(
+              "http://127.0.0.1:5000/api/share-project",
+              {
+                email: email,
+                project_id: this.route.params.projectID,
+              },
+              {
+                withCredentials: true,
+                headers: {
+                  "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+                },
+              }
+            );
+            Swal.fire("Success", response.data.message, "success");
+          } catch (error) {
+            Swal.fire(
+              "Error",
+              error.response?.data?.error || "An unexpected error occurred.",
+              "error"
+            );
           }
         },
       });
@@ -102,20 +116,19 @@ export default defineComponent({
     getProjectName() {
       const route = useRoute();
       const path = `http://127.0.0.1:5000/get-project-name-by-id/${route.params.projectID}`;
-      const axiosPromise = axios.get(path, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
-      });
-
-      axiosPromise
-          .then((response) => {
-            this.projectName = response.data;
-          })
-          .catch(() => {
-            console.log("Error when querying a project. Please try again...");
-          });
+      axios
+        .get(path, {
+          withCredentials: true,
+          headers: {
+            "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+          },
+        })
+        .then((response) => {
+          this.projectName = response.data;
+        })
+        .catch(() => {
+          console.log("Error when querying a project. Please try again...");
+        });
     },
     openNewProjectModal() {
       const swalPromise = Swal.fire({
@@ -124,15 +137,13 @@ export default defineComponent({
         inputLabel: "Enter new Task name",
         inputPlaceholder: "Enter name",
         confirmButtonText: "Create",
-        confirmButtonAriaLabel: "Create",
-        cancelButtonAriaLabel: "Cancel",
         showCancelButton: true,
+        buttonsStyling: false,
         customClass: {
           confirmButton: "swal-btn swal-btn__confirm",
           cancelButton: "swal-btn swal-btn__cancel",
           input: "swal-input swal-input__text",
         },
-        buttonsStyling: false,
         inputValidator: (value) => {
           if (!value) {
             return "Task name cannot be empty!";
@@ -147,48 +158,44 @@ export default defineComponent({
       });
     },
     saveTaskToDatabase(taskName) {
-      // TODO: Change to a dynamic url to switch between prod/local
-
       const path = "http://127.0.0.1:5000/save-task-to-db";
-      const axiosPromise = axios.post(path, {
-        name: taskName,
-        projectID: this.route.params.projectID,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
-      });
-
-      const router = this.$router;
-      axiosPromise
-          .then((response) => {
-            this.getTasksByProjectID();
-          })
-          .catch(() => {
-            console.log("Error when creating a new task. Please try again...");
-          });
-    },
-    getTasksByProjectID() {
-      const path = "http://127.0.0.1:5000/get-tasks-by-project-id";
-      const axiosPromise = axios.post(path, {
-            projectID: this.route.params.projectID,
-          },
+      axios
+        .post(
+          path,
+          { name: taskName, projectID: this.route.params.projectID },
           {
             withCredentials: true,
             headers: {
               "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
             },
-          });
-
-      axiosPromise
-          .then((response) => {
-            this.tasks = response.data;
-
-          })
-          .catch(() => {
-            console.log("Error when querying for all tasks. Please try again...");
-          });
+          }
+        )
+        .then(() => {
+          this.getTasksByProjectID();
+        })
+        .catch(() => {
+          console.log("Error when creating a new task. Please try again...");
+        });
+    },
+    getTasksByProjectID() {
+      const path = "http://127.0.0.1:5000/get-tasks-by-project-id";
+      axios
+        .post(
+          path,
+          { projectID: this.route.params.projectID },
+          {
+            withCredentials: true,
+            headers: {
+              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+            },
+          }
+        )
+        .then((response) => {
+          this.tasks = response.data;
+        })
+        .catch(() => {
+          console.log("Error when querying for all tasks. Please try again...");
+        });
     },
     handleClickOnTask(id, event) {
       const attribute = event.target.getAttribute("data-folder-action");
@@ -200,27 +207,29 @@ export default defineComponent({
     },
     deleteTask(id) {
       const path = `http://127.0.0.1:5000/delete-task-by-id`;
-      const axiosPromise = axios.post(path, {
-        taskID: id,
-        projectID: this.route.params.projectID
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
-      });
-
-      axiosPromise.then((response) => {
-        this.getTasksByProjectID();
-      }).catch((response) => {
-        console.log("Error when deleting project.");
-      })
+      axios
+        .post(
+          path,
+          { taskID: id, projectID: this.route.params.projectID },
+          {
+            withCredentials: true,
+            headers: {
+              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+            },
+          }
+        )
+        .then(() => {
+          this.getTasksByProjectID();
+        })
+        .catch(() => {
+          console.log("Error when deleting project.");
+        });
     },
     openExistingTask(id) {
       const router = this.$router;
       router.push({
         name: "taskEditAlternatives",
-        params: {taskID: id},
+        params: { taskID: id },
       });
     },
     showInputFieldAndHideName() {
@@ -267,6 +276,7 @@ export default defineComponent({
     this.getProjectName();
     this.route = useRoute();
     this.getTasksByProjectID();
+    this.fetchProjects();
   },
   mounted() {
     const input = document.getElementById("change-name");
@@ -291,6 +301,7 @@ export default defineComponent({
   },
 });
 </script>
+
 
 <style scoped lang="scss">
 .navbar {

@@ -8,6 +8,7 @@ from backend.app.db.models import Model
 from alembic import context
 from alembic.script.revision import RevisionMap
 
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

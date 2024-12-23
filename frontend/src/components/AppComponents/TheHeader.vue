@@ -45,42 +45,43 @@ export default {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
     navigateToProfile() {
-      this.$router.push({name: "userProfile"});
+      this.$router.push({ name: "userProfile" });
       this.isDropdownOpen = false;
     },
     signOut() {
       const path = "http://127.0.0.1:5000/sign-out";
       axios
-          .get(path, {
-            withCredentials: true,
-            headers: {
-              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-            },
-          })
-          .then((response) => {
-            localStorage.removeItem("csrfToken");
-            this.$router.push({
-              name: "home",
-            });
-          })
-          .catch(() => {
-            console.log("Error when signing out...");
-          });
-      this.isDropdownOpen = false;
-    },
-  },
-  created() {
-    const path = "http://127.0.0.1:5000/get-user-abbreviation";
-    axios
         .get(path, {
           withCredentials: true,
           headers: {
             "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
           },
         })
-        .then((result) => {
-          this.abbreviation = result.data.abbreviation;
+        .then((response) => {
+          localStorage.removeItem("csrfToken");
+          this.$router.push({
+            name: "home",
+          });
+        })
+        .catch(() => {
+          console.log("Error when signing out...");
         });
+      this.isDropdownOpen = false;
+    },
+  },
+  created() {
+    const path = "http://127.0.0.1:5000/get-user-abbreviation";
+    axios
+      .get(path, {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
+        },
+      })
+      .then((result) => {
+        this.abbreviation = result.data.abbreviation;
+      });
+    this.isDropdownOpen = false;
   },
 };
 </script>
