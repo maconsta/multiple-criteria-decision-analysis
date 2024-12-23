@@ -6,7 +6,7 @@
         <span class="task-name">{{ taskName }}</span>
       </div>
       <span class="trash-icon trash-icon--black" data-folder-action="delete"></span>
-      <span class="last-access">Last Opened: 29.10.2024 </span>
+      <span class="bottom-text">Created: {{ date }}</span>
     </div>
   </div>
 </template>
@@ -14,9 +14,22 @@
 <script>
 export default {
   name: "TaskCard",
+  data () {
+    return {
+      date: ""
+    };
+  },
   props: {
     taskName: String,
+    bottomText: String
   },
+  mounted() {
+    const today = new Date(this.bottomText);
+    const dd = today.getDate();
+    const mm = today.getMonth() + 1;
+    const yyyy = today.getFullYear();
+    this.date = dd + "." + mm + "." + yyyy;
+  }
 };
 </script>
 
@@ -67,7 +80,7 @@ export default {
     filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
   }
 
-  .last-access {
+  .bottom-text {
     font-weight: 300;
     line-height: 20px;
     font-size: 0.875rem;

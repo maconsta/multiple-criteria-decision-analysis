@@ -32,6 +32,7 @@
               v-for="(task, index) in tasks"
               :key="index"
               :task-name="task.taskName"
+              :bottom-text="task.createdAt"
               @click="handleClickOnTask(task.taskID, $event)"
           />
         </div>
@@ -183,6 +184,7 @@ export default defineComponent({
       axiosPromise
           .then((response) => {
             this.tasks = response.data;
+
           })
           .catch(() => {
             console.log("Error when querying for all tasks. Please try again...");
