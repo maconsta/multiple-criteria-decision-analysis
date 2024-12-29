@@ -44,6 +44,7 @@
         <div class="tooltip">
           <h2>Method AHP</h2>
           <div class="toolcontent">
+            <h3>What is AHP</h3>
             <p>The Analytic Hierarchy Process (AHP) is a method for organizing and analyzing complex decisions, using
               math and psychology. It was developed by Thomas L. Saaty in the 1970s and has been refined since then. It
               contains three parts: the ultimate goal or problem you’re trying to solve, all of the possible solutions,
@@ -75,7 +76,7 @@
         </div>
         <div class="tooltip">
           <h2>Method ELECTRE I</h2>
-          <div class="toolcontent2">
+          <div class="toolcontent">
             <h3>What is ELECTRE I</h3>
             <p>ÉLECTRE is a family of multi-criteria decision analysis (MCDA) methods that originated in Europe in the
               mid-1960s. The acronym ÉLECTRE stands for: ÉLimination Et Choix Traduisant la REalité ("Elimination and
@@ -391,20 +392,7 @@ h2:hover {
   visibility: hidden;
   opacity: 0;
   transition: 0.5s;
-}
-
-.toolcontent2 {
-  width: 600px;
-  background-color: #2cffc7;
-  padding: 20px;
-  position: absolute;
-  bottom: -175%;
-  right: 50%;
-  transform: translate(50%, 50%);
-  border-radius: 5px;
-  visibility: hidden;
-  opacity: 0;
-  transition: 0.5s;
+  z-index: 2;
 }
 
 .toolcontent h3 {
@@ -417,31 +405,18 @@ h2:hover {
   line-height: 1.4;
 }
 
-h2:hover + .toolcontent {
-  visibility: visible;
-  opacity: 1;
-}
-
-.toolcontent2 h3 {
-  text-transform: uppercase;
-  font-weight: 900;
-  margin-bottom: 15px;
-}
-
-.toolcontent2 p {
-  line-height: 1.4;
-}
-
-h2:hover + .toolcontent2 {
-  visibility: visible;
-  opacity: 1;
+.column:hover {
+  .toolcontent {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 /* About us */
 .about-content {
   text-align: center;
   grid-gap: 3em;
-  padding: 18em 0;
+  padding: 100px 0;
   background-color: #fff;
 }
 
@@ -505,11 +480,7 @@ h2:hover + .toolcontent2 {
 
 .footer-content {
   padding: 0.6em 0;
-  gap: 60em;
-}
-
-.footer-content > * {
-  flex-basis: 100%;
+  justify-content: space-between;
 }
 
 .footer-content .col {
@@ -565,7 +536,7 @@ h2:hover + .toolcontent2 {
     width: 30px;
     height: 30px;
     padding: 2em;
-    z-index: 1000;
+    z-index: 2;
   }
 
   .toggleMenu.active {
@@ -599,7 +570,7 @@ h2:hover + .toolcontent2 {
     -o-transform: scale(1, 0);
     max-height: 100%;
     opacity: 1;
-    z-index: 999;
+    z-index: 2;
     background-color: #2c64ff;
   }
 

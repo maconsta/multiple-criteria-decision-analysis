@@ -104,6 +104,7 @@ header {
   width: 100%;
   transition: all 0.3s ease;
   padding: 10px 0;
+  z-index: 100;
 }
 
 .small-header {
