@@ -155,9 +155,8 @@ def calculate_result():
         electre = Electre(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
         result.update({"ranking":electre.calculate_electre()})
     elif decision_method == 'wsm':
-        pass
-        # wsm = WeightedSum(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
-        # result = wsm.calulate_wsm()
+        wsm = WeightedSum(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
+        result = wsm.calculate_weighted_sum()
     elif decision_method == 'prometheeii':
         promethee = Promethee(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
         result.update({"ranking": promethee.calculate_promethee()})
