@@ -12,6 +12,7 @@ class Electre:
         self.discordance_index_matrix = np.zeros((self.decision_matrix.alt_count, self.decision_matrix.alt_count))
         self.net_superior_vector = np.zeros(self.decision_matrix.alt_count)
         self.net_inferior_vector = np.zeros(self.decision_matrix.alt_count)
+        self.average_ranking_vector = []
 
     def weigh(self):
         self.decision_matrix.normalized_matrix *= self.weights
@@ -23,16 +24,18 @@ class Electre:
                     continue
 
                 for k in range(self.decision_matrix.crit_count):
-                    if self.decision_matrix.normalized_matrix[i][k] >= self.decision_matrix.normalized_matrix[j][k]: # трябва ли да е по-голями и равно или само по-голямо като проверяваме за доминантност
+                    if self.decision_matrix.normalized_matrix[i][k] >= self.decision_matrix.normalized_matrix[j][k]:
                         self.concordance_interval_matrix[i][j] += self.weights[k]
 
     def calculate_concordance_index_matrix(self):
         col_sums = np.sum(self.concordance_interval_matrix, axis=0)
         c_threshold = np.sum(col_sums) / (
-            self.decision_matrix.alt_count * (self.decision_matrix.alt_count - 1))
+                self.decision_matrix.alt_count * (self.decision_matrix.alt_count - 1))
 
         for i in range(self.decision_matrix.alt_count):
             for j in range(self.decision_matrix.alt_count):
+                if i == j:
+                    continue
                 if self.concordance_interval_matrix[i][j] >= c_threshold:
                     self.concordance_index_matrix[i][j] = 1
                 else:
@@ -43,29 +46,32 @@ class Electre:
             for j in range(self.decision_matrix.alt_count):
                 if i == j:
                     continue
-                
+
                 abs_vector = []
                 discordance_abs_vector = []
                 for k in range(self.decision_matrix.crit_count):
-                    abs_vector.append(abs(self.decision_matrix.normalized_matrix[i][k] - self.decision_matrix.normalized_matrix[j][k]))
+                    abs_vector.append(abs(
+                        self.decision_matrix.normalized_matrix[i][k] - self.decision_matrix.normalized_matrix[j][k]))
 
                     if self.decision_matrix.normalized_matrix[i][k] < self.decision_matrix.normalized_matrix[j][k]:
-                        discordance_abs_vector.append(abs(self.decision_matrix.normalized_matrix[i][k] - self.decision_matrix.normalized_matrix[j][k])) 
-                
+                        (discordance_abs_vector.append(abs(
+                            self.decision_matrix.normalized_matrix[i][k] - self.decision_matrix.normalized_matrix[j][
+                                k])))
+
                 for k in range(self.decision_matrix.crit_count):
-                    if self.decision_matrix.normalized_matrix[i][k] < self.decision_matrix.normalized_matrix[j][k]: # трябва ли да е по-голями и равно или само по-голямо като проверяваме за доминантност
-                        self.discordance_interval_matrix[i][j] = max(discordance_abs_vector)/max(abs_vector)
+                    if self.decision_matrix.normalized_matrix[i][k] < self.decision_matrix.normalized_matrix[j][k]:
+                        self.discordance_interval_matrix[i][j] = max(discordance_abs_vector) / max(abs_vector)
 
     def calculate_discordance_index_matrix(self):
         col_sums = np.sum(self.discordance_interval_matrix, axis=0)
         d_threshold = np.sum(col_sums) / (
-            self.decision_matrix.alt_count * (self.decision_matrix.alt_count - 1))
-        
-        # print(d_threshold)
+                self.decision_matrix.alt_count * (self.decision_matrix.alt_count - 1))
 
         for i in range(self.decision_matrix.alt_count):
             for j in range(self.decision_matrix.alt_count):
-                if self.discordance_interval_matrix[i][j] <= d_threshold:
+                if i == j:
+                    continue
+                if self.discordance_interval_matrix[i][j] < d_threshold:
                     self.discordance_index_matrix[i][j] = 1
                 else:
                     self.discordance_index_matrix[i][j] = 0
@@ -81,6 +87,30 @@ class Electre:
         row_sums = np.sum(self.discordance_interval_matrix, axis=1)
 
         self.net_inferior_vector = row_sums - col_sums
+
+    def calculate_average_ranking_vector(self):
+        superior_ranking = []
+        inferior_ranking = []
+
+        for i in range(len(self.net_superior_vector)):
+            name = self.decision_matrix.alternatives[i].name
+            superior_ranking.append({"name": name, "score": self.net_superior_vector[i]})
+        superior_ranking = sorted(superior_ranking, key=lambda d: d['score'], reverse=True)
+
+        for i in range(len(self.net_inferior_vector)):
+            name = self.decision_matrix.alternatives[i].name
+            inferior_ranking.append({"name": name, "score": self.net_inferior_vector[i]})
+        inferior_ranking = sorted(inferior_ranking, key=lambda d: d['score'])
+
+        for i in range(len(superior_ranking)):
+            for j in range(len(inferior_ranking)):
+                if superior_ranking[i]["name"] == inferior_ranking[j]["name"]:
+                    rank_i = i + 1
+                    rank_j = j + 1
+                    avg_rank = int((rank_i + rank_j) / 2)
+                    self.average_ranking_vector.append({"name": superior_ranking[i]["name"], "averange_rank": avg_rank})
+
+        self.average_ranking_vector = sorted(self.average_ranking_vector, key=lambda d: d['averange_rank'])
 
     def calculate_electre(self):
         print("\n???")
@@ -115,37 +145,31 @@ class Electre:
         print("\nNet Inferior Vector")
         print(self.net_inferior_vector)
 
-        # по кой вектор ранкираме резултата? 
-        # >= или > при сравненията за доминантност? 
-        # трябва ли да се направи агрегирана матрица?
+        self.calculate_average_ranking_vector()
+        print("\nAverage Ranking Vector")
+        print(self.average_ranking_vector)
 
-        result = []
-        for i in range(len(self.net_superior_vector)):
-            name = self.decision_matrix.alternatives[i].name
-            result.append({"name": name, "score": self.net_superior_vector[i]})
-
-        result = sorted(result, key=lambda d: d['score'], reverse=True)
-
-        return result
+        return self.average_ranking_vector
 
 
-
-# c1 = Criterion("c1", "max")
-# c2 = Criterion("c2", "max")
-# c3 = Criterion("c3", "max")
-# c4 = Criterion("c4", "max")
-# c5 = Criterion("c5", "max")
-# c6 = Criterion("c6", "max")
-# criteria = [c1, c2, c3, c4, c5, c6]
-
-# a1 = Alternative("a1", [1350, 1850, 7.5, 2.58, 93.5, 0.045])
-# a2 = Alternative("a2", [1680, 1650, 8.5, 3.75, 95.3, 0.068])
-# a3 = Alternative("a3", [1560, 1950, 6.5, 4.86, 88.6, 0.095])
-# a4 = Alternative("a4", [1470, 1850, 9.5, 3.16, 98.4, 0.072])
+# TEST TAKEN FROM https://www.academia.edu/17051534/APPLICATION_OF_ELECTRE_II
+# c1 = Criterion("price", "max")
+# c2 = Criterion("technique", "max")
+# c3 = Criterion("BQ", "max")
+# c4 = Criterion("mc", "max")
+#
+# criteria = [c1, c2, c3, c4]
+#
+# a1 = Alternative("a1", [2330, 12.8, 14, 2])
+# a2 = Alternative("a2", [2170, 13.8, 11, 5])
+# a3 = Alternative("a3", [2178, 13.2, 11, 3])
+# a4 = Alternative("a4", [2290, 17.5, 13, 3])
+#
 # alternatives = [a1, a2, a3, a4]
-
-# dm = DecisionMatrix(criteria, alternatives)
-# weights = [0.2336, 0.1652, 0.3355, 0.1021, 0.0424, 0.1212]
-
+#
+# dm = DecisionMatrix(criteria, alternatives,
+#                     DecisionMatrix.normalize_l2)
+# weights = [0.4, 0.3, 0.2, 0.1]
+#
 # el = Electre(dm, weights)
-# print(el.calculate_electre())
+# el.calculate_electre()

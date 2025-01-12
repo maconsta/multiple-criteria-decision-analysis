@@ -3,7 +3,6 @@ from backend.mcda.core.core import DecisionMatrix, Pairwise
 from backend.mcda.methods.ahp import AHP
 from backend.mcda.methods.electre import Electre
 from backend.mcda.methods.promethee import Promethee
-from backend.mcda.methods.smart import SMART
 from backend.mcda.methods.topsis import Topsis
 from backend.mcda.methods.weightedSum import WeightedSum
 
@@ -100,7 +99,7 @@ def main_menu():
 
     while (True):
         print(
-            "\nPlease choose which method to use:\n[1] AHP \n[2] Electre \n[3] Promethee \n[4] SMART \n[5] TOPSIS \n[6] Weighted Sum Method")
+            "\nPlease choose which method to use:\n[1] AHP \n[2] Electre \n[3] Promethee \n[4] TOPSIS \n[5] Weighted Sum Method")
 
         method = None
         result = None
@@ -117,12 +116,9 @@ def main_menu():
             method = Promethee(decision_matrix, weights)
             result = method.calculate_promethee()
         elif chosen_method == "4":
-            method = SMART(decision_matrix, weights)
-            result = method.calculate_smart()
-        elif chosen_method == "5":
             method = Topsis(decision_matrix, weights)
             result = method.calculate_topsis()
-        elif chosen_method == "6":
+        elif chosen_method == "5":
             method = WeightedSum(decision_matrix, weights)
             result = method.calculate_weighted_sum()
         else:

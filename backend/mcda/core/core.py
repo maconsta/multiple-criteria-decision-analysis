@@ -62,8 +62,8 @@ class DecisionMatrix:
         self.alternatives = alternatives
         self.crit_count = len(criteria)
         self.alt_count = len(alternatives)
-        self.matrix = np.array([alt.values for alt in alternatives])
-        self.normalized_matrix = np.zeros((self.alt_count, self.crit_count))
+        self.matrix = np.array([alt.values for alt in alternatives], dtype=np.float64)
+        self.normalized_matrix = np.zeros((self.alt_count, self.crit_count), dtype=np.float64)
         normalization_method(self)
 
         # self.criteria = criteria #this is new one made for both topsis and ahp.
