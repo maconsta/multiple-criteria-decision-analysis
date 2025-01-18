@@ -1,13 +1,6 @@
 <template>
   <div class="sidebar sidebar--open">
     <div class="sidebar-btn-container mt-15">
-<!--      <SidebarButton-->
-<!--        image-url="monitor.svg"-->
-<!--        route-name="taskEditOverview"-->
-<!--        button-text="Overview"-->
-<!--        @click="openSidebar"-->
-<!--      />-->
-<!--      <div class="line mt-10 mb-10"></div>-->
       <SidebarButton
         :image-url="alt_image"
         route-name="taskEditAlternatives"
@@ -100,7 +93,7 @@ export default {
 
 <style scoped lang="scss">
 .sidebar {
-  height: 100%;
+  min-height: calc(100vh - 75px);
   padding: 0 10px;
   display: flex;
   flex-direction: column;
@@ -109,6 +102,7 @@ export default {
   box-shadow: -2px 6px 10px $charcoal;
   transition: 0.2s ease-in-out;
   overflow: hidden;
+  position: relative;
 
   &--open {
     width: 220px;
@@ -130,6 +124,8 @@ export default {
   border-radius: 8px;
   align-self: flex-end;
   transition: 0.2s ease-in-out;
+  position: fixed;
+  bottom: 0;
 
   &:hover {
     background-color: $main-blue-20;
