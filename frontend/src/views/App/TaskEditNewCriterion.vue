@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 mt-30">
+  <div class="w-100 mt-30 pb-20">
     <div class="topbar w-100">
       <router-link :to="{ name: 'taskEditCriteria' }" class="back-btn">
         <div class="chevron chevron--left"></div>

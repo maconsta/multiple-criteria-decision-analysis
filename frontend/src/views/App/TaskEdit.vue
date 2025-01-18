@@ -4,7 +4,7 @@
     <div class="sideways">
       <TheSidebar />
       <router-view></router-view>
-      <TheHelpSidebar />
+<!--      <TheHelpSidebar />-->
     </div>
   </div>
 </template>
@@ -30,6 +30,6 @@ export default {
   flex-direction: row;
   column-gap: 35px;
   width: 100%;
-  height: 100%;
+  padding-right: 20px;
 }
 </style>

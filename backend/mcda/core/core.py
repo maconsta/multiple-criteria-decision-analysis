@@ -214,9 +214,9 @@ class Pairwise:
             eigenvector = new_eigenvector
 
 # TEST FROM THE AHP PRESENTATION
-# vals = [0.5, 3, 4]
+# vals = [9, 9, 9, 9, 2, 1/2, 8, 1/7, 8, 8]
 # pw = Pairwise(vals)
 # print(pw.calculate_eigenvector())
-# EXPECTED RESULT [0.3194, 0.5595, 0.1211]
+# # EXPECTED RESULT [0.3194, 0.5595, 0.1211]
 
 # ---------------------------------------------CLASS_PAIRWISE_END-----------------------------------------------------

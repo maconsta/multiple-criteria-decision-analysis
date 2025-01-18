@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 mt-30">
+  <div class="w-100 mt-30 pb-20">
     <div class="topbar w-100">
       <h2>Criteria</h2>
       <div class="btn-container">

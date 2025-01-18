@@ -7,7 +7,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
-from sqlalchemy import or_
+from sqlalchemy import or_, any_
 
 from backend.app.routes.utils import (
     save_project_in_session,
@@ -191,7 +191,7 @@ def get_projects_for_user():
                     .filter_by(email=user_email)
                     .scalar()
                 )
-                | (user_email == sa.any_(Project.collaborators))
+                | (user_email == any_(Project.collaborators))
             )
             .all()
         )
