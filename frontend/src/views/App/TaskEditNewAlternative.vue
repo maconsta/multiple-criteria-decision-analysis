@@ -40,7 +40,7 @@
 
 <script>
 import {useRoute} from "vue-router";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import Swal from "sweetalert2";
 
 export default {
@@ -52,17 +52,11 @@ export default {
       const taskID = this.route.params.taskID;
       const projectID = this.route.params.projectID;
 
-      const path = "http://127.0.0.1:5000/save-alternative-to-db";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("save-alternative-to-db", {
         name: name,
         description: description,
         taskID: taskID,
         projectID: projectID
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       const router = this.$router;

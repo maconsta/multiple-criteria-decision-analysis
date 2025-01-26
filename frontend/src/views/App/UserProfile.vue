@@ -74,7 +74,7 @@
 
 <script>
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import Swal from "sweetalert2";
 
 export default {
@@ -114,13 +114,8 @@ export default {
       formData.append("currentEmail", this.profile.currentEmail);
       formData.append("newEmail", this.profile.newEmail);
 
-      axios
-        .post("http://127.0.0.1:5000/api/update-profile", formData, {
-          withCredentials: true,
-          headers: {
-            "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-          },
-        })
+      axiosExtended
+        .post("api/update-profile", formData)
         .then((response) => {
           if (response.data.success) {
             Swal.fire({

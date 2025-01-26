@@ -39,7 +39,7 @@
 
 <script>
 import {helpText, selectedMethod} from "@/store/store";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import {useRoute} from "vue-router";
 import Swal from "sweetalert2";
 
@@ -47,14 +47,8 @@ export default {
   name: "TaskEditNewTradeOff",
   methods: {
     getCriteriaByTaskID() {
-      const path = "http://127.0.0.1:5000/get-criteria-by-task-id";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("get-criteria-by-task-id", {
         taskID: this.route.params.taskID,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise
@@ -79,17 +73,11 @@ export default {
         weights.push(parseFloat(input.value));
       });
 
-      const path = "http://127.0.0.1:5000/save-trade-off-to-db";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("save-trade-off-to-db", {
         decisionMethod: decisionMethod,
         normalizationMethod: normalizationMethod,
         taskID: taskID,
         weights: weights
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       const router = this.$router;

@@ -14,7 +14,7 @@
 <script>
 import HeaderHomeNew from "@/components/HeaderHomeNew.vue";
 import HeroHome from "@/components/HeroHome.vue";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 
 export default {
   name: "HomeView",
@@ -23,16 +23,7 @@ export default {
     HeroHome,
   },
   beforeCreate() {
-    const path = "http://127.0.0.1:5000/is-logged-in";
-    const axiosPromise = axios.get(
-        path,
-        {
-          withCredentials: true,
-          headers: {
-            "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-          },
-        }
-    );
+    const axiosPromise = axiosExtended.get("is-logged-in");
 
     axiosPromise.then((result) => {
       if (result.data.success === true) {

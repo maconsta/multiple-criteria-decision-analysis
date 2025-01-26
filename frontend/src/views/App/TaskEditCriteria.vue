@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import {useRoute} from "vue-router";
 import Swal from "sweetalert2";
 
@@ -58,14 +58,8 @@ export default {
       });
     },
     getCriteriaByTaskID() {
-      const path = "http://127.0.0.1:5000/get-criteria-by-task-id";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("get-criteria-by-task-id", {
         taskID: this.route.params.taskID,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise
@@ -120,14 +114,8 @@ export default {
         }
       }
 
-      const path = "http://127.0.0.1:5000/delete-criteria-by-id";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("delete-criteria-by-id", {
         criteriaIDs: selectedCriteriaIDs,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise

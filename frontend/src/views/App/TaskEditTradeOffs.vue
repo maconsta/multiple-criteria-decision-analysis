@@ -1,5 +1,5 @@
 <script>
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import {useRoute} from "vue-router";
 import Swal from "sweetalert2";
 
@@ -22,14 +22,8 @@ export default {
       });
     },
     getTradeOffByTaskId() {
-      const path = "http://127.0.0.1:5000/get-trade-off-by-task-id";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("get-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise
@@ -51,14 +45,8 @@ export default {
         return;
       }
 
-      const path = `http://127.0.0.1:5000/delete-trade-off-by-task-id`;
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("delete-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise.then((response) => {

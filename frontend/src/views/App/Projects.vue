@@ -136,7 +136,7 @@
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import CardFolder from "@/components/AppComponents/CardFolder.vue";
 import Swal from "sweetalert2/dist/sweetalert2.all.min.js";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import Flicking from "@egjs/vue3-flicking";
 import DataTable from 'datatables.net/js/dataTables';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
@@ -156,19 +156,10 @@ export default {
       this.$refs.flicking.next().catch(() => void 0);
     },
     saveProjectToDatabase(projectName) {
-      // TODO: Change to a dynamic url to switch between prod/local
-
-      const path = "http://127.0.0.1:5000/save-project-to-db";
-      const axiosPromise = axios.post(
-          path,
+      const axiosPromise = axiosExtended.post(
+          "save-project-to-db",
           {
             name: projectName,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-            },
           }
       );
 
@@ -214,13 +205,7 @@ export default {
       });
     },
     getAllProjects() {
-      const path = "http://127.0.0.1:5000/get-projects-by-user-id";
-      const axiosPromise = axios.get(path, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
-      });
+      const axiosPromise = axiosExtended.get("get-projects-by-user-id");
 
       axiosPromise
           .then((response) => {
@@ -260,14 +245,8 @@ export default {
       }
     },
     deleteProject(id) {
-      const path = `http://127.0.0.1:5000/delete-project-by-id`;
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("delete-project-by-id", {
         projectID: id
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise.then((response) => {

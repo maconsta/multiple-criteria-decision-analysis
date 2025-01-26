@@ -147,7 +147,7 @@
 
 <script>
 import {useRoute} from "vue-router";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import Swal from "sweetalert2";
 import {alternatives, criteria as storedCriteria} from "@/store/store";
 import Sortable from "sortablejs";
@@ -204,19 +204,13 @@ export default {
         pairwise = true;
       }
 
-      const path = "http://127.0.0.1:5000/save-criterion-to-db";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("save-criterion-to-db", {
         name: name,
         beneficiality: beneficiality,
         description: description,
         taskID: taskID,
         values: values,
         pairwise: pairwise,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        }
       });
 
       const router = this.$router;
@@ -245,15 +239,9 @@ export default {
           });
     },
     getAlternativesByTaskID() {
-      const path = "http://127.0.0.1:5000/get-alternatives-by-task-id";
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("get-alternatives-by-task-id", {
         taskID: this.route.params.taskID,
         projectID: this.route.params.projectID,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise
