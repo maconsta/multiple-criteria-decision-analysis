@@ -8,7 +8,7 @@
 <script>
 // @ is an alias to /src
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 
 export default {
   name: "HomeApp",
@@ -17,16 +17,9 @@ export default {
   },
   methods: {
     callTestApi() {
-      const path = "http://127.0.0.1:5000/test-api";
-      const axiosPromise = axios.post(
-        path,
+      const axiosPromise = axiosExtended.post(
+        "test-api",
         {},
-        {
-          withCredentials: true,
-          headers: {
-            "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-          },
-        }
       );
 
       axiosPromise.then((result) => {

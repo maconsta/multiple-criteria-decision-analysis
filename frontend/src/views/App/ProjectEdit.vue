@@ -43,26 +43,21 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { useRoute } from "vue-router";
+import {defineComponent} from "vue";
+import {useRoute} from "vue-router";
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import Swal from "sweetalert2";
-import axios from "axios";
+import axiosExtended from "@/router/axiosExtended";
 import TaskCard from "@/components/AppComponents/TaskCard.vue";
 
 export default defineComponent({
   name: "ProjectEdit",
-  components: { TheHeader, TaskCard },
+  components: {TheHeader, TaskCard},
   methods: {
     async fetchProjects() {
-    try {
-      const response = await axios.get("http://127.0.0.1:5000/api/projects", {
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
-        withCredentials: true,
-      });
-      this.projects = response.data;
+      try {
+        const response = await axiosExtended.get("api/projects");
+        this.projects = response.data;
       } catch (error) {
         console.error("Error fetching projects:", error.response?.data?.error || error.message);
       }
@@ -89,25 +84,18 @@ export default defineComponent({
         },
         preConfirm: async (email) => {
           try {
-            const response = await axios.post(
-              "http://127.0.0.1:5000/api/share-project",
-              {
-                email: email,
-                project_id: this.route.params.projectID,
-              },
-              {
-                withCredentials: true,
-                headers: {
-                  "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-                },
-              }
+            const response = await axiosExtended.post("api/share-project",
+                {
+                  email: email,
+                  project_id: this.route.params.projectID,
+                }
             );
             Swal.fire("Success", response.data.message, "success");
           } catch (error) {
             Swal.fire(
-              "Error",
-              error.response?.data?.error || "An unexpected error occurred.",
-              "error"
+                "Error",
+                error.response?.data?.error || "An unexpected error occurred.",
+                "error"
             );
           }
         },
@@ -115,20 +103,14 @@ export default defineComponent({
     },
     getProjectName() {
       const route = useRoute();
-      const path = `http://127.0.0.1:5000/get-project-name-by-id/${route.params.projectID}`;
-      axios
-        .get(path, {
-          withCredentials: true,
-          headers: {
-            "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-          },
-        })
-        .then((response) => {
-          this.projectName = response.data;
-        })
-        .catch(() => {
-          console.log("Error when querying a project. Please try again...");
-        });
+      axiosExtended
+          .get(`get-project-name-by-id/${route.params.projectID}`)
+          .then((response) => {
+            this.projectName = response.data;
+          })
+          .catch(() => {
+            console.log("Error when querying a project. Please try again...");
+          });
     },
     openNewProjectModal() {
       const swalPromise = Swal.fire({
@@ -158,44 +140,30 @@ export default defineComponent({
       });
     },
     saveTaskToDatabase(taskName) {
-      const path = "http://127.0.0.1:5000/save-task-to-db";
-      axios
-        .post(
-          path,
-          { name: taskName, projectID: this.route.params.projectID },
-          {
-            withCredentials: true,
-            headers: {
-              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-            },
-          }
-        )
-        .then(() => {
-          this.getTasksByProjectID();
-        })
-        .catch(() => {
-          console.log("Error when creating a new task. Please try again...");
-        });
+      axiosExtended
+          .post(
+              "save-task-to-db",
+              {name: taskName, projectID: this.route.params.projectID},
+          )
+          .then(() => {
+            this.getTasksByProjectID();
+          })
+          .catch(() => {
+            console.log("Error when creating a new task. Please try again...");
+          });
     },
     getTasksByProjectID() {
-      const path = "http://127.0.0.1:5000/get-tasks-by-project-id";
-      axios
-        .post(
-          path,
-          { projectID: this.route.params.projectID },
-          {
-            withCredentials: true,
-            headers: {
-              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-            },
-          }
-        )
-        .then((response) => {
-          this.tasks = response.data;
-        })
-        .catch(() => {
-          console.log("Error when querying for all tasks. Please try again...");
-        });
+      axiosExtended
+          .post(
+              "get-tasks-by-project-id",
+              {projectID: this.route.params.projectID},
+          )
+          .then((response) => {
+            this.tasks = response.data;
+          })
+          .catch(() => {
+            console.log("Error when querying for all tasks. Please try again...");
+          });
     },
     handleClickOnTask(id, event) {
       const attribute = event.target.getAttribute("data-folder-action");
@@ -206,30 +174,23 @@ export default defineComponent({
       }
     },
     deleteTask(id) {
-      const path = `http://127.0.0.1:5000/delete-task-by-id`;
-      axios
-        .post(
-          path,
-          { taskID: id, projectID: this.route.params.projectID },
-          {
-            withCredentials: true,
-            headers: {
-              "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-            },
-          }
-        )
-        .then(() => {
-          this.getTasksByProjectID();
-        })
-        .catch(() => {
-          console.log("Error when deleting project.");
-        });
+      axiosExtended
+          .post(
+              "delete-task-by-id",
+              {taskID: id, projectID: this.route.params.projectID},
+          )
+          .then(() => {
+            this.getTasksByProjectID();
+          })
+          .catch(() => {
+            console.log("Error when deleting project.");
+          });
     },
     openExistingTask(id) {
       const router = this.$router;
       router.push({
         name: "taskEditAlternatives",
-        params: { taskID: id },
+        params: {taskID: id},
       });
     },
     showInputFieldAndHideName() {
@@ -251,16 +212,9 @@ export default defineComponent({
       input.classList.add("hidden");
     },
     changeProjectName(name) {
-      const path = "http://127.0.0.1:5000/change-project-name";
-
-      const axiosPromise = axios.post(path, {
+      const axiosPromise = axiosExtended.post("change-project-name", {
         name: name,
         projectID: this.route.params.projectID,
-      }, {
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": localStorage.getItem("csrfToken"),
-        },
       });
 
       axiosPromise
@@ -286,7 +240,7 @@ export default defineComponent({
     });
 
     input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter"){
+      if (event.key === "Enter") {
         this.changeProjectName(input.value);
         this.showNameAndHideInputField();
       }
