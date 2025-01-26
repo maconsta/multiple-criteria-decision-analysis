@@ -14,7 +14,7 @@ from backend.mcda.methods.weightedSum import WeightedSum
 
 jwt = JWTManager(app)
 
-from backend.mcda.core.core import Criterion as Crit, Alternative as Alt, DecisionMatrix
+from backend.mcda.core.core import Criterion as Crit, Alternative as Alt, DecisionMatrix, Pairwise
 
 
 @app.route("/save-trade-off-to-db", methods=['POST'])
@@ -25,6 +25,11 @@ def save_trade_off_to_db():
     decision_method = post_data['decisionMethod']
     normalization_method = post_data['normalizationMethod']
     task_id = post_data['taskID']
+    pairwise = post_data['pairwise']
+
+    if pairwise:
+        pw = Pairwise(criteria_weights)
+        criteria_weights = pw.calculate_eigenvector()
 
     new_trade_off = TradeOff(criteria_weights=criteria_weights, decision_method=decision_method,
                              normalization_method=normalization_method, task_id=task_id)
@@ -41,7 +46,7 @@ def save_trade_off_to_db():
 
         response = {"result": "success"}
 
-    return (jsonify(response))
+    return jsonify(response)
 
 
 @app.route("/get-trade-off-by-task-id", methods=["POST"])

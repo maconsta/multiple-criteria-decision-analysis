@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 mt-30">
+  <div class="w-100 mt-30 pb-20">
     <div class="topbar w-100">
       <router-link :to="{ name: 'taskEditTradeOffs' }" class="back-btn">
         <div class="chevron chevron--left"></div>
@@ -28,11 +28,37 @@
     <div class="line mb-30 mt-30"></div>
     <div class="methods">
       <label>Add Weights (Required)</label>
-      <div v-for="(criterion, index) in criteria" :key="index" class="criterion mt-15">
-        <label for="{{ criterion.name }}">{{ criterion.name }}</label>
-        <input id="{{ criterion.name }}" name="{{ criterion.name }}" required type="number"
-               placeholder="Enter a value"/>
+      <div v-for="(pair, index) in pairwiseCriteria" class="mt-15" :key="index">
+        <div class="slider-container">
+          <div class="top-bar">
+            <span>{{ pair[0] }}</span>
+            <span>{{ pair[1] }}</span>
+          </div>
+          <input type="range" min="-8" max="8" value="0" class="slider" :id="'input-slider-' + index"
+                 @input="updateValue($event)" list="markers">
+          <datalist id="markers">
+            <option value="-8"></option>
+            <option value="-6"></option>
+            <option value="-4"></option>
+            <option value="-2"></option>
+            <option value="0"></option>
+            <option value="2"></option>
+            <option value="4"></option>
+            <option value="6"></option>
+            <option value="8"></option>
+          </datalist>
+          <label class="value-container" :for="'input-slider-' + index">Value:
+            <output class="value">Equal Importance</output>
+          </label>
+        </div>
       </div>
+
+      <!--      <div v-for="(criterion, index) in criteria" :key="index" class="criterion mt-15">-->
+      <!--        <label for="{{ criterion.name }}">{{ criterion.name }}</label>-->
+      <!--        <input id="{{ criterion.name }}" name="{{ criterion.name }}" required type="number"-->
+      <!--               placeholder="Enter a value"/>-->
+      <!--      </div>-->
+
     </div>
   </div>
 </template>
@@ -58,6 +84,9 @@ export default {
               crit.beneficiality =
                   crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
             }
+
+            this.fillPairwiseCriteria();
+
           })
           .catch(() => {
             console.log("Error when querying for criteria. Please try again...");
@@ -68,16 +97,34 @@ export default {
       const normalizationMethod = document.getElementById("normalization-method").value;
       const taskID = this.route.params.taskID;
 
+      let pairwise = false;
       const weights = [];
-      document.querySelectorAll(".criterion input").forEach(input => {
-        weights.push(parseFloat(input.value));
-      });
+      document.querySelectorAll(".slider-container input").forEach(input => {
+          let val = parseInt(input.value);
+          if (val < 0) {
+            val *= -1;
+            val += 1;
+            val = 1 / val;
+          } else {
+            val += 1;
+          }
+
+          weights.push(val);
+        });
+
+        pairwise = true;
+
+      // direct weight input method; TODO add option to add weights directly for testing purposes
+      // document.querySelectorAll(".criterion input").forEach(input => {
+      //   weights.push(parseFloat(input.value));
+      // });
 
       const axiosPromise = axiosExtended.post("save-trade-off-to-db", {
         decisionMethod: decisionMethod,
         normalizationMethod: normalizationMethod,
         taskID: taskID,
-        weights: weights
+        weights: weights,
+        pairwise: pairwise,
       });
 
       const router = this.$router;
@@ -102,12 +149,51 @@ export default {
             );
           });
     },
+    fillPairwiseCriteria() {
+      for (let i = 0; i < this.criteria.length - 1; i++) {
+        for (let j = i + 1; j < this.criteria.length; j++) {
+          this.pairwiseCriteria.push([this.criteria[i].name, this.criteria[j].name]);
+        }
+      }
+    },
+    updateValue(event) {
+      const sliderID = event.target.id;
+
+      let val = parseInt(event.target.value);
+      if (val < 0) {
+        val *= -1;
+      }
+
+      let text = "";
+      if (val === 0) {
+        text = "Equal Importance";
+      } else if (val === 1) {
+        text = "Marginal Importance";
+      } else if (val === 2) {
+        text = "Low Importance";
+      } else if (val === 3) {
+        text = "Moderate Importance";
+      } else if (val === 4) {
+        text = "Substantial Importance";
+      } else if (val === 5) {
+        text = "Considerable Importance";
+      } else if (val === 6) {
+        text = "Significant Importance";
+      } else if (val === 7) {
+        text = "High Importance";
+      } else if (val === 8) {
+        text = "Absolute Importance";
+      }
+
+      document.querySelector("label[for='" + sliderID + "'] output").innerHTML = text;
+    },
   },
   data() {
     return {
       helpText,
       criteria: [],
-      route: null
+      route: null,
+      pairwiseCriteria: []
     };
   },
   mounted() {
@@ -217,6 +303,30 @@ h2 {
     line-height: 2em;
     color: #fff;
     white-space: nowrap;
+  }
+}
+
+.slider-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 5px;
+  border-radius: 8px;
+  border: 1px solid $light-gray;
+  padding: 8px;
+
+  .top-bar {
+    display: flex;
+    flex: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
+  .slider {
+    width: 100%;
+    opacity: 0.7;
+    appearance: auto;
   }
 }
 </style>
