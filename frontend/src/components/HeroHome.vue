@@ -4,7 +4,7 @@
     <div class="container hero-content row">
       <div class="col row">
         <div>
-          <h1>Welcome to SynthetIQ Deciderrr testing</h1>
+          <h1>Welcome to SynthetIQ Decider</h1>
           <p>Your new advisor!</p>
         </div>
       </div>
