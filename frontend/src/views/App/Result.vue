@@ -2,7 +2,7 @@
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import axiosExtended from "@/router/axiosExtended";
 import * as echarts from "echarts";
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -15,7 +15,7 @@ export default {
       chartInstance: null,
     };
   },
-  components: {TheHeader},
+  components: { TheHeader },
   created() {
     this.route = useRoute();
     this.calculateResult();
@@ -26,23 +26,20 @@ export default {
     },
     calculateResult() {
       axiosExtended
-          .post(
-              "calculate-result",
-              {
-                projectID: this.route.params.projectID,
-                taskID: this.route.params.taskID,
-              },
-          )
-          .then((response) => {
-            if (response.data.success) {
-              console.log(response.data);
-              this.ranking = response.data.ranking;
-              this.renderChart(); // Render chart after data is loaded
-            }
-          })
-          .catch(() => {
-            console.log("Error when creating a new project. Please try again...");
-          });
+        .post("calculate-result", {
+          projectID: this.route.params.projectID,
+          taskID: this.route.params.taskID,
+        })
+        .then((response) => {
+          if (response.data.success) {
+            console.log(response.data);
+            this.ranking = response.data.ranking;
+            this.renderChart(); // Render chart after data is loaded
+          }
+        })
+        .catch(() => {
+          console.log("Error when creating a new project. Please try again...");
+        });
     },
     renderChart() {
       const chartDom = document.getElementById("resultChart");
@@ -54,11 +51,11 @@ export default {
       const scores = this.ranking.map((item) => item.score);
 
       const option = {
-        title: {text: "Ranking Scores", left: "center"},
-        tooltip: {trigger: "axis"},
-        xAxis: {type: "category", data: names, axisLabel: {rotate: 45}},
-        yAxis: {type: "value", name: "Score"},
-        series: [{data: scores, type: "bar", color: "#2ecc71"}],
+        title: { text: "Ranking Scores", left: "center" },
+        tooltip: { trigger: "axis" },
+        xAxis: { type: "category", data: names, axisLabel: { rotate: 45 } },
+        yAxis: { type: "value", name: "Score" },
+        series: [{ data: scores, type: "bar", color: "#2ecc71" }],
       };
 
       this.chartInstance.setOption(option);
@@ -88,7 +85,7 @@ export default {
       pdf.save("result.pdf");
     },
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.chartInstance) {
       this.chartInstance.dispose();
     }
@@ -98,28 +95,41 @@ export default {
 
 <template>
   <div class="main">
-    <TheHeader/>
+    <TheHeader />
     <div class="full-width mt-45">
       <h2>Result</h2>
       <table class="mt-30">
         <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Score</th>
-        </tr>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Score</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="(rank, index) in ranking" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ rank.name }}</td>
-          <td>{{ formatNumber(rank.score, 4) }}</td>
-        </tr>
+          <tr v-for="(rank, index) in ranking" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ rank.name }}</td>
+            <td>{{ formatNumber(rank.score, 4) }}</td>
+          </tr>
         </tbody>
       </table>
-      <div id="resultChart" style="width: 100%; height: 400px; margin-top: 30px;"></div>
-      <button @click="downloadPDF"
-              style="margin-top: 20px; padding: 10px 20px; background-color: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      <div
+        id="resultChart"
+        style="width: 100%; height: 400px; margin-top: 30px"
+      ></div>
+      <button
+        @click="downloadPDF"
+        style="
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #2ecc71;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        "
+      >
         Download PDF
       </button>
     </div>

@@ -13,25 +13,25 @@
       <div class="alternative__name">
         <label for="name">Name (Required)</label>
         <input
-            type="text"
-            name="name"
-            id="name"
-            required
-            minlength="3"
-            maxlength="70"
-            placeholder="Alternative Name"
+          type="text"
+          name="name"
+          id="name"
+          required
+          minlength="3"
+          maxlength="70"
+          placeholder="Alternative Name"
         />
       </div>
       <div class="alternative__description mt-15">
         <label for="description">Description (Required)</label>
         <textarea
-            type="text"
-            name="description"
-            id="description"
-            minlength="3"
-            maxlength="500"
-            placeholder="..."
-            required
+          type="text"
+          name="description"
+          id="description"
+          minlength="3"
+          maxlength="500"
+          placeholder="..."
+          required
         />
       </div>
     </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import axiosExtended from "@/router/axiosExtended";
 import Swal from "sweetalert2";
 
@@ -56,30 +56,30 @@ export default {
         name: name,
         description: description,
         taskID: taskID,
-        projectID: projectID
+        projectID: projectID,
       });
 
       const router = this.$router;
       axiosPromise
-          .then((result) => {
-            Swal.fire({
-              position: "top-end",
-              toast: true,
-              icon: "success",
-              title: "Alternative has been saved",
-              showConfirmButton: false,
-              timer: 3000,
-            });
-
-            router.push({
-              name: "taskEditAlternatives",
-            });
-          })
-          .catch(() => {
-            console.log(
-                "Error when creating a new alternative. Please try again..."
-            );
+        .then((result) => {
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "Alternative has been saved",
+            showConfirmButton: false,
+            timer: 3000,
           });
+
+          router.push({
+            name: "taskEditAlternatives",
+          });
+        })
+        .catch(() => {
+          console.log(
+            "Error when creating a new alternative. Please try again..."
+          );
+        });
     },
   },
   created() {
@@ -92,7 +92,7 @@ export default {
   },
   data() {
     return {
-      route: null
+      route: null,
     };
   },
 };

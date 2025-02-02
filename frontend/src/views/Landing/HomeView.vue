@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <HeaderHomeNew/>
-    <HeroHome/>
+    <HeaderHomeNew />
+    <HeroHome />
     <!--<div class="hero">
       <div class="hero-second-img">
 
@@ -25,17 +25,16 @@ export default {
   beforeCreate() {
     const axiosPromise = axiosExtended.get("is-logged-in");
 
-    axiosPromise.then((result) => {
-      if (result.data.success === true) {
-        this.$router.push({
-          name: "homeApp",
-        });
-      }
-    }).catch((result) => {
-      
-    });
-
-  }
+    axiosPromise
+      .then((result) => {
+        if (result.data.success === true) {
+          this.$router.push({
+            name: "homeApp",
+          });
+        }
+      })
+      .catch((result) => {});
+  },
 };
 </script>
 

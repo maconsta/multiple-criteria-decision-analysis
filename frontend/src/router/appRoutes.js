@@ -10,7 +10,7 @@ import TaskEditAlternatives from "@/views/App/TaskEditAlternatives.vue";
 import TaskEditNewCriterion from "@/views/App/TaskEditNewCriterion.vue";
 import TaskEditNewAlternative from "@/views/App/TaskEditNewAlternative.vue";
 import TaskEditNewTradeOff from "@/views/App/TaskEditNewTradeOff.vue";
-import Result from "@/views/App/Result.vue"
+import Result from "@/views/App/Result.vue";
 import UserProfile from "@/views/App/UserProfile.vue";
 
 export default [
@@ -63,7 +63,7 @@ export default [
         path: "new-trade-off",
         name: "taskEditNewTradeOff",
         component: TaskEditNewTradeOff,
-      }
+      },
     ],
   },
   {
@@ -76,5 +76,4 @@ export default [
     name: "userProfile",
     component: UserProfile,
   },
-
 ];

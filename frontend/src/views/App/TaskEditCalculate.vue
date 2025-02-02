@@ -1,6 +1,4 @@
-<template>
-  asd
-</template>
+<template>asd</template>
 
 <script>
 export default {

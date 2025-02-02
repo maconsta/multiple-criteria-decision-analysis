@@ -8,9 +8,9 @@
           <div class="add-criteria-btn__text">Add Criterion</div>
         </div>
         <div
-            class="delete-criteria-btn"
-            @click="deleteSelectedCriteria"
-            role="button"
+          class="delete-criteria-btn"
+          @click="deleteSelectedCriteria"
+          role="button"
         >
           <div class="trash-icon trash-icon--white"></div>
           <div class="add-criteria-btn__text">Delete</div>
@@ -19,18 +19,18 @@
     </div>
     <div class="criteria mt-30">
       <div
-          v-for="(criterion, index) in criteria"
-          class="criterion"
-          :key="index"
-          @click="selectCriterion"
-          :data-criterion-id="criterion.criterionID"
+        v-for="(criterion, index) in criteria"
+        class="criterion"
+        :key="index"
+        @click="selectCriterion"
+        :data-criterion-id="criterion.criterionID"
       >
         <span class="checkbox"></span>
         <span class="text">{{ criterion.name }}</span>
         <!--suppress VueUnrecognizedDirective -->
         <span
-            class="help"
-            v-tooltip="{
+          class="help"
+          v-tooltip="{
             content:
               '<b>Description</b>: ' +
               criterion.description +
@@ -46,7 +46,7 @@
 
 <script>
 import axiosExtended from "@/router/axiosExtended";
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 
 export default {
@@ -63,16 +63,16 @@ export default {
       });
 
       axiosPromise
-          .then((response) => {
-            this.criteria = response.data;
-            for (const crit of this.criteria) {
-              crit.beneficiality =
-                  crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
-            }
-          })
-          .catch(() => {
-            console.log("Error when querying for criteria. Please try again...");
-          });
+        .then((response) => {
+          this.criteria = response.data;
+          for (const crit of this.criteria) {
+            crit.beneficiality =
+              crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
+          }
+        })
+        .catch(() => {
+          console.log("Error when querying for criteria. Please try again...");
+        });
     },
     selectCriterion(event) {
       const checkbox = event.currentTarget.querySelector(".checkbox");
@@ -119,25 +119,25 @@ export default {
       });
 
       axiosPromise
-          .then(() => {
-            Swal.fire({
-              position: "top-end",
-              toast: true,
-              icon: "success",
-              title: "Criteria have been deleted",
-              showConfirmButton: false,
-              timer: 3000,
-            });
-
-            this.criteria = this.criteria.filter(
-                (crit) => !selectedCriteriaIDs.includes(crit.criterionID)
-            );
-
-            this.deselectAllCriteria();
-          })
-          .catch(() => {
-            console.log("Error when deleting criteria. Please try again...");
+        .then(() => {
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "Criteria have been deleted",
+            showConfirmButton: false,
+            timer: 3000,
           });
+
+          this.criteria = this.criteria.filter(
+            (crit) => !selectedCriteriaIDs.includes(crit.criterionID)
+          );
+
+          this.deselectAllCriteria();
+        })
+        .catch(() => {
+          console.log("Error when deleting criteria. Please try again...");
+        });
     },
     deselectAllCriteria() {
       const checkboxes = document.getElementsByClassName("checkbox");
@@ -152,12 +152,11 @@ export default {
       }
 
       this.numberOfSelectedCrit = 0;
-    }
+    },
   },
   created() {
     this.route = useRoute();
     this.getCriteriaByTaskID();
-
   },
   data() {
     return {

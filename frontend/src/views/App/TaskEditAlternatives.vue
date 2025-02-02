@@ -4,17 +4,17 @@
       <h2>Alternatives</h2>
       <div class="btn-container">
         <div
-            class="add-alternative-btn"
-            @click="addNewAlternative"
-            role="button"
+          class="add-alternative-btn"
+          @click="addNewAlternative"
+          role="button"
         >
           <div class="plus-icon plus-icon--white"></div>
           <div class="add-alternative-btn__text">Add Alternative</div>
         </div>
         <div
-            class="delete-alternatives-btn"
-            @click="deleteSelectedAlternatives"
-            role="button"
+          class="delete-alternatives-btn"
+          @click="deleteSelectedAlternatives"
+          role="button"
         >
           <div class="trash-icon trash-icon--white"></div>
           <div class="delete-alternatives-btn__text">Delete</div>
@@ -23,18 +23,18 @@
     </div>
     <div class="alternatives mt-30">
       <div
-          v-for="(alternative, index) in alternatives"
-          class="alternative"
-          :key="index"
-          @click="toggleAlternative"
-          :data-alternative-id="alternative.alternativeID"
+        v-for="(alternative, index) in alternatives"
+        class="alternative"
+        :key="index"
+        @click="toggleAlternative"
+        :data-alternative-id="alternative.alternativeID"
       >
         <span class="checkbox"></span>
         <span class="text">{{ alternative.name }}</span>
         <!--        suppress VueUnrecognizedDirective-->
         <span
-            class="help"
-            v-tooltip="{
+          class="help"
+          v-tooltip="{
             content: '<b>Description</b>: ' + alternative.description,
             html: true,
           }"
@@ -46,7 +46,7 @@
 
 <script>
 import axiosExtended from "@/router/axiosExtended";
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 
 export default {
@@ -64,14 +64,14 @@ export default {
       });
 
       axiosPromise
-          .then((response) => {
-            this.alternatives = response.data;
-          })
-          .catch(() => {
-            console.log(
-                "Error when querying for alternatives. Please try again..."
-            );
-          });
+        .then((response) => {
+          this.alternatives = response.data;
+        })
+        .catch(() => {
+          console.log(
+            "Error when querying for alternatives. Please try again..."
+          );
+        });
     },
     deselectAllAlternatives() {
       const checkboxes = document.getElementsByClassName("checkbox");
@@ -86,7 +86,6 @@ export default {
       }
 
       this.numberOfSelectedAlternatives = 0;
-
     },
     toggleAlternative(event) {
       const checkbox = event.currentTarget.querySelector(".checkbox");
@@ -130,25 +129,25 @@ export default {
       });
 
       axiosPromise
-          .then(() => {
-            Swal.fire({
-              position: "top-end",
-              toast: true,
-              icon: "success",
-              title: "Alternatives have been deleted",
-              showConfirmButton: false,
-              timer: 3000,
-            });
-
-            this.alternatives = this.alternatives.filter(
-                (alt) => !selectedAlternativesIDs.includes(alt.alternativeID)
-            );
-
-            this.deselectAllAlternatives();
-          })
-          .catch(() => {
-            console.log("Error when deleting alternatives. Please try again...");
+        .then(() => {
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "Alternatives have been deleted",
+            showConfirmButton: false,
+            timer: 3000,
           });
+
+          this.alternatives = this.alternatives.filter(
+            (alt) => !selectedAlternativesIDs.includes(alt.alternativeID)
+          );
+
+          this.deselectAllAlternatives();
+        })
+        .catch(() => {
+          console.log("Error when deleting alternatives. Please try again...");
+        });
     },
   },
   created() {

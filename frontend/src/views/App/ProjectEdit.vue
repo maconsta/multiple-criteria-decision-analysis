@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <TheHeader/>
+    <TheHeader />
     <div class="full-width">
       <div class="navbar mt-45">
         <router-link :to="{ name: 'projects' }" class="back-btn">
@@ -22,18 +22,23 @@
         <div class="project-name" @click="showInputFieldAndHideName()">
           <h3 class="edit">{{ projectName }}</h3>
           <span class="edit-icon edit-icon--charcoal edit"></span>
-          <input type="text" :placeholder="projectName" id="change-name" class="hidden"/>
+          <input
+            type="text"
+            :placeholder="projectName"
+            id="change-name"
+            class="hidden"
+          />
         </div>
         <div v-if="tasks.length === 0" class="tasks__empty-placeholder mt-30">
           You don't have any tasks yet.
         </div>
         <div v-else class="card-container mt-20">
           <TaskCard
-              v-for="(task, index) in tasks"
-              :key="index"
-              :task-name="task.taskName"
-              :bottom-text="task.createdAt"
-              @click="handleClickOnTask(task.taskID, $event)"
+            v-for="(task, index) in tasks"
+            :key="index"
+            :task-name="task.taskName"
+            :bottom-text="task.createdAt"
+            @click="handleClickOnTask(task.taskID, $event)"
           />
         </div>
       </div>
@@ -43,8 +48,8 @@
 </template>
 
 <script>
-import {defineComponent} from "vue";
-import {useRoute} from "vue-router";
+import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 import TheHeader from "@/components/AppComponents/TheHeader.vue";
 import Swal from "sweetalert2";
 import axiosExtended from "@/router/axiosExtended";
@@ -52,14 +57,17 @@ import TaskCard from "@/components/AppComponents/TaskCard.vue";
 
 export default defineComponent({
   name: "ProjectEdit",
-  components: {TheHeader, TaskCard},
+  components: { TheHeader, TaskCard },
   methods: {
     async fetchProjects() {
       try {
         const response = await axiosExtended.get("api/projects");
         this.projects = response.data;
       } catch (error) {
-        console.error("Error fetching projects:", error.response?.data?.error || error.message);
+        console.error(
+          "Error fetching projects:",
+          error.response?.data?.error || error.message
+        );
       }
     },
     async openShareProjectModal() {
@@ -84,18 +92,16 @@ export default defineComponent({
         },
         preConfirm: async (email) => {
           try {
-            const response = await axiosExtended.post("api/share-project",
-                {
-                  email: email,
-                  project_id: this.route.params.projectID,
-                }
-            );
+            const response = await axiosExtended.post("api/share-project", {
+              email: email,
+              project_id: this.route.params.projectID,
+            });
             Swal.fire("Success", response.data.message, "success");
           } catch (error) {
             Swal.fire(
-                "Error",
-                error.response?.data?.error || "An unexpected error occurred.",
-                "error"
+              "Error",
+              error.response?.data?.error || "An unexpected error occurred.",
+              "error"
             );
           }
         },
@@ -104,13 +110,13 @@ export default defineComponent({
     getProjectName() {
       const route = useRoute();
       axiosExtended
-          .get(`get-project-name-by-id/${route.params.projectID}`)
-          .then((response) => {
-            this.projectName = response.data;
-          })
-          .catch(() => {
-            console.log("Error when querying a project. Please try again...");
-          });
+        .get(`get-project-name-by-id/${route.params.projectID}`)
+        .then((response) => {
+          this.projectName = response.data;
+        })
+        .catch(() => {
+          console.log("Error when querying a project. Please try again...");
+        });
     },
     openNewProjectModal() {
       const swalPromise = Swal.fire({
@@ -141,29 +147,28 @@ export default defineComponent({
     },
     saveTaskToDatabase(taskName) {
       axiosExtended
-          .post(
-              "save-task-to-db",
-              {name: taskName, projectID: this.route.params.projectID},
-          )
-          .then(() => {
-            this.getTasksByProjectID();
-          })
-          .catch(() => {
-            console.log("Error when creating a new task. Please try again...");
-          });
+        .post("save-task-to-db", {
+          name: taskName,
+          projectID: this.route.params.projectID,
+        })
+        .then(() => {
+          this.getTasksByProjectID();
+        })
+        .catch(() => {
+          console.log("Error when creating a new task. Please try again...");
+        });
     },
     getTasksByProjectID() {
       axiosExtended
-          .post(
-              "get-tasks-by-project-id",
-              {projectID: this.route.params.projectID},
-          )
-          .then((response) => {
-            this.tasks = response.data;
-          })
-          .catch(() => {
-            console.log("Error when querying for all tasks. Please try again...");
-          });
+        .post("get-tasks-by-project-id", {
+          projectID: this.route.params.projectID,
+        })
+        .then((response) => {
+          this.tasks = response.data;
+        })
+        .catch(() => {
+          console.log("Error when querying for all tasks. Please try again...");
+        });
     },
     handleClickOnTask(id, event) {
       const attribute = event.target.getAttribute("data-folder-action");
@@ -175,27 +180,27 @@ export default defineComponent({
     },
     deleteTask(id) {
       axiosExtended
-          .post(
-              "delete-task-by-id",
-              {taskID: id, projectID: this.route.params.projectID},
-          )
-          .then(() => {
-            this.getTasksByProjectID();
-          })
-          .catch(() => {
-            console.log("Error when deleting project.");
-          });
+        .post("delete-task-by-id", {
+          taskID: id,
+          projectID: this.route.params.projectID,
+        })
+        .then(() => {
+          this.getTasksByProjectID();
+        })
+        .catch(() => {
+          console.log("Error when deleting project.");
+        });
     },
     openExistingTask(id) {
       const router = this.$router;
       router.push({
         name: "taskEditAlternatives",
-        params: {taskID: id},
+        params: { taskID: id },
       });
     },
     showInputFieldAndHideName() {
       document.querySelectorAll(".edit").forEach((element) => {
-        element.classList.add("hidden")
+        element.classList.add("hidden");
       });
 
       const input = document.getElementById("change-name");
@@ -205,7 +210,7 @@ export default defineComponent({
     },
     showNameAndHideInputField() {
       document.querySelectorAll(".edit").forEach((element) => {
-        element.classList.remove("hidden")
+        element.classList.remove("hidden");
       });
 
       const input = document.getElementById("change-name");
@@ -218,12 +223,12 @@ export default defineComponent({
       });
 
       axiosPromise
-          .then((response) => {
-            this.projectName = name;
-          })
-          .catch(() => {
-            console.log("Error when changing name. Please try again...");
-          });
+        .then((response) => {
+          this.projectName = name;
+        })
+        .catch(() => {
+          console.log("Error when changing name. Please try again...");
+        });
     },
   },
   created() {
@@ -256,7 +261,6 @@ export default defineComponent({
 });
 </script>
 
-
 <style scoped lang="scss">
 .navbar {
   display: flex;
@@ -270,7 +274,6 @@ export default defineComponent({
   width: fit-content;
   color: #808080;
   filter: grayscale(100%) brightness(50%);
-
 
   &:hover {
     color: $dark-gray;
@@ -366,10 +369,10 @@ export default defineComponent({
 
   &__empty-placeholder {
     background-image: linear-gradient(
-            rgba(255, 255, 255, 0.5),
-            rgba(255, 255, 255, 0.5)
-    ),
-    url(http://app.localhost:8080/img/about.1f15f248.png);
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0.5)
+      ),
+      url(http://app.localhost:8080/img/about.1f15f248.png);
     background-size: 300px;
     background-position: center right 20px;
     background-repeat: no-repeat;

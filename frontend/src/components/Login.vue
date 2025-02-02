@@ -201,18 +201,22 @@ export default {
       const { email, password } = this.signInData;
       const path = "http://127.0.0.1:5000/sign-in";
       axios
-        .post(path, {
-          email,
-          password,
-        }, { withCredentials: true })
+        .post(
+          path,
+          {
+            email,
+            password,
+          },
+          { withCredentials: true }
+        )
         .then((response) => {
           if (response.data.success === true) {
-            localStorage.setItem("csrfToken", response.data.csrfToken);  // Store the token
+            localStorage.setItem("csrfToken", response.data.csrfToken); // Store the token
             this.$router.push({
-              name: "homeApp", 
+              name: "homeApp",
             });
           } else {
-            this.signInError = response.data.result;  // Show the error message if login fails
+            this.signInError = response.data.result; // Show the error message if login fails
           }
         })
         .catch(() => {

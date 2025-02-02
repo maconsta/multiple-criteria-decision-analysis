@@ -17,14 +17,11 @@ export default {
   },
   methods: {
     callTestApi() {
-      const axiosPromise = axiosExtended.post(
-        "test-api",
-        {},
-      );
+      const axiosPromise = axiosExtended.post("test-api", {});
 
       axiosPromise.then((result) => {
-        console.log(result)
-      })
+        console.log(result);
+      });
     },
   },
 };

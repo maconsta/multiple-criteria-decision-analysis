@@ -4,7 +4,7 @@
     <div class="sideways">
       <TheSidebar />
       <router-view></router-view>
-<!--      <TheHelpSidebar />-->
+      <!--      <TheHelpSidebar />-->
     </div>
   </div>
 </template>

@@ -11,15 +11,25 @@
     </div>
     <div class="methods mt-30">
       <label for="decision-method">Decision Methods (Required)</label>
-      <select id="decision-method" name="decision-method" class="methods__dropdown">
+      <select
+        id="decision-method"
+        name="decision-method"
+        class="methods__dropdown"
+      >
         <option value="topsis">Topsis</option>
         <option value="ahp">AHP</option>
         <option value="electre">Electre</option>
         <option value="wsm">Weighted Sum</option>
         <option value="prometheeii">PROMETHEE II</option>
       </select>
-      <label for="normalization-method" class="mt-15">Normalization Method</label>
-      <select id="normalization-method" name="normalization-method" class="methods__dropdown">
+      <label for="normalization-method" class="mt-15"
+        >Normalization Method</label
+      >
+      <select
+        id="normalization-method"
+        name="normalization-method"
+        class="methods__dropdown"
+      >
         <option value="linear">Linear Normalization</option>
         <option value="l1">L1 Normalization</option>
         <option value="l2">L2 Normalization</option>
@@ -34,8 +44,16 @@
             <span>{{ pair[0] }}</span>
             <span>{{ pair[1] }}</span>
           </div>
-          <input type="range" min="-8" max="8" value="0" class="slider" :id="'input-slider-' + index"
-                 @input="updateValue($event)" list="markers">
+          <input
+            type="range"
+            min="-8"
+            max="8"
+            value="0"
+            class="slider"
+            :id="'input-slider-' + index"
+            @input="updateValue($event)"
+            list="markers"
+          />
           <datalist id="markers">
             <option value="-8"></option>
             <option value="-6"></option>
@@ -47,7 +65,8 @@
             <option value="6"></option>
             <option value="8"></option>
           </datalist>
-          <label class="value-container" :for="'input-slider-' + index">Value:
+          <label class="value-container" :for="'input-slider-' + index"
+            >Value:
             <output class="value">Equal Importance</output>
           </label>
         </div>
@@ -58,15 +77,14 @@
       <!--        <input id="{{ criterion.name }}" name="{{ criterion.name }}" required type="number"-->
       <!--               placeholder="Enter a value"/>-->
       <!--      </div>-->
-
     </div>
   </div>
 </template>
 
 <script>
-import {helpText, selectedMethod} from "@/store/store";
+import { helpText, selectedMethod } from "@/store/store";
 import axiosExtended from "@/router/axiosExtended";
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 
 export default {
@@ -78,41 +96,42 @@ export default {
       });
 
       axiosPromise
-          .then((response) => {
-            this.criteria = response.data;
-            for (const crit of this.criteria) {
-              crit.beneficiality =
-                  crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
-            }
+        .then((response) => {
+          this.criteria = response.data;
+          for (const crit of this.criteria) {
+            crit.beneficiality =
+              crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
+          }
 
-            this.fillPairwiseCriteria();
-
-          })
-          .catch(() => {
-            console.log("Error when querying for criteria. Please try again...");
-          });
+          this.fillPairwiseCriteria();
+        })
+        .catch(() => {
+          console.log("Error when querying for criteria. Please try again...");
+        });
     },
     saveTradeOff() {
       const decisionMethod = document.getElementById("decision-method").value;
-      const normalizationMethod = document.getElementById("normalization-method").value;
+      const normalizationMethod = document.getElementById(
+        "normalization-method"
+      ).value;
       const taskID = this.route.params.taskID;
 
       let pairwise = false;
       const weights = [];
-      document.querySelectorAll(".slider-container input").forEach(input => {
-          let val = parseInt(input.value);
-          if (val < 0) {
-            val *= -1;
-            val += 1;
-            val = 1 / val;
-          } else {
-            val += 1;
-          }
+      document.querySelectorAll(".slider-container input").forEach((input) => {
+        let val = parseInt(input.value);
+        if (val < 0) {
+          val *= -1;
+          val += 1;
+          val = 1 / val;
+        } else {
+          val += 1;
+        }
 
-          weights.push(val);
-        });
+        weights.push(val);
+      });
 
-        pairwise = true;
+      pairwise = true;
 
       // direct weight input method; TODO add option to add weights directly for testing purposes
       // document.querySelectorAll(".criterion input").forEach(input => {
@@ -129,30 +148,33 @@ export default {
 
       const router = this.$router;
       axiosPromise
-          .then((result) => {
-            Swal.fire({
-              position: "top-end",
-              toast: true,
-              icon: "success",
-              title: "Trade Off has been saved",
-              showConfirmButton: false,
-              timer: 3000,
-            });
-
-            router.push({
-              name: "taskEditTradeOffs",
-            });
-          })
-          .catch(() => {
-            console.log(
-                "Error when creating a new trade-off. Please try again..."
-            );
+        .then((result) => {
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "Trade Off has been saved",
+            showConfirmButton: false,
+            timer: 3000,
           });
+
+          router.push({
+            name: "taskEditTradeOffs",
+          });
+        })
+        .catch(() => {
+          console.log(
+            "Error when creating a new trade-off. Please try again..."
+          );
+        });
     },
     fillPairwiseCriteria() {
       for (let i = 0; i < this.criteria.length - 1; i++) {
         for (let j = i + 1; j < this.criteria.length; j++) {
-          this.pairwiseCriteria.push([this.criteria[i].name, this.criteria[j].name]);
+          this.pairwiseCriteria.push([
+            this.criteria[i].name,
+            this.criteria[j].name,
+          ]);
         }
       }
     },
@@ -185,7 +207,8 @@ export default {
         text = "Absolute Importance";
       }
 
-      document.querySelector("label[for='" + sliderID + "'] output").innerHTML = text;
+      document.querySelector("label[for='" + sliderID + "'] output").innerHTML =
+        text;
     },
   },
   data() {
@@ -193,20 +216,20 @@ export default {
       helpText,
       criteria: [],
       route: null,
-      pairwiseCriteria: []
+      pairwiseCriteria: [],
     };
   },
   mounted() {
     if (selectedMethod.method) {
       document
-          .querySelector("div[data-method='" + selectedMethod.method + "']")
-          .click();
+        .querySelector("div[data-method='" + selectedMethod.method + "']")
+        .click();
     }
   },
   created() {
     this.route = useRoute();
     this.getCriteriaByTaskID();
-  }
+  },
 };
 </script>
 
@@ -321,7 +344,6 @@ h2 {
     justify-content: space-between;
     align-items: center;
   }
-
 
   .slider {
     width: 100%;

@@ -4,28 +4,42 @@
       <div class="folder__top"></div>
       <div class="folder__bottom">
         <div v-if="havePlus" class="plus-icon plus-icon--black"></div>
-        <div class="description" v-if="showDescription" data-folder-action="open-folder">
+        <div
+          class="description"
+          v-if="showDescription"
+          data-folder-action="open-folder"
+        >
           <div class="title" v-if="projectName">
             {{ projectName }}
           </div>
-          <span class="trash-icon trash-icon--black" v-if="trash" data-folder-action="delete"></span>
+          <span
+            class="trash-icon trash-icon--black"
+            v-if="trash"
+            data-folder-action="delete"
+          ></span>
           <div class="owner" v-if="owner">
             {{ owner }}
           </div>
           <div class="visibility" v-if="visibility == 'private'">
-            <span class="visibility__icon visibility__icon--private" title="Private"></span>
-<!--            <span class="visibility__text">Private</span>-->
+            <span
+              class="visibility__icon visibility__icon--private"
+              title="Private"
+            ></span>
+            <!--            <span class="visibility__text">Private</span>-->
           </div>
           <div class="visibility" v-if="visibility == 'public'">
-            <span class="visibility__icon visibility__icon--public" title="Public"></span>
-<!--            <span class="visibility__text">Public</span>-->
+            <span
+              class="visibility__icon visibility__icon--public"
+              title="Public"
+            ></span>
+            <!--            <span class="visibility__text">Public</span>-->
           </div>
         </div>
       </div>
     </div>
     <span class="bottom-text" v-if="bottomText && bottomText.show">{{
-        bottomText.text
-      }}</span>
+      bottomText.text
+    }}</span>
   </div>
 </template>
 

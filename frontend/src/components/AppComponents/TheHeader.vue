@@ -15,10 +15,9 @@
     </nav>
     <nav>
       <div class="dropdown">
-        <span
-            class="profile-icon"
-            @click="toggleDropdown"
-        >{{ abbreviation }}</span>
+        <span class="profile-icon" @click="toggleDropdown">{{
+          abbreviation
+        }}</span>
         <div v-if="isDropdownOpen" class="dropdown-menu">
           <span @click="navigateToProfile" class="dropdown-item">Profile</span>
           <span @click="signOut" class="dropdown-item">Sign Out</span>
@@ -27,7 +26,6 @@
     </nav>
   </header>
 </template>
-
 
 <script>
 import axiosExtended from "@/router/axiosExtended";
@@ -45,35 +43,32 @@ export default {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
     navigateToProfile() {
-      this.$router.push({name: "userProfile"});
+      this.$router.push({ name: "userProfile" });
       this.isDropdownOpen = false;
     },
     signOut() {
       axiosExtended
-          .get("sign-out")
-          .then((response) => {
-            localStorage.removeItem("csrfToken");
-            this.$router.push({
-              name: "home",
-            });
-          })
-          .catch(() => {
-            console.log("Error when signing out...");
+        .get("sign-out")
+        .then((response) => {
+          localStorage.removeItem("csrfToken");
+          this.$router.push({
+            name: "home",
           });
+        })
+        .catch(() => {
+          console.log("Error when signing out...");
+        });
       this.isDropdownOpen = false;
     },
   },
   created() {
-    axiosExtended
-        .get("get-user-abbreviation")
-        .then((result) => {
-          this.abbreviation = result.data.abbreviation;
-        });
+    axiosExtended.get("get-user-abbreviation").then((result) => {
+      this.abbreviation = result.data.abbreviation;
+    });
     this.isDropdownOpen = false;
   },
 };
 </script>
-
 
 <style scoped lang="scss">
 header {
@@ -97,7 +92,8 @@ nav {
   }
 }
 
-.home-btn, .projects-btn {
+.home-btn,
+.projects-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,7 +196,6 @@ nav {
   background-size: cover;
   background-repeat: no-repeat;
 }
-
 
 @keyframes fadeIn {
   from {

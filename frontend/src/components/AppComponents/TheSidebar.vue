@@ -87,7 +87,7 @@ export default {
       crit_image: "square.svg",
       trade_offs_image: "square.svg",
     };
-  }
+  },
 };
 </script>
 

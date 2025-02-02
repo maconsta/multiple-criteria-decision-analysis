@@ -8,8 +8,12 @@
 
       <!-- Options for Update Email and Password -->
       <div class="update-options">
-        <button @click="showUpdateSection('email')" class="update-button">Update Email</button>
-        <button @click="showUpdateSection('password')" class="update-button">Update Password</button>
+        <button @click="showUpdateSection('email')" class="update-button">
+          Update Email
+        </button>
+        <button @click="showUpdateSection('password')" class="update-button">
+          Update Password
+        </button>
       </div>
 
       <form @submit.prevent="updateProfile" class="profile-form">
@@ -37,7 +41,9 @@
 
         <!-- Password Section (with two fields for current and new password) -->
         <div v-if="activeSection === 'password'" class="password-section">
-          <label for="current-password" class="profile-label">Current Password</label>
+          <label for="current-password" class="profile-label"
+            >Current Password</label
+          >
           <input
             id="current-password"
             type="password"
@@ -56,7 +62,6 @@
             required
           />
         </div>
-
 
         <!-- Profile Picture Section -->
 
@@ -149,7 +154,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .profile-page {

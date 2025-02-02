@@ -5,7 +5,10 @@
         <span class="file-icon file-icon--charcoal"></span>
         <span class="task-name">{{ taskName }}</span>
       </div>
-      <span class="trash-icon trash-icon--black" data-folder-action="delete"></span>
+      <span
+        class="trash-icon trash-icon--black"
+        data-folder-action="delete"
+      ></span>
       <span class="bottom-text">Created: {{ date }}</span>
     </div>
   </div>
@@ -14,14 +17,14 @@
 <script>
 export default {
   name: "TaskCard",
-  data () {
+  data() {
     return {
-      date: ""
+      date: "",
     };
   },
   props: {
     taskName: String,
-    bottomText: String
+    bottomText: String,
   },
   mounted() {
     const today = new Date(this.bottomText);
@@ -29,7 +32,7 @@ export default {
     const mm = today.getMonth() + 1;
     const yyyy = today.getFullYear();
     this.date = dd + "." + mm + "." + yyyy;
-  }
+  },
 };
 </script>
 
@@ -73,11 +76,13 @@ export default {
   }
 
   .file-icon--charcoal {
-    filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
+    filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg)
+      brightness(93%) contrast(91%);
   }
 
   .trash-icon--black {
-    filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
+    filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg)
+      brightness(93%) contrast(91%);
   }
 
   .bottom-text {

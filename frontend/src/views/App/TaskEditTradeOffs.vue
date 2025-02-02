@@ -1,6 +1,6 @@
 <script>
 import axiosExtended from "@/router/axiosExtended";
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 
 export default {
@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       tradeOff: null,
-      route: null
+      route: null,
     };
   },
   methods: {
@@ -27,21 +27,29 @@ export default {
       });
 
       axiosPromise
-          .then((response) => {
-            if (response.data.success) {
-              this.tradeOff = response.data;
+        .then((response) => {
+          if (response.data.success) {
+            this.tradeOff = response.data;
 
-              document.getElementsByClassName("delete-trade-off-btn")[0].classList.add("delete-trade-off-btn--active");
-            } else {
-              document.getElementsByClassName("delete-trade-off-btn")[0].classList.remove("delete-trade-off-btn--active");
-            }
-          })
-          .catch(() => {
-            console.log("Error when querying for criteria. Please try again...");
-          });
+            document
+              .getElementsByClassName("delete-trade-off-btn")[0]
+              .classList.add("delete-trade-off-btn--active");
+          } else {
+            document
+              .getElementsByClassName("delete-trade-off-btn")[0]
+              .classList.remove("delete-trade-off-btn--active");
+          }
+        })
+        .catch(() => {
+          console.log("Error when querying for criteria. Please try again...");
+        });
     },
     deleteTradeOff() {
-      if (!document.getElementsByClassName("delete-trade-off-btn")[0].classList.contains("delete-trade-off-btn--active")) {
+      if (
+        !document
+          .getElementsByClassName("delete-trade-off-btn")[0]
+          .classList.contains("delete-trade-off-btn--active")
+      ) {
         return;
       }
 
@@ -49,24 +57,28 @@ export default {
         taskID: this.route.params.taskID,
       });
 
-      axiosPromise.then((response) => {
-        Swal.fire({
-          position: "top-end",
-          toast: true,
-          icon: "success",
-          title: "Trade-Off has been deleted",
-          showConfirmButton: false,
-          timer: 3000,
-        });
+      axiosPromise
+        .then((response) => {
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "Trade-Off has been deleted",
+            showConfirmButton: false,
+            timer: 3000,
+          });
 
-        this.tradeOff = null
-        document.getElementsByClassName("delete-trade-off-btn")[0].classList.remove("delete-trade-off-btn--active");
-      }).catch((response) => {
-        console.log("Error when deleting project.");
-      });
-    }
-  }
-}
+          this.tradeOff = null;
+          document
+            .getElementsByClassName("delete-trade-off-btn")[0]
+            .classList.remove("delete-trade-off-btn--active");
+        })
+        .catch((response) => {
+          console.log("Error when deleting project.");
+        });
+    },
+  },
+};
 </script>
 
 <template>
@@ -74,19 +86,11 @@ export default {
     <div class="topbar w-100">
       <h2>Trade-Offs</h2>
       <div class="btn-container">
-        <div
-            class="add-trade-off-btn"
-            @click="addNewTradeOff"
-            role="button"
-        >
+        <div class="add-trade-off-btn" @click="addNewTradeOff" role="button">
           <div class="plus-icon plus-icon--white"></div>
           <div class="add-trade-off-btn__text">Add Trade-Off</div>
         </div>
-        <div
-            class="delete-trade-off-btn"
-            @click="deleteTradeOff"
-            role="button"
-        >
+        <div class="delete-trade-off-btn" @click="deleteTradeOff" role="button">
           <div class="trash-icon trash-icon--white"></div>
           <div class="delete-trade-off-btn__text">Delete</div>
         </div>
@@ -96,11 +100,11 @@ export default {
       <span class="text">Trade-Off</span>
       <!--        suppress VueUnrecognizedDirective-->
       <span
-          class="help"
-          v-tooltip="{
-            content: '<b>Decision Method</b>: ' + tradeOff.decisionMethod + '', 
-            html: true,
-          }"
+        class="help"
+        v-tooltip="{
+          content: '<b>Decision Method</b>: ' + tradeOff.decisionMethod + '',
+          html: true,
+        }"
       ></span>
     </div>
   </div>
