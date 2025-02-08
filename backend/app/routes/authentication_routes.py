@@ -137,7 +137,7 @@ def is_logged_in():
 
     return response
 
-@app.route("/sign-out", methods=["GET"])
+@app.route("/api/sign-out", methods=["GET"])
 def sign_out():
     response = jsonify({"result": "User signed out!", "success": True})
 

@@ -48,7 +48,9 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env &&
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env &&
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env &&
-          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env &&
+          cd frontend &&
+          echo "VUE_APP_AXIOS_BASE_URL=${{ secrets.VUE_APP_AXIOS_BASE_URL }}" > .env &&
+          cd ../ && 
           python3.11 -m venv venv &&
           source venv/bin/activate &&
           pip install -r requirements.txt
