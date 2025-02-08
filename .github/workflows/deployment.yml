@@ -1,0 +1,55 @@
+name: Deploy to Production
+
+on:
+  pull_request:
+    branches: [ "prod" ]
+    types: [ "closed"]
+
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache-dependency-path: './frontend/package-lock.json'
+
+    - name: Install dependencies
+      run: npm ci
+      working-directory: './frontend'
+
+    - name: Install dependencies
+      run: npm run build --if-present
+      working-directory: './frontend'
+
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H "${{ secrets.SERVER_ADDRESS }}" >> ~/.ssh/known_hosts
+        
+    - name: Deploy to server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+        SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+      run: |
+        rsync -avz -e "ssh -i ~/.ssh/id_rsa" --exclude 'node_modules' ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }}:/var/www/html/multiple-criteria-decision-analysis &&
+        ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} '
+          cd /var/www/html/multiple-criteria-decision-analysis &&
+          pip install -r requirements.txt
+        '
