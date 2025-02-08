@@ -49,7 +49,7 @@ jobs:
         DB_PORT: ${{ secrets.DB_PORT }}
       run: |
         rsync -avz -e "ssh -i ~/.ssh/id_rsa" --exclude 'node_modules' ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }}:/var/www/html/multiple-criteria-decision-analysis &&
-        r
+        ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} '
           cd /var/www/html/multiple-criteria-decision-analysis &&
           echo "JWT_SECRET_KEY=${{ secrets.DB_HOST }}" > .env &&
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env &&
