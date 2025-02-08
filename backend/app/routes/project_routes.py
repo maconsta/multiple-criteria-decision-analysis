@@ -212,9 +212,8 @@ def get_projects_for_user():
         return jsonify({"error": f"Failed to fetch projects: {str(e)}"}), 500
 
 
-@app.route("/test-api", methods=["GET", "POST"])
+@app.route("/api/test-api", methods=["GET", "POST"])
 @jwt_required()
 def test_api():
     print(get_jwt_identity())
-    print(flask_session.get("projects"))
     return jsonify({"testkey": "testvalue"})
