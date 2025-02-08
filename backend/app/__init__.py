@@ -22,7 +22,7 @@ app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
 CORS(
     app,
-    origins=["http://localhost:8080", "http://www.localhost:8080"],
+    origins=["http://localhost:8080", "http://www.localhost:8080", "http://167.99.131.5"],
     supports_credentials=True,
     allow_headers=["x-csrf-token", "content-type"],
 )  # allows CORS from localhost only
