@@ -1,110 +1,109 @@
 <template>
   <body>
-    <div>
-      <div class="container" id="container" :class="{ active: isActive }">
-        <div class="form-container sign-up">
-          <form @submit.prevent="validateSignUp">
-            <h1>Create Account</h1>
-            <div class="social-icons">
-              <a href="#" class="google-icon" aria-label="Google">
-                <Icon icon="mdi:google-plus" style="font-size: 20px" />
-              </a>
-              <a href="#" class="facebook-icon" aria-label="Facebook">
-                <Icon icon="fe:facebook" style="font-size: 20px" />
-              </a>
-              <a href="#" class="git-icon" aria-label="GitHub">
-                <Icon icon="mdi:github" style="font-size: 20px" />
-              </a>
-            </div>
-            <span>or use your email for registration</span>
-            <input
+  <div>
+    <div class="container" id="container" :class="{ active: isActive }">
+      <div class="form-container sign-up">
+        <form @submit.prevent="validateSignUp">
+          <h1>Create Account</h1>
+          <div class="social-icons">
+            <a href="#" class="google-icon" aria-label="Google">
+              <Icon icon="mdi:google-plus" style="font-size: 20px"/>
+            </a>
+            <a href="#" class="facebook-icon" aria-label="Facebook">
+              <Icon icon="fe:facebook" style="font-size: 20px"/>
+            </a>
+            <a href="#" class="git-icon" aria-label="GitHub">
+              <Icon icon="mdi:github" style="font-size: 20px"/>
+            </a>
+          </div>
+          <span>or use your email for registration</span>
+          <input
               type="text"
               id="first-name"
               placeholder="First Name"
               v-model="signUpData.firstName"
-            />
-            <input
+          />
+          <input
               type="text"
               id="last-name"
               placeholder="Last Name"
               v-model="signUpData.lastName"
-            />
-            <input
+          />
+          <input
               type="email"
               id="email"
               placeholder="Email"
               v-model="signUpData.email"
-            />
-            <input
+          />
+          <input
               type="password"
               id="password"
               placeholder="Password"
               v-model="signUpData.password"
-            />
-            <div class="button" @click="validateSignUp">Sign Up</div>
-            <p v-if="signUpError">{{ signUpError }}</p>
-          </form>
-        </div>
-        <div class="form-container sign-in">
-          <form @submit.prevent="validateSignIn">
-            <h1>Sign In</h1>
-            <div class="social-icons">
-              <a href="#" class="google-icon" aria-label="Google">
-                <Icon icon="mdi:google-plus" style="font-size: 20px" />
-              </a>
-              <a href="#" class="facebook-icon" aria-label="Facebook">
-                <Icon icon="fe:facebook" style="font-size: 20px" />
-              </a>
-              <a href="#" class="git-icon" aria-label="GitHub">
-                <Icon icon="mdi:github" style="font-size: 20px" />
-              </a>
-            </div>
-            <span>or use your email and password</span>
-            <input
+          />
+          <div class="button" @click="validateSignUp">Sign Up</div>
+          <p v-if="signUpError">{{ signUpError }}</p>
+        </form>
+      </div>
+      <div class="form-container sign-in">
+        <form @submit.prevent="validateSignIn">
+          <h1>Sign In</h1>
+          <div class="social-icons">
+            <a href="#" class="google-icon" aria-label="Google">
+              <Icon icon="mdi:google-plus" style="font-size: 20px"/>
+            </a>
+            <a href="#" class="facebook-icon" aria-label="Facebook">
+              <Icon icon="fe:facebook" style="font-size: 20px"/>
+            </a>
+            <a href="#" class="git-icon" aria-label="GitHub">
+              <Icon icon="mdi:github" style="font-size: 20px"/>
+            </a>
+          </div>
+          <span>or use your email and password</span>
+          <input
               type="email"
               placeholder="Email"
               v-model="signInData.email"
-            />
-            <input
+          />
+          <input
               type="password"
               placeholder="Password"
               v-model="signInData.password"
-            />
-            <a href="#">Forget your Password?</a>
-            <div class="button" @click="validateSignIn">Sign In</div>
-            <p v-if="signInError">{{ signInError }}</p>
-          </form>
-        </div>
-        <div class="toggle-container">
-          <div class="toggle">
-            <div class="toggle-panel toggle-left">
-              <h1>Welcome Back!</h1>
-              <p>Enter your personal details to use all of site features</p>
-              <div class="button" id="login" @click="deactivateContainer">
-                Sign In
-              </div>
+          />
+          <a href="#">Forget your Password?</a>
+          <div class="button" @click="validateSignIn">Sign In</div>
+          <p v-if="signInError">{{ signInError }}</p>
+        </form>
+      </div>
+      <div class="toggle-container">
+        <div class="toggle">
+          <div class="toggle-panel toggle-left">
+            <h1>Welcome Back!</h1>
+            <p>Enter your personal details to use all of site features</p>
+            <div class="button" id="login" @click="deactivateContainer">
+              Sign In
             </div>
-            <div class="toggle-panel toggle-right">
-              <h1>Hello, Friend!</h1>
-              <p>
-                Register with your personal details to use all of site features
-              </p>
-              <div class="button" id="register" @click="activateContainer">
-                Sign Up
-              </div>
+          </div>
+          <div class="toggle-panel toggle-right">
+            <h1>Hello, Friend!</h1>
+            <p>
+              Register with your personal details to use all of site features
+            </p>
+            <div class="button" id="register" @click="activateContainer">
+              Sign Up
             </div>
           </div>
         </div>
       </div>
-      <!-- <div v-if="signUpSuccess" class="success-message">Your account has been successfully created!</div> -->
     </div>
+    <!-- <div v-if="signUpSuccess" class="success-message">Your account has been successfully created!</div> -->
+  </div>
   </body>
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
-import axios from "axios";
-import { redirectToSubdomain } from "@/router";
+import {Icon} from "@iconify/vue";
+import axiosExtended from "@/router/axiosExtended";
 
 export default {
   name: "Login",
@@ -137,7 +136,7 @@ export default {
       this.isActive = false;
     },
     validateSignUp() {
-      const { firstName, lastName, email, password } = this.signUpData;
+      const {firstName, lastName, email, password} = this.signUpData;
       if (!firstName || !lastName || !email || !password) {
         this.signUpError = "All fields are required.";
         return;
@@ -154,7 +153,7 @@ export default {
       this.registerUser();
     },
     validateSignIn() {
-      const { email, password } = this.signInData;
+      const {email, password} = this.signInData;
       if (!email || !password) {
         this.signInError = "All fields are required.";
         return;
@@ -171,58 +170,57 @@ export default {
       return re.test(email);
     },
     registerUser() {
-      const { firstName, lastName, email, password } = this.signUpData;
-      const path = "register-user";
-      axios
-        .post(
-          path,
-          {
-            firstName,
-            lastName,
-            email,
-            password,
-          },
-          { withCredentials: true }
-        )
-        .then((response) => {
-          if (response.data.success === true) {
-            localStorage.setItem("csrfToken", response.data.csrfToken);
-            this.signUpSuccess = true;
-            this.$router.push({
-              name: "homeApp",
-            });
-          }
-        })
-        .catch(() => {
-          console.log("Error when creating a new account. Please try again...");
-        });
+      const {firstName, lastName, email, password} = this.signUpData;
+      const path = "/register-user";
+      axiosExtended
+          .post(
+              path,
+              {
+                firstName,
+                lastName,
+                email,
+                password,
+              }
+          )
+          .then((response) => {
+            if (response.data.success === true) {
+              localStorage.setItem("csrfToken", response.data.csrfToken);
+              this.signUpSuccess = true;
+              this.$router.push({
+                name: "homeApp",
+              });
+            }
+          })
+          .catch(() => {
+            console.log("Error when creating a new account. Please try again...");
+          });
     },
     signInUser() {
-      const { email, password } = this.signInData;
+      const {email, password} = this.signInData;
       const path = "sign-in";
-      axios
-        .post(
-          path,
-          {
-            email,
-            password,
-          },
-          { withCredentials: true }
-        )
-        .then((response) => {
-          if (response.data.success === true) {
-            localStorage.setItem("csrfToken", response.data.csrfToken); // Store the token
-            this.$router.push({
-              name: "homeApp",
-            });
-          } else {
-            this.signInError = response.data.result; // Show the error message if login fails
-          }
-        })
-        .catch(() => {
-          console.log("Error when signing in. Please try again...");
-          this.signInError = "Error during sign-in. Please try again.";
-        });
+      axiosExtended
+          .post(
+              path,
+              {
+                email,
+                password,
+              },
+              {withCredentials: true}
+          )
+          .then((response) => {
+            if (response.data.success === true) {
+              localStorage.setItem("csrfToken", response.data.csrfToken); // Store the token
+              this.$router.push({
+                name: "homeApp",
+              });
+            } else {
+              this.signInError = response.data.result; // Show the error message if login fails
+            }
+          })
+          .catch(() => {
+            console.log("Error when signing in. Please try again...");
+            this.signInError = "Error during sign-in. Please try again.";
+          });
     },
   },
 };

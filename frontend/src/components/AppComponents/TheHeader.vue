@@ -62,7 +62,7 @@ export default {
     },
   },
   created() {
-    axiosExtended.get("get-user-abbreviation").then((result) => {
+    axiosExtended.get("/get-user-abbreviation").then((result) => {
       this.abbreviation = result.data.abbreviation;
     });
     this.isDropdownOpen = false;
