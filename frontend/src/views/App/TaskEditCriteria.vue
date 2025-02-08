@@ -58,7 +58,7 @@ export default {
       });
     },
     getCriteriaByTaskID() {
-      const axiosPromise = axiosExtended.post("get-criteria-by-task-id", {
+      const axiosPromise = axiosExtended.post("/get-criteria-by-task-id", {
         taskID: this.route.params.taskID,
       });
 
@@ -114,7 +114,7 @@ export default {
         }
       }
 
-      const axiosPromise = axiosExtended.post("delete-criteria-by-id", {
+      const axiosPromise = axiosExtended.post("/delete-criteria-by-id", {
         criteriaIDs: selectedCriteriaIDs,
       });
 

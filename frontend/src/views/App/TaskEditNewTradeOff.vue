@@ -91,7 +91,7 @@ export default {
   name: "TaskEditNewTradeOff",
   methods: {
     getCriteriaByTaskID() {
-      const axiosPromise = axiosExtended.post("get-criteria-by-task-id", {
+      const axiosPromise = axiosExtended.post("/get-criteria-by-task-id", {
         taskID: this.route.params.taskID,
       });
 
@@ -138,7 +138,7 @@ export default {
       //   weights.push(parseFloat(input.value));
       // });
 
-      const axiosPromise = axiosExtended.post("save-trade-off-to-db", {
+      const axiosPromise = axiosExtended.post("/save-trade-off-to-db", {
         decisionMethod: decisionMethod,
         normalizationMethod: normalizationMethod,
         taskID: taskID,

@@ -283,7 +283,7 @@ export default {
         pairwise = true;
       }
 
-      const axiosPromise = axiosExtended.post("save-criterion-to-db", {
+      const axiosPromise = axiosExtended.post("/save-criterion-to-db", {
         name: name,
         beneficiality: beneficiality,
         description: description,
@@ -318,7 +318,7 @@ export default {
         });
     },
     getAlternativesByTaskID() {
-      const axiosPromise = axiosExtended.post("get-alternatives-by-task-id", {
+      const axiosPromise = axiosExtended.post("/get-alternatives-by-task-id", {
         taskID: this.route.params.taskID,
         projectID: this.route.params.projectID,
       });

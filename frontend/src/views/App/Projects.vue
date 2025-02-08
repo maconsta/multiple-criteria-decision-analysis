@@ -174,7 +174,7 @@ export default {
       this.$refs.flicking.next().catch(() => void 0);
     },
     saveProjectToDatabase(projectName) {
-      const axiosPromise = axiosExtended.post("save-project-to-db", {
+      const axiosPromise = axiosExtended.post("/save-project-to-db", {
         name: projectName,
       });
 
@@ -220,7 +220,7 @@ export default {
       });
     },
     getAllProjects() {
-      const axiosPromise = axiosExtended.get("get-projects-by-user-id");
+      const axiosPromise = axiosExtended.get("/get-projects-by-user-id");
 
       axiosPromise
         .then((response) => {
@@ -260,7 +260,7 @@ export default {
       }
     },
     deleteProject(id) {
-      const axiosPromise = axiosExtended.post("delete-project-by-id", {
+      const axiosPromise = axiosExtended.post("/delete-project-by-id", {
         projectID: id,
       });
 

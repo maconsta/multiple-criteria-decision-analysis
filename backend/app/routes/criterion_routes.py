@@ -16,7 +16,7 @@ from backend.app.routes.utils import save_project_in_session, delete_project_fro
 jwt = JWTManager(app)
 
 
-@app.route("/save-criterion-to-db", methods=['POST'])
+@app.route("/api/save-criterion-to-db", methods=['POST'])
 @jwt_required()
 def save_criterion_to_db():
     post_data = request.get_json()
@@ -48,7 +48,7 @@ def save_criterion_to_db():
     return jsonify(response)
 
 
-@app.route("/get-criteria-by-task-id", methods=['POST'])
+@app.route("/api/get-criteria-by-task-id", methods=['POST'])
 @jwt_required()
 def get_criteria_by_task_id():
     post_data = request.get_json()
@@ -70,7 +70,7 @@ def get_criteria_by_task_id():
     return jsonify(result)
 
 
-@app.route("/delete-criteria-by-id", methods=['POST'])
+@app.route("/api/delete-criteria-by-id", methods=['POST'])
 @jwt_required()
 def delete_criteria_by_id():
     post_data = request.get_json()

@@ -12,7 +12,7 @@ from flask_jwt_extended import set_access_cookies
 jwt = JWTManager(app)
 
 
-@app.route("/save-alternative-to-db", methods=['POST'])
+@app.route("/api/save-alternative-to-db", methods=['POST'])
 @jwt_required()
 def save_alternative_to_db():
     post_data = request.get_json()
@@ -38,7 +38,7 @@ def save_alternative_to_db():
     return jsonify(response)
 
 
-@app.route("/get-alternatives-by-task-id", methods=['POST'])
+@app.route("/api/get-alternatives-by-task-id", methods=['POST'])
 def get_alternatives_by_task_id():
     post_data = request.get_json()
     task_id = post_data['taskID']
@@ -63,7 +63,7 @@ def get_alternatives_by_task_id():
     return jsonify(result)
 
 
-@app.route("/delete-alternatives-by-id", methods=['POST'])
+@app.route("/api/delete-alternatives-by-id", methods=['POST'])
 def delete_alternatives_by_id():
     post_data = request.get_json()
     alternatives_ids = post_data['alternativesIDs']

@@ -22,7 +22,7 @@ export default {
       });
     },
     getTradeOffByTaskId() {
-      const axiosPromise = axiosExtended.post("get-trade-off-by-task-id", {
+      const axiosPromise = axiosExtended.post("/get-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
       });
 
@@ -53,7 +53,7 @@ export default {
         return;
       }
 
-      const axiosPromise = axiosExtended.post("delete-trade-off-by-task-id", {
+      const axiosPromise = axiosExtended.post("/delete-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
       });
 

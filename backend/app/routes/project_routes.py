@@ -17,7 +17,7 @@ from backend.app.routes.utils import (
 jwt = JWTManager(app)
 
 
-@app.route("/save-project-to-db", methods=["POST"])
+@app.route("/api/save-project-to-db", methods=["POST"])
 @jwt_required()
 def save_project_to_db():
     post_data = request.get_json()
@@ -41,7 +41,7 @@ def save_project_to_db():
     return jsonify(response)
 
 
-@app.route("/get-project-name-by-id/<project_id>", methods=["GET"])
+@app.route("/api/get-project-name-by-id/<project_id>", methods=["GET"])
 @jwt_required()
 def get_project(project_id):
     project_name = ""
@@ -59,7 +59,7 @@ def get_project(project_id):
     return jsonify(project_name)
 
 
-@app.route("/get-projects-by-user-id", methods=["GET"])
+@app.route("/api/get-projects-by-user-id", methods=["GET"])
 @jwt_required()
 def get_projects_by_user_id():
 
@@ -106,7 +106,7 @@ def get_projects_by_user_id():
     return jsonify(result)
 
 
-@app.route("/delete-project-by-id", methods=["POST"])
+@app.route("/api/delete-project-by-id", methods=["POST"])
 @jwt_required()
 def delete_project():
     post_data = request.get_json()
@@ -127,7 +127,7 @@ def delete_project():
 
     return jsonify(response)
 
-@app.route("/change-project-name", methods=['POST'])
+@app.route("/api/change-project-name", methods=['POST'])
 @jwt_required()
 def change_project_name():
     post_data = request.get_json()

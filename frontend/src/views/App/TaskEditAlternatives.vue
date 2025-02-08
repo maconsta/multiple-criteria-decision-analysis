@@ -58,7 +58,7 @@ export default {
       });
     },
     getAlternativesByTaskID() {
-      const axiosPromise = axiosExtended.post("get-alternatives-by-task-id", {
+      const axiosPromise = axiosExtended.post("/get-alternatives-by-task-id", {
         taskID: this.route.params.taskID,
         projectID: this.route.params.projectID,
       });
@@ -124,7 +124,7 @@ export default {
         }
       }
 
-      const axiosPromise = axiosExtended.post("delete-alternatives-by-id", {
+      const axiosPromise = axiosExtended.post("/delete-alternatives-by-id", {
         alternativesIDs: selectedAlternativesIDs,
       });
 

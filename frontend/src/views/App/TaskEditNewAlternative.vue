@@ -52,7 +52,7 @@ export default {
       const taskID = this.route.params.taskID;
       const projectID = this.route.params.projectID;
 
-      const axiosPromise = axiosExtended.post("save-alternative-to-db", {
+      const axiosPromise = axiosExtended.post("/save-alternative-to-db", {
         name: name,
         description: description,
         taskID: taskID,
