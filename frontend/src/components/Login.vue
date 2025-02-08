@@ -185,6 +185,8 @@ export default {
           .then((response) => {
             if (response.data.success === true) {
               localStorage.setItem("csrfToken", response.data.csrfToken);
+              const csrfToken = localStorage.getItem("csrfToken");
+              console.log('CSRF Token:', csrfToken);
               this.signUpSuccess = true;
               this.$router.push({
                 name: "homeApp",
