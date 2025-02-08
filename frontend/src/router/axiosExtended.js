@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "@/router/index.js";
 
+console.log(process.env);
 const axiosExtended = axios.create({
   baseURL: process.env.VUE_APP_AXIOS_BASE_URL,
   withCredentials: true,
