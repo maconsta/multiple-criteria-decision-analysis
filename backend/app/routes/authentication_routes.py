@@ -87,7 +87,7 @@ def register_user():
                 "result": "User registered!",
                 "userID": new_user.user_id,
                 "success": True,
-                "csrfToken": get_csrf_token(token),
+                "accessToken": token,
             }
         )
 
@@ -95,7 +95,7 @@ def register_user():
         # if projects is not None:
         #     projects.clear()
 
-        set_access_cookies(response, token)
+        # set_access_cookies(response, token)
 
     return response
 
