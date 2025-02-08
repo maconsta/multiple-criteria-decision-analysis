@@ -3,11 +3,11 @@ from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 from os import environ as env
 
 #db config vars
-host = env.get("host")
-user = env.get("user")
-password = env.get("password")
-database = env.get("database")
-port = env.get("port")
+host = env.get("DB_HOST")
+user = env.get("DB_USER")
+password = env.get("DB_PASSWORD")
+database = env.get("DB_DATABASE")
+port = env.get("DB_PORT")
 
 url = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
 engine = create_engine(url)
