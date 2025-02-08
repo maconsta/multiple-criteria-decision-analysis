@@ -11,9 +11,11 @@ app = Flask(__name__)
 
 # JWT CONFIG
 app.config["JWT_SECRET_KEY"] = env.get("JWT_SECRET_KEY")
-app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config["JWT_COOKIE_SAMESITE"] = "None"
 app.config["JWT_COOKIE_SECURE"] = "Secure"
+app.config["JWT_HEADER_NAME"] = "Authorization"
+app.config["JWT_HEADER_TYPE"] = "Bearer"
 
 # FLASK CONFIG
 app.config["SECRET_KEY"] = env.get("JWT_SECRET_KEY")  # same secret key as jwt
