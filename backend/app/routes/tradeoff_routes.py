@@ -17,7 +17,7 @@ jwt = JWTManager(app)
 from backend.mcda.core.core import Criterion as Crit, Alternative as Alt, DecisionMatrix, Pairwise
 
 
-@app.route("/save-trade-off-to-db", methods=['POST'])
+@app.route("/api/save-trade-off-to-db", methods=['POST'])
 @jwt_required()
 def save_trade_off_to_db():
     post_data = request.get_json()
@@ -49,7 +49,7 @@ def save_trade_off_to_db():
     return jsonify(response)
 
 
-@app.route("/get-trade-off-by-task-id", methods=["POST"])
+@app.route("/api/get-trade-off-by-task-id", methods=["POST"])
 @jwt_required()
 def get_trade_off_by_task_id():
     post_data = request.get_json()
@@ -71,7 +71,7 @@ def get_trade_off_by_task_id():
     return jsonify(result)
 
 
-@app.route("/delete-trade-off-by-task-id", methods=["POST"])
+@app.route("/api/delete-trade-off-by-task-id", methods=["POST"])
 @jwt_required()
 def delete_trade_off_by_task_id():
     post_data = request.get_json()
@@ -93,7 +93,7 @@ def delete_trade_off_by_task_id():
     return jsonify(response)
 
 
-@app.route("/calculate-result", methods=["POST"])
+@app.route("/api/calculate-result", methods=["POST"])
 @jwt_required()
 def calculate_result():
     post_data = request.get_json()

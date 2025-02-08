@@ -23,7 +23,7 @@ export default {
     HeroHome,
   },
   beforeCreate() {
-    const axiosPromise = axiosExtended.get("is-logged-in");
+    const axiosPromise = axiosExtended.get("/is-logged-in");
 
     axiosPromise
       .then((result) => {

@@ -26,7 +26,7 @@ export default {
     },
     calculateResult() {
       axiosExtended
-        .post("calculate-result", {
+        .post("/calculate-result", {
           projectID: this.route.params.projectID,
           taskID: this.route.params.taskID,
         })

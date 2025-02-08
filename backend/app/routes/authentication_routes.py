@@ -49,7 +49,7 @@ def verify_password(stored_password: str, provided_password: str):
     return hashed_password_hex == stored_hashed_password
 
 
-@app.route("/register-user", methods=["POST"])
+@app.route("/api/register-user", methods=["POST"])
 def register_user():
     post_data = request.get_json()
     firstName = post_data["firstName"]
@@ -100,7 +100,7 @@ def register_user():
     return response
 
 
-@app.route("/sign-in", methods=["POST"])
+@app.route("/api/sign-in", methods=["POST"])
 def sign_in():
     post_data = request.get_json()
     email = post_data["email"]
@@ -126,7 +126,7 @@ def sign_in():
     return response
 
 
-@app.route("/is-logged-in", methods=["GET"])
+@app.route("/api/is-logged-in", methods=["GET"])
 def is_logged_in():
     token = verify_jwt_in_request(optional=True)
 
@@ -148,7 +148,7 @@ def sign_out():
 
     return response
 
-@app.route("/get-user-abbreviation", methods=["GET"])
+@app.route("/api/get-user-abbreviation", methods=["GET"])
 @jwt_required()
 def get_user_abbreviation():
     user_id = get_jwt_identity()

@@ -11,7 +11,7 @@ from backend.app.routes.utils import save_task_in_session, delete_task_from_sess
 jwt = JWTManager(app)
 
 
-@app.route("/save-task-to-db", methods=['POST'])
+@app.route("/api/save-task-to-db", methods=['POST'])
 @jwt_required()
 def save_task_to_db():
     post_data = request.get_json()
@@ -33,7 +33,7 @@ def save_task_to_db():
     return jsonify(response)
 
 
-@app.route("/get-tasks-by-project-id", methods=['POST'])
+@app.route("/api/get-tasks-by-project-id", methods=['POST'])
 @jwt_required()
 def get_tasks_by_project_id():
     post_data = request.get_json()
@@ -54,7 +54,7 @@ def get_tasks_by_project_id():
     return jsonify(result)
 
 
-@app.route("/delete-task-by-id", methods=['POST'])
+@app.route("/api/delete-task-by-id", methods=['POST'])
 @jwt_required()
 def delete_task_by_id():
     post_data = request.get_json()

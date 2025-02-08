@@ -120,7 +120,7 @@ export default {
       formData.append("newEmail", this.profile.newEmail);
 
       axiosExtended
-        .post("api/update-profile", formData)
+        .post("/update-profile", formData)
         .then((response) => {
           if (response.data.success) {
             Swal.fire({
