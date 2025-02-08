@@ -172,7 +172,7 @@ export default {
     },
     registerUser() {
       const { firstName, lastName, email, password } = this.signUpData;
-      const path = "http://127.0.0.1:5000/register-user";
+      const path = "register-user";
       axios
         .post(
           path,
@@ -199,7 +199,7 @@ export default {
     },
     signInUser() {
       const { email, password } = this.signInData;
-      const path = "http://127.0.0.1:5000/sign-in";
+      const path = "sign-in";
       axios
         .post(
           path,
