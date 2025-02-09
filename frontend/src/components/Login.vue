@@ -185,7 +185,6 @@ export default {
           .then((response) => {
             if (response.data.success === true) {
               localStorage.setItem("accessToken", response.data.accessToken);
-              console.log('Token set:', response.data.accessToken);
 
               this.signUpSuccess = true;
               this.$router.push({
@@ -211,12 +210,12 @@ export default {
           )
           .then((response) => {
             if (response.data.success === true) {
-              localStorage.setItem("csrfToken", response.data.csrfToken); // Store the token
+              localStorage.setItem("accessToken", response.data.accessToken);
               this.$router.push({
                 name: "homeApp",
               });
             } else {
-              this.signInError = response.data.result; // Show the error message if login fails
+              this.signInError = response.data.result;
             }
           })
           .catch(() => {

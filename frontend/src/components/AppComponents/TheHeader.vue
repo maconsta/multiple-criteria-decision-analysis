@@ -50,7 +50,7 @@ export default {
       axiosExtended
         .get("sign-out")
         .then((response) => {
-          localStorage.removeItem("csrfToken");
+          localStorage.removeItem("accessToken");
           this.$router.push({
             name: "home",
           });

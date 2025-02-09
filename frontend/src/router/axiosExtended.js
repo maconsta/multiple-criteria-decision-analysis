@@ -9,6 +9,20 @@ const axiosExtended = axios.create({
     },
 });
 
+// we need it just in case
+axiosExtended.interceptors.request.use(
+    (config) => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (accessToken) {
+            config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 axiosExtended.interceptors.response.use(
     (response) => response,
     (error) => {
