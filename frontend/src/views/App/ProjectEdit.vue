@@ -61,7 +61,7 @@ export default defineComponent({
   methods: {
     async fetchProjects() {
       try {
-        const response = await axiosExtended.get("api/projects");
+        const response = await axiosExtended.get("/projects");
         this.projects = response.data;
       } catch (error) {
         console.error(
@@ -92,7 +92,7 @@ export default defineComponent({
         },
         preConfirm: async (email) => {
           try {
-            const response = await axiosExtended.post("api/share-project", {
+            const response = await axiosExtended.post("/share-project", {
               email: email,
               project_id: this.route.params.projectID,
             });
@@ -110,7 +110,7 @@ export default defineComponent({
     getProjectName() {
       const route = useRoute();
       axiosExtended
-        .get(`get-project-name-by-id/${route.params.projectID}`)
+        .get(`/get-project-name-by-id/${route.params.projectID}`)
         .then((response) => {
           this.projectName = response.data;
         })

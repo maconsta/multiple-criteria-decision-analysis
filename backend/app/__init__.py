@@ -26,8 +26,8 @@ CORS(
     app,
     origins=["http://localhost:8080", "http://www.localhost:8080", "http://67.207.76.165"],
     supports_credentials=True,
-    allow_headers=["x-csrf-token", "content-type"],
-)  # allows CORS from localhost only
+    allow_headers=["x-csrf-token", "content-type", "Authorization"],
+)
 
 from backend.app.routes import project_routes
 from backend.app.routes import task_routes

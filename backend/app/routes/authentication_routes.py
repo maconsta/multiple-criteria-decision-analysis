@@ -91,12 +91,6 @@ def register_user():
             }
         )
 
-        # projects = flask_session.get("projects")
-        # if projects is not None:
-        #     projects.clear()
-
-        # set_access_cookies(response, token)
-
     return response
 
 
@@ -116,10 +110,9 @@ def sign_in():
             "result": "User signed in!",
             "userID": user.user_id,
             "success": True,
-            "csrfToken": get_csrf_token(token),
+            "accessToken": token,
         })
-        
-        set_access_cookies(response, token)
+
     else:
         response = jsonify({"result": "Invalid email or password", "success": False})
 
@@ -140,9 +133,6 @@ def is_logged_in():
 @app.route("/api/sign-out", methods=["GET"])
 def sign_out():
     response = jsonify({"result": "User signed out!", "success": True})
-
-    # flask_session.get("projects").clear()
-    # flask_session.modified = True
 
     unset_jwt_cookies(response)
 
