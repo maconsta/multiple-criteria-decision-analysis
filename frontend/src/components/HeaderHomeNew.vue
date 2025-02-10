@@ -3,7 +3,7 @@
   <header :class="{ 'small-header': isScrolled }">
     <div class="container header row">
       <a href="#" class="logo">
-        <h1>Synthet<span>IQq</span></h1>
+        <h1>Synthet<span>IQ</span></h1>
       </a>
       <div class="toggleMenu" v-on:click="toggleMenu"></div>
       <nav class="navigation row">
