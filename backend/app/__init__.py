@@ -24,7 +24,8 @@ app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
 CORS(
     app,
-    origins=["http://localhost:8080", "http://www.localhost:8080", "http://67.207.76.165"],
+    origins=["http://localhost:8080", "http://www.localhost:8080", "http://67.207.76.165", "https://synthetiq.online",
+             "https://www.synthetiq.online"],
     supports_credentials=True,
     allow_headers=["x-csrf-token", "content-type", "Authorization"],
 )
