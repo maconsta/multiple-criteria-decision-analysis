@@ -9,11 +9,6 @@ from flask_jwt_extended import JWTManager
 
 from sqlalchemy import or_, any_
 
-from backend.app.routes.utils import (
-    save_project_in_session,
-    delete_project_from_session,
-)
-
 jwt = JWTManager(app)
 
 

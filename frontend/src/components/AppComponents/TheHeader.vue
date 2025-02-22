@@ -2,10 +2,10 @@
   <header>
     <div class="empty-container"></div>
     <nav>
-      <router-link :to="{ name: 'homeApp' }" class="link">
-        <span class="home-btn"><span class="home-btn__img"></span></span>
-        <span class="text">Home</span>
-      </router-link>
+<!--      <router-link :to="{ name: 'homeApp' }" class="link">-->
+<!--        <span class="home-btn"><span class="home-btn__img"></span></span>-->
+<!--        <span class="text">Home</span>-->
+<!--      </router-link>-->
       <router-link :to="{ name: 'projects' }" class="link">
         <span class="projects-btn">
           <span class="projects-btn__img"></span>

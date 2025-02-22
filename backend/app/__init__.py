@@ -37,3 +37,4 @@ from backend.app.routes import alternative_routes
 from backend.app.routes import criterion_routes
 from backend.app.routes import tradeoff_routes
 from backend.app.routes import user_profile_routes
+from backend.app.routes import template_routes
