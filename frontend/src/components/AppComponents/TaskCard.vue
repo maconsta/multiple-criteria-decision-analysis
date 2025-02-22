@@ -38,7 +38,7 @@ export default {
 
 <style scoped lang="scss">
 .card {
-  width: 250px;
+  width: 300px;
   height: 200px;
   border-radius: 6px 8px 6px 6px;
   border: 2px solid #bfd0ff;
@@ -67,6 +67,7 @@ export default {
     display: flex;
     align-items: center;
     column-gap: 5px;
+    width: calc(100% - 20px);
   }
 
   .task-name {

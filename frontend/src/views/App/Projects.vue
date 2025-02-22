@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <TheHeader />
+    <TheHeader/>
     <div class="full-width">
       <nav class="dashboard mt-45">
         <div class="dashboard__top">
@@ -12,76 +12,83 @@
         </div>
         <div class="dashboard__bot">
           <CardFolder
-            @click="openNewProjectModal"
-            size="folder--small"
-            background-color="folder--gray"
-            :have-plus="true"
-            :bottom-text="{ show: true, text: 'Blank' }"
+              @click="openNewProjectModal"
+              size="folder--small"
+              background-color="folder--gray"
+              :have-plus="true"
+              :bottom-text="{ show: true, text: 'Blank' }"
           />
           <div class="vertical-spacer"></div>
           <Flicking
-            :options="{
+              :options="{
               circular: true,
               align: 'prev',
               circularFallback: 'bound',
             }"
-            ref="flicking"
+              ref="flicking"
           >
             <CardFolder
-              size="folder--small"
-              background-color="folder--gray"
-              :show-description="true"
-              project-name="World Geography"
-              :bottomText="{ show: true, text: 'Public Template 1' }"
-              :key="0"
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Dream Home"
+                :bottomText="{ show: true, text: 'Public Template 1' }"
+                :key="0"
+                @click="newProjectFromTemplate('dreamHome')"
             />
             <CardFolder
-              size="folder--small"
-              background-color="folder--gray"
-              :show-description="true"
-              project-name="Real Estate"
-              :bottomText="{ show: true, text: 'Public Template 2' }"
-              :key="1"
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="New Car"
+                :bottomText="{ show: true, text: 'Public Template 2' }"
+                :key="1"
+                @click="newProjectFromTemplate('newCar')"
             />
             <CardFolder
-              size="folder--small"
-              background-color="folder--gray"
-              :show-description="true"
-              project-name="Best Economy Vehicle"
-              :bottomText="{ show: true, text: 'Public Template 3' }"
-              :key="2"
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Build Your PC"
+                :bottomText="{ show: true, text: 'Public Template 3' }"
+                :key="2"
+                @click="newProjectFromTemplate('buildYourPc')"
             />
             <CardFolder
-              size="folder--small"
-              background-color="folder--gray"
-              :show-description="true"
-              project-name="Social Media Marketing"
-              :bottomText="{ show: true, text: 'Public Template 4' }"
-              :key="3"
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Shopping List"
+                :bottomText="{ show: true, text: 'Public Template 4' }"
+                :key="3"
+                @click="newProjectFromTemplate('shoppingList')"
             />
             <CardFolder
-              size="folder--small"
-              background-color="folder--gray"
-              :show-description="true"
-              project-name="New House"
-              :bottomText="{ show: true, text: 'Public Template 5' }"
-              :key="4"
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="Holiday Planner"
+                :bottomText="{ show: true, text: 'Public Template 5' }"
+                :key="4"
+                @click="newProjectFromTemplate('holidayPlanner')"
             />
             <CardFolder
-              size="folder--small"
-              background-color="folder--gray"
-              :show-description="true"
-              project-name="Popular Trends"
-              :bottomText="{ show: true, text: 'Public Template 6' }"
-              :key="5"
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="New Phone"
+                :bottomText="{ show: true, text: 'Public Template 6' }"
+                :key="5"
+                @click="newProjectFromTemplate('newPhone')"
             />
             <CardFolder
-              size="folder--small"
-              background-color="folder--gray"
-              :show-description="true"
-              project-name="Lorem Ipsum"
-              :bottomText="{ show: true, text: 'Public Template 7' }"
-              :key="6"
+                size="folder--small"
+                background-color="folder--gray"
+                :show-description="true"
+                project-name="New Guitar"
+                :bottomText="{ show: true, text: 'Public Template 7' }"
+                :key="6"
+                @click="newProjectFromTemplate('newGuitar')"
             />
           </Flicking>
         </div>
@@ -91,8 +98,8 @@
           <h3 class="dashboard__heading">All Projects</h3>
           <div class="dashboard__icons">
             <div
-              class="grid-icon grid-icon--active"
-              @click="changeDashboardMode('grid')"
+                class="grid-icon grid-icon--active"
+                @click="changeDashboardMode('grid')"
             ></div>
             <div class="list-icon" @click="changeDashboardMode('list')"></div>
           </div>
@@ -102,44 +109,44 @@
             You don't have any projects.
           </div>
           <CardFolder
-            v-else-if="dashboardMode === 'grid'"
-            v-for="(project, index) in projects"
-            :key="index"
-            size="folder--large"
-            background-color="folder--yellow"
-            :show-description="true"
-            :project-name="project.projectName"
-            :trash="true"
-            :owner="project.owner"
-            :visibility="project.visibility"
-            @click="handleClickOnFolder(project.projectID, $event)"
+              v-else-if="dashboardMode === 'grid'"
+              v-for="(project, index) in projects"
+              :key="index"
+              size="folder--large"
+              background-color="folder--yellow"
+              :show-description="true"
+              :project-name="project.projectName"
+              :trash="true"
+              :owner="project.owner"
+              :visibility="project.visibility"
+              @click="handleClickOnFolder(project.projectID, $event)"
           />
           <table
-            v-else-if="dashboardMode === 'list'"
-            class="data-table"
-            ref="dataTable"
+              v-else-if="dashboardMode === 'list'"
+              class="data-table"
+              ref="dataTable"
           >
             <thead>
-              <tr>
-                <th>Project</th>
-                <th>Owner</th>
-                <th>Delete</th>
-              </tr>
+            <tr>
+              <th>Project</th>
+              <th>Owner</th>
+              <th>Delete</th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="(project, index) in projects" :key="index">
-                <td @click="handleClickOnFolder(project.projectID, $event)">
-                  {{ project.projectName }}
-                </td>
-                <td>{{ project.owner }}</td>
-                <td class="align-right">
+            <tr v-for="(project, index) in projects" :key="index">
+              <td @click="handleClickOnFolder(project.projectID, $event)">
+                {{ project.projectName }}
+              </td>
+              <td>{{ project.owner }}</td>
+              <td class="align-right">
                   <span
-                    class="trash-icon trash-icon--black"
-                    data-folder-action="delete"
-                    @click="handleClickOnFolder(project.projectID, $event)"
+                      class="trash-icon trash-icon--black"
+                      data-folder-action="delete"
+                      @click="handleClickOnFolder(project.projectID, $event)"
                   ></span>
-                </td>
-              </tr>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -180,15 +187,15 @@ export default {
 
       const router = this.$router;
       axiosPromise
-        .then((response) => {
-          router.push({
-            name: "projectEdit",
-            params: { projectID: response.data.projectID },
+          .then((response) => {
+            router.push({
+              name: "projectEdit",
+              params: {projectID: response.data.projectID},
+            });
+          })
+          .catch(() => {
+            console.log("Error when creating a new project. Please try again...");
           });
-        })
-        .catch(() => {
-          console.log("Error when creating a new project. Please try again...");
-        });
     },
     openNewProjectModal() {
       const swalPromise = Swal.fire({
@@ -223,33 +230,33 @@ export default {
       const axiosPromise = axiosExtended.get("/get-projects-by-user-id");
 
       axiosPromise
-        .then((response) => {
-          for (const project of response.data) {
-            if (project.owner.length > 20) {
-              const splitString = project.owner.split(" ");
-              project.owner = splitString[0][0] + ". " + splitString[1];
+          .then((response) => {
+            for (const project of response.data) {
+              if (project.owner.length > 20) {
+                const splitString = project.owner.split(" ");
+                project.owner = splitString[0][0] + ". " + splitString[1];
+              }
+
+              if (project.owner.length > 20) {
+                const splitString = project.owner.split(" ");
+                project.owner = splitString[0] + splitString[1][0] + ".";
+              }
+            }
+            this.projects = response.data;
+
+            if (this.dataTable) {
+              this.dataTable.destroy();
             }
 
-            if (project.owner.length > 20) {
-              const splitString = project.owner.split(" ");
-              project.owner = splitString[0] + splitString[1][0] + ".";
-            }
-          }
-          this.projects = response.data;
-
-          if (this.dataTable) {
-            this.dataTable.destroy();
-          }
-
-          this.$nextTick(() => {
-            this.createDataTable();
+            this.$nextTick(() => {
+              this.createDataTable();
+            });
+          })
+          .catch(() => {
+            console.log(
+                "Error when querying for all projects. Please try again..."
+            );
           });
-        })
-        .catch(() => {
-          console.log(
-            "Error when querying for all projects. Please try again..."
-          );
-        });
     },
     handleClickOnFolder(id, event) {
       const attribute = event.target.getAttribute("data-folder-action");
@@ -265,18 +272,18 @@ export default {
       });
 
       axiosPromise
-        .then((response) => {
-          this.getAllProjects();
-        })
-        .catch((response) => {
-          console.log("Error when deleting project.");
-        });
+          .then((response) => {
+            this.getAllProjects();
+          })
+          .catch((response) => {
+            console.log("Error when deleting project.");
+          });
     },
     openExistingProject(id) {
       const router = this.$router;
       router.push({
         name: "projectEdit",
-        params: { projectID: id },
+        params: {projectID: id},
       });
     },
     createDataTable() {
@@ -299,6 +306,34 @@ export default {
           this.createDataTable();
         });
       }
+    },
+    newProjectFromTemplate(template) {
+      let axiosPromise;
+      if (template === "dreamHome") {
+        axiosPromise = axiosExtended.get("/template/dream-home");
+      } else if (template === "newCar") {
+        axiosPromise = axiosExtended.get("/template/new-car");
+      } else if (template === "buildYourPc") {
+        axiosPromise = axiosExtended.get("/template/build-your-pc");
+      } else if (template === "shoppingList") {
+        axiosPromise = axiosExtended.get("/template/shopping-list");
+      } else if (template === "holidayPlanner") {
+        axiosPromise = axiosExtended.get("/template/holiday-planner");
+      } else if (template === "newPhone") {
+        axiosPromise = axiosExtended.get("/template/new-phone");
+      } else if (template === "newGuitar") {
+        axiosPromise = axiosExtended.get("/template/new-guitar");
+      }
+
+      const router = this.$router;
+      axiosPromise.then((response) => {
+        router.push({
+          name: "projectEdit",
+          params: {projectID: response.data.projectID},
+        });
+      }).catch(() => {
+        console.log("Error when creating a new project from template. Please try again...");
+      });
     },
   },
   mounted() {
@@ -325,8 +360,8 @@ export default {
         info: false,
         destroy: true,
         columnDefs: [
-          { targets: [0, 1], width: "40%" },
-          { targets: 2, orderable: false, width: "20%" },
+          {targets: [0, 1], width: "40%"},
+          {targets: 2, orderable: false, width: "20%"},
         ],
       },
     };
@@ -356,6 +391,10 @@ export default {
     justify-content: flex-start;
     gap: 20px;
     width: 100%;
+
+    @media screen and (max-width: 1280px) {
+      justify-content: center;
+    }
 
     &--wrap {
       flex-wrap: wrap;
@@ -414,10 +453,10 @@ export default {
 
 .empty-placeholder {
   background-image: linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
-    ),
-    url(http://app.localhost:8080/img/about.1f15f248.png);
+          rgba(255, 255, 255, 0.5),
+          rgba(255, 255, 255, 0.5)
+  ),
+  url(http://app.localhost:8080/img/about.1f15f248.png);
   background-size: 300px;
   background-position: center right 20px;
   background-repeat: no-repeat;
@@ -441,8 +480,7 @@ export default {
 }
 
 .dashboard__icons {
-  filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg)
-    brightness(93%) contrast(91%);
+  filter: invert(31%) sepia(9%) saturate(303%) hue-rotate(177deg) brightness(93%) contrast(91%);
 }
 
 .dt-container {

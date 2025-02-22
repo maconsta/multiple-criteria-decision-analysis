@@ -393,8 +393,13 @@ export default defineComponent({
 
   .card-container {
     display: flex;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 20px;
     flex-wrap: wrap;
+
+    @media screen and (max-width: 1280px) {
+      justify-content: center;
+    }
   }
 }
 </style>
