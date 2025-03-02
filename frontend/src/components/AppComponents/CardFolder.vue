@@ -203,7 +203,7 @@ export default {
   }
 
   &--small {
-    width: 160px;
+    width: 163px;
     height: 100px;
 
     #{ $block }__top {
