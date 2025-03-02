@@ -240,7 +240,10 @@ export default defineComponent({
   mounted() {
     const input = document.getElementById("change-name");
     input.addEventListener("focusout", (event) => {
-      this.changeProjectName(input.value);
+      if (input.value.length > 0) {
+        this.changeProjectName(input.value);
+      }
+
       this.showNameAndHideInputField();
     });
 
