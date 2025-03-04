@@ -13,13 +13,13 @@
       <div class="criterion__name">
         <label for="name">Name (Required)</label>
         <input
-          type="text"
-          name="name"
-          id="name"
-          required
-          minlength="3"
-          maxlength="70"
-          placeholder="Criterion Name"
+            type="text"
+            name="name"
+            id="name"
+            required
+            minlength="3"
+            maxlength="70"
+            placeholder="Criterion Name"
         />
       </div>
       <div class="criterion__dropdown mt-15">
@@ -41,13 +41,13 @@
       <div class="criterion__description mt-15">
         <label for="description">Description (Required)</label>
         <textarea
-          type="text"
-          name="description"
-          id="description"
-          minlength="3"
-          maxlength="80"
-          placeholder="..."
-          required
+            type="text"
+            name="description"
+            id="description"
+            minlength="3"
+            maxlength="80"
+            placeholder="..."
+            required
         />
       </div>
 
@@ -56,17 +56,17 @@
 
       <div id="section-quantitative" class="section">
         <div
-          v-for="(alternative, index) in alternatives"
-          :key="index"
-          class="alternative mt-15"
+            v-for="(alternative, index) in alternatives"
+            :key="index"
+            class="alternative mt-15"
         >
           <label for="{{ alternative.name }}">{{ alternative.name }}</label>
           <input
-            id="{{ alternative.name }}"
-            name="{{ alternative.name }}"
-            required
-            type="number"
-            placeholder="Enter a value"
+              id="{{ alternative.name }}"
+              name="{{ alternative.name }}"
+              required
+              type="number"
+              placeholder="Enter a value"
           />
         </div>
       </div>
@@ -83,90 +83,90 @@
       <div id="section-qualitative" class="section disabled mt-15">
         <div id="radio-buttons">
           <div
-            v-for="(alternative, index) in alternatives"
-            :key="index"
-            class=""
+              v-for="(alternative, index) in alternatives"
+              :key="index"
+              class=""
           >
             <span class="mt-10">{{ alternative.name }}</span>
             <div class="radio-container mt-10">
               <label :for="'terrible' + index">Terrible</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'terrible' + index"
-                value="1"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'terrible' + index"
+                  value="1"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'very-bad-' + index">Very Bad</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'very-bad-' + index"
-                value="2"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'very-bad-' + index"
+                  value="2"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'bad-' + index">Bad</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'bad-' + index"
-                value="3"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'bad-' + index"
+                  value="3"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'subpar-' + index">Subpar</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'subpar-' + index"
-                value="4"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'subpar-' + index"
+                  value="4"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'average-' + index">Average</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'average-' + index"
-                value="5"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'average-' + index"
+                  value="5"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'fair-' + index">Fair</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'fair-' + index"
-                value="6"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'fair-' + index"
+                  value="6"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'good-' + index">Good</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'good-' + index"
-                value="7"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'good-' + index"
+                  value="7"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'very-good-' + index">Very Good</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'very-good-' + index"
-                value="8"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'very-good-' + index"
+                  value="8"
               />
             </div>
             <div class="radio-container mt-5">
               <label :for="'excellent-' + index">Excellent</label>
               <input
-                type="radio"
-                :name="'qualitative-value-' + index"
-                :id="'excellent-' + index"
-                value="9"
+                  type="radio"
+                  :name="'qualitative-value-' + index"
+                  :id="'excellent-' + index"
+                  value="9"
               />
             </div>
           </div>
@@ -175,9 +175,9 @@
 
       <div id="section-weighting" class="section disabled">
         <div
-          v-for="(pair, index) in weightingAlternatives"
-          class="mt-15"
-          :key="index"
+            v-for="(pair, index) in weightingAlternatives"
+            class="mt-15"
+            :key="index"
         >
           <div class="slider-container">
             <div class="top-bar">
@@ -185,14 +185,14 @@
               <span>{{ pair[1] }}</span>
             </div>
             <input
-              type="range"
-              min="-8"
-              max="8"
-              value="0"
-              class="slider"
-              :id="'input-slider-' + index"
-              @input="updateValue($event)"
-              list="markers"
+                type="range"
+                min="-8"
+                max="8"
+                value="0"
+                class="slider"
+                :id="'input-slider-' + index"
+                @input="updateValue($event)"
+                list="markers"
             />
             <datalist id="markers">
               <option value="-8"></option>
@@ -206,7 +206,7 @@
               <option value="8"></option>
             </datalist>
             <label class="value-container" :for="'input-slider-' + index"
-              >Value:
+            >Value:
               <output class="value">Equal Importance</output>
             </label>
           </div>
@@ -217,10 +217,10 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 import axiosExtended from "@/router/axiosExtended";
 import Swal from "sweetalert2";
-import { alternatives, criteria as storedCriteria } from "@/store/store";
+import {alternatives, criteria as storedCriteria} from "@/store/store";
 import Sortable from "sortablejs";
 
 export default {
@@ -233,11 +233,27 @@ export default {
       const taskID = this.route.params.taskID;
       const section = document.querySelector(".section:not(.disabled)").id;
 
+      if (name.length === 0 || description.length === 0) {
+        Swal.fire({
+          position: "top-end",
+          toast: true,
+          icon: "error",
+          title: "Please enter name and description!",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        return;
+      }
+
       let pairwise = false;
       let values = [];
       if (section === "section-quantitative") {
         document.querySelectorAll(".alternative input").forEach((input) => {
-          values.push(parseFloat(input.value));
+          if (!input.value) {
+            values.push(1);
+          } else {
+            values.push(parseFloat(input.value));
+          }
         });
       } else if (section === "section-ranking") {
         // FORMULA FOR CALCULATING THE RANKING SCORE FOR EACH INDIVIDUAL ALTERNATIVE
@@ -246,7 +262,7 @@ export default {
         document.querySelectorAll("#draggable li").forEach((li) => {
           const name = li.getElementsByClassName("alt-name")[0].innerHTML;
           const order = parseInt(
-            li.getElementsByClassName("order-number")[0].innerHTML
+              li.getElementsByClassName("order-number")[0].innerHTML
           );
 
           for (let i = 0; i < this.alternatives.length; i++) {
@@ -257,28 +273,33 @@ export default {
         });
       } else if (section === "section-qualitative") {
         for (let i = 0; i < this.alternatives.length; i++) {
-          let val = parseInt(
-            document.querySelector(
-              "input[name='qualitative-value-" + i + "']:checked"
-            ).value
-          );
+          let val;
+          try {
+            val = parseInt(
+                document.querySelector(
+                    "input[name='qualitative-value-" + i + "']:checked"
+                ).value
+            );
+          } catch (e) {
+            val = 1;
+          }
           values.push(val);
         }
       } else if (section === "section-weighting") {
         document
-          .querySelectorAll(".slider-container input")
-          .forEach((input) => {
-            let val = parseInt(input.value);
-            if (val < 0) {
-              val *= -1;
-              val += 1;
-              val = 1 / val;
-            } else {
-              val += 1;
-            }
+            .querySelectorAll(".slider-container input")
+            .forEach((input) => {
+              let val = parseInt(input.value);
+              if (val < 0) {
+                val *= -1;
+                val += 1;
+                val = 1 / val;
+              } else {
+                val += 1;
+              }
 
-            values.push(val);
-          });
+              values.push(val);
+            });
 
         pairwise = true;
       }
@@ -294,28 +315,28 @@ export default {
 
       const router = this.$router;
       axiosPromise
-        .then(() => {
-          Swal.fire({
-            position: "top-end",
-            toast: true,
-            icon: "success",
-            title: "Criterion has been saved",
-            showConfirmButton: false,
-            timer: 3000,
-          });
+          .then(() => {
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: "Criterion has been saved",
+              showConfirmButton: false,
+              timer: 3000,
+            });
 
-          // set stored crit to an empty arr to trigger a DB call
-          storedCriteria.criteria = [];
+            // set stored crit to an empty arr to trigger a DB call
+            storedCriteria.criteria = [];
 
-          router.push({
-            name: "taskEditCriteria",
+            router.push({
+              name: "taskEditCriteria",
+            });
+          })
+          .catch(() => {
+            console.log(
+                "Error when creating a new criterion. Please try again..."
+            );
           });
-        })
-        .catch(() => {
-          console.log(
-            "Error when creating a new criterion. Please try again..."
-          );
-        });
     },
     getAlternativesByTaskID() {
       const axiosPromise = axiosExtended.post("/get-alternatives-by-task-id", {
@@ -324,15 +345,15 @@ export default {
       });
 
       axiosPromise
-        .then((response) => {
-          this.alternatives = response.data;
-          this.fillWeightingAlternatives();
-        })
-        .catch(() => {
-          console.log(
-            "Error when querying for alternatives. Please try again..."
-          );
-        });
+          .then((response) => {
+            this.alternatives = response.data;
+            this.fillWeightingAlternatives();
+          })
+          .catch(() => {
+            console.log(
+                "Error when querying for alternatives. Please try again..."
+            );
+          });
     },
     onCritTypeChange(event) {
       const selectedSection = document.getElementById(event.target.value);
@@ -382,7 +403,7 @@ export default {
       }
 
       document.querySelector("label[for='" + sliderID + "'] output").innerHTML =
-        text;
+          text;
     },
   },
   created() {
