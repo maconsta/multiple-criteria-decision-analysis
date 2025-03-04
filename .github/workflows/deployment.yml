@@ -54,5 +54,6 @@ jobs:
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env &&
           python3.11 -m venv venv &&
           source venv/bin/activate &&
-          pip install -r requirements.txt
+          pip install -r requirements.txt && 
+          sudo systemctl restart gunicorn
         '
