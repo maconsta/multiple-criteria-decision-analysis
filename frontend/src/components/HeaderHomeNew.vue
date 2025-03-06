@@ -1,18 +1,22 @@
 <template>
   <!-- Navigation -->
   <header :class="{ 'small-header': isScrolled }">
-    <div class="container header row">
+    <div class="container header">
       <a href="#" class="logo">
         <h1>Synthet<span>IQ</span></h1>
       </a>
-      <div class="toggleMenu" v-on:click="toggleMenu"></div>
-      <nav class="navigation row">
-        <ul class="row">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#solution">Solutions</a></li>
-          <li><a href="#resource">Resources</a></li>
-          <li><a href="#about">About Us</a></li>
-          <a href="/signIn">Sign In</a>
+      <div class="toggleMenu" @click="toggleMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav class="navigation" :class="{ active: isMenuOpen }">
+        <ul>
+          <li><a href="#home" @click="closeMenu">Home</a></li>
+          <li><a href="#solution" @click="closeMenu">Solutions</a></li>
+          <li><a href="#resource" @click="closeMenu">Resources</a></li>
+          <li><a href="#about" @click="closeMenu">About Us</a></li>
+          <li><a href="/signIn" @click="closeMenu">Sign In</a></li>
         </ul>
       </nav>
     </div>
@@ -20,24 +24,23 @@
 </template>
 
 <script>
-/* Custum Function */
-function toggleMenu() {
-  const toggleMenu = document.querySelector(".toggleMenu");
-  const navigation = document.querySelector(".navigation");
-  toggleMenu.classList.toggle("active");
-  navigation.classList.toggle("active");
-}
-
 export default {
   name: "HeaderHomeNew",
   data() {
     return {
       isScrolled: false,
+      isMenuOpen: false, // Controls the visibility of the mobile menu
     };
   },
   methods: {
     handleScroll() {
       this.isScrolled = window.scrollY > 50;
+    },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen; // Toggle the menu state
+    },
+    closeMenu() {
+      this.isMenuOpen = false; // Close the menu when a link is clicked
     },
   },
   mounted() {
@@ -54,6 +57,8 @@ export default {
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -62,24 +67,65 @@ html {
 
 body {
   font-family: "Montserrat", sans-serif;
-  margin: 0;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 img {
   max-width: 100%;
+  height: auto; /* Ensure images are responsive */
+}
+
+.hero {
+  width: 100%; /* Full width */
+  min-height: 400px; /* Adjust height as needed */
+  background-color: #f0f4f8; /* Example background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px; /* Adjust padding for smaller screens */
+  margin-top: 60px; /* Account for the fixed header height */
+}
+
+.hero h1 {
+  font-size: clamp(32px, 6vw, 48px); /* Responsive font size */
+  color: #2c64ff;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: clamp(18px, 3vw, 24px); /* Responsive font size */
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.hero .cta-button {
+  font-size: clamp(16px, 3vw, 20px); /* Responsive font size */
+  padding: 10px 20px;
+  background-color: #2c64ff;
+  color: #fff;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.hero .cta-button:hover {
+  background-color: #1e4fd1;
 }
 
 .container {
-  max-width: 90%;
+  max-width: 100%; /* Ensure the container doesn't exceed the viewport */
+  width: 100%;
   margin: 0 auto;
+  padding: 0 20px; /* Add padding for smaller screens */
 }
 
-.row {
+.header {
   display: flex;
-}
-
-.column {
-  display: grid;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 a {
@@ -97,14 +143,11 @@ ul {
 /* Navigation */
 header {
   background-color: #2c64ff;
-}
-
-header {
   position: fixed;
   width: 100%;
   transition: all 0.3s ease;
   padding: 10px 0;
-  z-index: 100;
+  z-index: 1000; /* Ensure the header is above other content */
 }
 
 .small-header {
@@ -118,15 +161,6 @@ header {
   font-size: 1em;
 }
 
-.small-header a {
-  font-size: 1em;
-}
-
-.header {
-  justify-content: space-between;
-  align-items: center;
-}
-
 .logo h1 {
   font-weight: 900;
   font-size: clamp(30px, 4vw, 60px);
@@ -138,7 +172,9 @@ header {
 }
 
 nav ul {
+  display: flex;
   gap: 2.5em;
+  align-items: center;
 }
 
 nav a {
@@ -148,70 +184,133 @@ nav a {
 }
 
 nav a:hover {
-  opacity: 1.5;
   color: #2cffc7;
 }
 
-.navigation {
-  transition: transform 0.3s ease-in-out;
-  -webkit-transition: transform 0.3s ease-in-out;
-  -moz-transition: transform 0.3s ease-in-out;
-  -ms-transition: transform 0.3s ease-in-out;
-  -o-transition: transform 0.3s ease-in-out;
+/* Toggle Menu Icon */
+.toggleMenu {
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 24px;
+  cursor: pointer;
 }
 
-/* End Navigation */
+.toggleMenu span {
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
 
-@media screen and (max-width: 1010px) {
+/* Mobile Navigation */
+@media screen and (max-width: 1300px) {
   .toggleMenu {
-    position: absolute;
-    right: 15px;
-    background-image: url("../assets/images/toggleMenu.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 30px;
-    width: 30px;
-    height: 30px;
-    padding: 2em;
-    z-index: 1000;
-  }
-  .toggleMenu.active {
-    position: fixed;
-    background-size: 25px;
+    display: flex; /* Show toggle menu icon on smaller screens */
   }
 
   .navigation {
-    justify-content: center;
+    position: fixed; /* Change to fixed positioning */
+    top: 60px; /* Position below the header */
+    right: 0;
+    width: 250px; /* Smaller dropdown menu */
+    height: calc(100vh - 60px); /* Full height minus header */
+    background-color: #2c64ff;
     flex-direction: column;
-    transform: scale(1, 0);
-    -webkit-transform: scale(1, 0);
-    -moz-transform: scale(1, 0);
-    -ms-transform: scale(1, 0);
-    -o-transform: scale(1, 0);
-    transform-origin: top;
-    max-height: 0;
-    opacity: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    transform: translateX(100%); /* Hide the menu off-screen by default */
+    transition: transform 0.3s ease-in-out;
+    z-index: 999;
+    padding: 20px 0;
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto; /* Add scroll if content overflows */
   }
 
   .navigation.active {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: scale(1, 0);
-    -webkit-transform: scale(1, 0);
-    -moz-transform: scale(1, 0);
-    -ms-transform: scale(1, 0);
-    -o-transform: scale(1, 0);
-    max-height: 100%;
-    opacity: 1;
-    z-index: 999;
-    background-color: #2c64ff;
+    transform: translateX(0); /* Slide the menu into view */
   }
+
   .navigation ul {
     flex-direction: column;
-    text-align: center;
+    gap: 1.5em;
+    text-align: left;
+    padding-left: 20px;
   }
+
+  .navigation ul li a {
+    font-size: 18px; /* Normal text size for dropdown */
+  }
+}
+
+/* Fix blank white space issues */
+@media screen and (max-width: 1400px) {
+  .container {
+    padding: 0 15px; /* Adjust padding for medium screens */
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .container {
+    padding: 0 10px; /* Adjust padding for smaller screens */
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .container {
+    padding: 0 5px; /* Adjust padding for very small screens */
+  }
+
+  .logo h1 {
+    font-size: clamp(24px, 6vw, 30px); /* Adjust logo size for small screens */
+  }
+
+  .navigation {
+    width: 200px; /* Smaller dropdown menu for very small screens */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hero {
+    min-height: 300px; /* Adjust height for smaller screens */
+    padding: 40px 15px; /* Adjust padding for smaller screens */
+    margin-top: 50px; /* Adjust for smaller header height */
+  }
+
+  .hero h1 {
+    font-size: 28px; /* Smaller font size for mobile */
+  }
+
+  .hero p {
+    font-size: 16px; /* Smaller font size for mobile */
+  }
+
+  .hero .cta-button {
+    font-size: 14px; /* Smaller font size for mobile */
+    padding: 8px 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero {
+    min-height: 250px; /* Adjust height for very small screens */
+    padding: 30px 10px; /* Adjust padding for very small screens */
+    margin-top: 40px; /* Adjust for very small header height */
+  }
+
+  .hero h1 {
+    font-size: 24px; /* Smaller font size for very small screens */
+  }
+
+  .hero p {
+    font-size: 14px; /* Smaller font size for very small screens */
+  }
+
+  .hero .cta-button {
+    font-size: 12px; /* Smaller font size for very small screens */
+    padding: 6px 12px;
+  }
+
 }
 </style>

@@ -1,4 +1,10 @@
 <template>
+  <!-- Rotate Screen Message -->
+  <div class="rotate-screen-message">
+    <Icon icon="mdi:rotate-3d" class="rotate-icon" />
+    <p>Please rotate your device to view the content.</p>
+  </div>
+
   <!-- Hero Section -->
   <section class="hero" id="home">
     <div class="container hero-content row">
@@ -16,19 +22,6 @@
     </div>
   </section>
   <!-- End Hero Section -->
-
-  <!-- <section class="wave">
-    <div>
-      <h1>Welcome to SynthetIQ Decider</h1>
-      <p>Your new advisor!</p>
-    </div>
-    <div class="col row">
-      <div>
-     <img src="../assets/images/heroImg3.png" alt="" />
-      </div>
-    </div>
-  </section>
-  End Hero Section -->
 
   <section class="wave">
     <div></div>
@@ -180,6 +173,8 @@ export default {
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -188,46 +183,39 @@ html {
 
 body {
   font-family: "Montserrat", sans-serif;
-  margin: 0;
-  background-color: #fff;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 img {
-  width: 900px;
-  height: 300px;
   max-width: 100%;
+  height: auto; 
+}
+
+.navigation {
+  max-width: 1200px; 
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px; 
 }
 
 .container {
-  max-width: 90%;
+  width: 100%;
+  max-width: 1200px; 
   margin: 0 auto;
-}
-
-.row {
-  display: flex;
-}
-
-.column {
-  display: grid;
-}
-
-a {
-  text-decoration: none;
-}
-
-ul {
-  list-style: none;
-}
-
-:is(h1, h2, h3, p) {
-  margin: 0;
+  padding: 0 20px; 
 }
 
 /* Hero Section */
 .hero {
   background-color: #2c64ff;
-  padding-top: 10em;
+  padding: 100px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
+
 
 .hero-content > * {
   flex-basis: 100%;
@@ -256,10 +244,8 @@ ul {
   color: #fff;
 }
 
-/* End Hero Section */
 
-/* Wave */
-
+/* Wave Section */
 .wave {
   background-color: #2c64ff;
   background-image: url("../assets/images/hero-1-bottom-shape.png");
@@ -270,33 +256,28 @@ ul {
   color: #fff;
 }
 
-/* Resources */
-/*
-.resource {
-    background-color: #4169e1;
-    background-image: url("../assets/images/hero-1-bottom-shape.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding: 15em 0;
-    color: #fff;
-}
-*/
-
-.resource .feature-content {
-  display: flex;
-  gap: 12em; /* Adjust the value as needed to add more space */
-  flex-wrap: wrap;
-  justify-content: center; /* Ensure the columns are centered */
-}
+/* Resources Section */
 
 .resource {
   padding-top: 100px;
-  /* Adjust the value as needed */
   align-items: center;
   justify-content: center;
-  /* Center the section */
   margin-left: 47px;
+}
+
+.resource .feature-content {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%; 
+  margin-right: 11%;
+}
+
+.resource .col {
+  flex: 1;
+  text-align: center;
+  position: relative;
 }
 
 .resource-content > * {
@@ -341,21 +322,17 @@ ul {
   top: 50%;
   left: 50%;
   width: 100px;
-  /* Adjust if needed */
   height: 100px;
-  /* Adjust if needed */
   content: "";
   border: solid 2px black;
   transform: translate(-50%, -50%) rotate(45deg);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.7s ease-in-out;
 }
 
 .resource .col:hover .icon::after {
   transform: translate(-50%, -50%) rotate(90deg);
-  /* Or any degree you prefer */
-  transition: transform 0.3s ease-in-out;
-  /* Smooth transition */
   border: solid 2px #2cffc7;
+  transition: transform 0.7s ease-in-out;
 }
 
 /* Change icon color on hover */
@@ -394,17 +371,18 @@ h2:hover {
 }
 
 .toolcontent {
-  width: 600px;
+  width: 162%;
+  max-width: 600px;
   background-color: #2cffc7;
-  padding: 20px;
+  padding: 10px;
   position: absolute;
-  bottom: -150%;
-  right: 50%;
-  transform: translate(50%, 50%);
+  bottom: -100%;
+  margin-right: 5px;
   border-radius: 5px;
   visibility: hidden;
   opacity: 0;
-  transition: 0.5s;
+  transition: opacity 0.7s ease, visibility 0.3s ease;
+  transition-delay: 0.7s; 
   z-index: 2;
 }
 
@@ -418,14 +396,31 @@ h2:hover {
   line-height: 1.4;
 }
 
-.column:hover {
-  .toolcontent {
-    visibility: visible;
-    opacity: 1;
-  }
+.column:hover .toolcontent {
+  visibility: visible;
+  opacity: 1;
 }
 
-/* About us */
+.feature-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+.feature-content .col {
+  flex: 1 1 300px;
+  text-align: center;
+}
+
+
+/* About Us Section */
+.about {
+  padding: 100px 0;
+  text-align: center;
+}
+
 .about-content {
   text-align: center;
   grid-gap: 3em;
@@ -475,14 +470,17 @@ h2:hover {
   color: #2cffc7;
 }
 
-/* End About */
-
-/* Footer */
-
+/* Footer Section */
 .footer {
   background-color: #2c64ff;
-  padding: 0.1em 0;
+  padding: 10px 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: auto;
 }
+
 
 .footer h1 {
   text-align: center;
@@ -492,30 +490,47 @@ h2:hover {
 }
 
 .footer-content {
-  padding: 0.6em 0;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  gap: 10px;
+  padding: 0 20px;
 }
 
 .footer-content .col {
-  gap: 1em;
+  flex: 1 1 200px; 
+  text-align: center;
   color: #fff;
 }
 
+
 .footer-content h2 {
-  text-align: center;
   font-weight: 900;
-  font-size: 1em;
+  font-size: 1em; 
+  margin-bottom: 5px;
 }
 
 .footer-content p {
   font-weight: 500;
-  font-size: 1em;
+  font-size: 0.9em;
+  margin-bottom: 5px;
 }
 
 .footer-content ul {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
   padding: 0;
-  align-items: center;
-  gap: 2em;
+  list-style: none;
+}
+
+.footer-content ul li {
+  display: inline-block;
+}
+
+.footer-content ul li a {
+  color: #fff;
+  transition: color 0.3s ease;
 }
 
 .footer h4 {
@@ -535,99 +550,155 @@ h2:hover {
 
 .x-icon:hover {
   color: black;
-  /* This will apply only to the Facebook icon */
 }
 
-@media screen and (max-width: 1100px) {
-  .toggleMenu {
-    position: absolute;
-    right: 15px;
-    background-image: url("../assets/images/toggleMenu.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 30px;
-    width: 30px;
-    height: 30px;
-    padding: 2em;
-    z-index: 2;
+.reserved {
+  margin-top: 20px;
+}
+
+.reserved h4 {
+  color: #2cffc7;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+/* Rotate Screen Message */
+.rotate-screen-message {
+  display: none; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #2c64ff;
+  color: #fff;
+  font-size: 1.5em;
+  text-align: center;
+  padding-top: 30%; 
+  z-index: 10000; 
+}
+
+.rotate-icon {
+  font-size: 4em; 
+  margin-bottom: 20px; 
+  animation: rotate 2s infinite linear;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hide all content on small screens */
+@media (max-width: 768px) and (orientation: portrait) {
+  .rotate-screen-message {
+    display: block;
   }
 
-  .toggleMenu.active {
-    position: fixed;
-    background-size: 25px;
+  .hero,
+  .wave,
+  .resource,
+  .about,
+  .footer {
+    display: none;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+
+  .toggleMenu {
+    display: flex;
   }
 
   .navigation {
-    justify-content: center;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    height: 10px;
+    width: 100%; 
+    background-color: #2c64ff;
     flex-direction: column;
-    transform: scale(1, 0);
-    -webkit-transform: scale(1, 0);
-    -moz-transform: scale(1, 0);
-    -ms-transform: scale(1, 0);
-    -o-transform: scale(1, 0);
-    transform-origin: top;
-    max-height: 0;
-    opacity: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 999;
+    padding: 10px 0;
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    max-height: 20px;
   }
 
   .navigation.active {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: scale(1, 0);
-    -webkit-transform: scale(1, 0);
-    -moz-transform: scale(1, 0);
-    -ms-transform: scale(1, 0);
-    -o-transform: scale(1, 0);
-    max-height: 100%;
-    opacity: 1;
-    z-index: 2;
-    background-color: #2c64ff;
+    transform: translateX(0);
   }
 
   .navigation ul {
     flex-direction: column;
-    text-align: center;
+    gap: 0.5em; 
+    text-align: left;
+    padding-left: 10px;
+    width: 100%;
   }
-}
 
-@media screen and (max-width: 900px) {
-  .hero {
-    padding-bottom: 4em;
+  .navigation ul li a {
+    font-size: 14px; 
+    padding: 8px 0; 
+    display: block; 
+  
   }
 
   .hero-content {
-    flex-wrap: wrap;
-    gap: 3em;
-  }
-
-  .hero-content h1 {
+    flex-direction: column;
     text-align: center;
   }
 
-  .resource {
-    background-image: unset;
+  .hero-content .col img {
+    margin-left: 0;
   }
 
-  .resource-content {
-    flex-wrap: wrap;
-    padding-top: unset;
+
+  .feature-content {
+    flex-direction: column;
   }
 
-  .about-content img {
-    max-width: 100%;
+  .footer {
+    padding: 5px 0; 
   }
 
-  .about-content {
-    flex-wrap: wrap;
+  .footer h1 {
+    font-size: 1.2em; 
   }
-}
 
-@media (max-width: 768px) {
-  .resource {
-    margin-top: 20px;
+  .footer-content {
+    flex-direction: column; 
+    align-items: center;
+    gap: 5px; 
+  }
+
+  .footer-content .col {
+    flex: 1 1 100%; 
+  }
+
+  .footer-content h2 {
+    font-size: 0.9em; 
+  }
+
+  .footer-content p {
+    font-size: 0.8em; 
+  }
+
+  .footer-content ul {
+    gap: 5px;
+  }
+
+  .reserved h4 {
+    font-size: 0.6em; 
   }
 }
 </style>
