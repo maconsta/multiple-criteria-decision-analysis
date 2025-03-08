@@ -219,7 +219,7 @@ export default {
     },
     signInUser() {
       const {email, password} = this.signInData;
-      const path = "sign-in";
+      const path = "/sign-in";
       axiosExtended
           .post(
               path,
@@ -232,6 +232,7 @@ export default {
           .then((response) => {
             if (response.data.success === true) {
               localStorage.setItem("accessToken", response.data.accessToken);
+
               this.$router.push({
                 name: "homeApp",
               });
@@ -547,7 +548,7 @@ body {
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(-360deg);
   }
 }
 

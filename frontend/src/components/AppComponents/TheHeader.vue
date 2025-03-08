@@ -48,16 +48,18 @@ export default {
     },
     signOut() {
       axiosExtended
-        .get("sign-out")
+        .get("/sign-out")
         .then((response) => {
           localStorage.removeItem("accessToken");
+
           this.$router.push({
-            name: "home",
+            name: "signIn",
           });
         })
         .catch(() => {
           console.log("Error when signing out...");
         });
+
       this.isDropdownOpen = false;
     },
   },

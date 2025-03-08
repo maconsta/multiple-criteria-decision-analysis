@@ -14,7 +14,6 @@ from flask_jwt_extended import (
     unset_jwt_cookies, jwt_required,
 )
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import set_access_cookies
 
 jwt = JWTManager(app)
 
@@ -78,8 +77,8 @@ def register_user():
             "success": False,
         }
     else:
-        token = create_access_token(
-            identity=str(new_user.user_id), expires_delta=timedelta(weeks=1)
+        access_token = create_access_token(
+            identity=str(new_user.user_id), expires_delta=timedelta(days=1)
         )
 
         response = jsonify(
@@ -87,7 +86,7 @@ def register_user():
                 "result": "User registered!",
                 "userID": new_user.user_id,
                 "success": True,
-                "accessToken": token,
+                "accessToken": access_token,
             }
         )
 
@@ -102,15 +101,15 @@ def sign_in():
 
     user = session.query(User).filter_by(email=email).first()
     if user and verify_password(user.password, password):
-        token = create_access_token(
-            identity=str(user.user_id), expires_delta=timedelta(weeks=1)
+        access_token = create_access_token(
+            identity=str(user.user_id), expires_delta=timedelta(days=1)
         )
 
         response = jsonify({
             "result": "User signed in!",
             "userID": user.user_id,
             "success": True,
-            "accessToken": token,
+            "accessToken": access_token,
         })
 
     else:
@@ -130,13 +129,13 @@ def is_logged_in():
 
     return response
 
+
 @app.route("/api/sign-out", methods=["GET"])
 def sign_out():
     response = jsonify({"result": "User signed out!", "success": True})
 
-    unset_jwt_cookies(response)
-
     return response
+
 
 @app.route("/api/get-user-abbreviation", methods=["GET"])
 @jwt_required()
