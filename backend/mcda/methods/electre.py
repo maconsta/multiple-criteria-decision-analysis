@@ -108,9 +108,9 @@ class Electre:
                     rank_i = i + 1
                     rank_j = j + 1
                     avg_rank = int((rank_i + rank_j) / 2)
-                    self.average_ranking_vector.append({"name": superior_ranking[i]["name"], "averange_rank": avg_rank})
+                    self.average_ranking_vector.append({"name": superior_ranking[i]["name"], "score": avg_rank})
 
-        self.average_ranking_vector = sorted(self.average_ranking_vector, key=lambda d: d['averange_rank'])
+        self.average_ranking_vector = sorted(self.average_ranking_vector, key=lambda d: d['score'])
 
     def calculate_electre(self):
         print("\n???")
