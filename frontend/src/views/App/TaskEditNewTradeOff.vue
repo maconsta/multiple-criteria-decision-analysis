@@ -12,9 +12,9 @@
     <div class="methods mt-30">
       <label for="decision-method">Decision Methods (Required)</label>
       <select
-        id="decision-method"
-        name="decision-method"
-        class="methods__dropdown"
+          id="decision-method"
+          name="decision-method"
+          class="methods__dropdown"
       >
         <option value="topsis">Topsis</option>
         <option value="ahp">AHP</option>
@@ -23,12 +23,12 @@
         <option value="prometheeii">PROMETHEE II</option>
       </select>
       <label for="normalization-method" class="mt-15"
-        >Normalization Method</label
+      >Normalization Method</label
       >
       <select
-        id="normalization-method"
-        name="normalization-method"
-        class="methods__dropdown"
+          id="normalization-method"
+          name="normalization-method"
+          class="methods__dropdown"
       >
         <option value="linear">Linear Normalization</option>
         <option value="l1">L1 Normalization</option>
@@ -45,14 +45,14 @@
             <span>{{ pair[1] }}</span>
           </div>
           <input
-            type="range"
-            min="-8"
-            max="8"
-            value="0"
-            class="slider"
-            :id="'input-slider-' + index"
-            @input="updateValue($event)"
-            list="markers"
+              type="range"
+              min="-8"
+              max="8"
+              value="0"
+              class="slider"
+              :id="'input-slider-' + index"
+              @input="updateValue($event)"
+              list="markers"
           />
           <datalist id="markers">
             <option value="-8"></option>
@@ -66,7 +66,7 @@
             <option value="8"></option>
           </datalist>
           <label class="value-container" :for="'input-slider-' + index"
-            >Value:
+          >Value:
             <output class="value">Equal Importance</output>
           </label>
         </div>
@@ -82,9 +82,9 @@
 </template>
 
 <script>
-import { helpText, selectedMethod } from "@/store/store";
+import {helpText, selectedMethod} from "@/store/store";
 import axiosExtended from "@/router/axiosExtended";
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 import Swal from "sweetalert2";
 
 export default {
@@ -96,23 +96,23 @@ export default {
       });
 
       axiosPromise
-        .then((response) => {
-          this.criteria = response.data;
-          for (const crit of this.criteria) {
-            crit.beneficiality =
-              crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
-          }
+          .then((response) => {
+            this.criteria = response.data;
+            for (const crit of this.criteria) {
+              crit.beneficiality =
+                  crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
+            }
 
-          this.fillPairwiseCriteria();
-        })
-        .catch(() => {
-          console.log("Error when querying for criteria. Please try again...");
-        });
+            this.fillPairwiseCriteria();
+          })
+          .catch(() => {
+            console.log("Error when querying for criteria. Please try again...");
+          });
     },
     saveTradeOff() {
       const decisionMethod = document.getElementById("decision-method").value;
       const normalizationMethod = document.getElementById(
-        "normalization-method"
+          "normalization-method"
       ).value;
       const taskID = this.route.params.taskID;
 
@@ -148,25 +148,25 @@ export default {
 
       const router = this.$router;
       axiosPromise
-        .then((result) => {
-          Swal.fire({
-            position: "top-end",
-            toast: true,
-            icon: "success",
-            title: "Trade Off has been saved",
-            showConfirmButton: false,
-            timer: 3000,
-          });
+          .then((result) => {
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: "Trade Off has been saved",
+              showConfirmButton: false,
+              timer: 3000,
+            });
 
-          router.push({
-            name: "taskEditTradeOffs",
+            router.push({
+              name: "taskEditTradeOffs",
+            });
+          })
+          .catch(() => {
+            console.log(
+                "Error when creating a new trade-off. Please try again..."
+            );
           });
-        })
-        .catch(() => {
-          console.log(
-            "Error when creating a new trade-off. Please try again..."
-          );
-        });
     },
     fillPairwiseCriteria() {
       for (let i = 0; i < this.criteria.length - 1; i++) {
@@ -208,7 +208,7 @@ export default {
       }
 
       document.querySelector("label[for='" + sliderID + "'] output").innerHTML =
-        text;
+          text;
     },
   },
   data() {
@@ -222,8 +222,8 @@ export default {
   mounted() {
     if (selectedMethod.method) {
       document
-        .querySelector("div[data-method='" + selectedMethod.method + "']")
-        .click();
+          .querySelector("div[data-method='" + selectedMethod.method + "']")
+          .click();
     }
   },
   created() {
@@ -305,6 +305,12 @@ h2 {
     padding-left: 5px;
     cursor: pointer;
     transition: 0.1s ease-in-out;
+  }
+
+  @media screen and (max-width: 440px) {
+    &__text {
+      display: none;
+    }
   }
 }
 

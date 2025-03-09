@@ -61,6 +61,10 @@
   width: 20px;
   height: 20px;
   display: inline-block;
+
+  @media screen and (max-width: 440px) {
+    display: none;
+  }
 }
 
 .trash-icon {

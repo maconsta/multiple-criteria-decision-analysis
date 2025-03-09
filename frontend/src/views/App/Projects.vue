@@ -408,6 +408,16 @@ export default {
 
 .vertical-spacer {
   border-left: 1px solid $light-gray;
+
+  @media screen and (max-width: 440px) {
+    display: none;
+  }
+}
+
+.flicking-viewport {
+  @media screen and (max-width: 440px) {
+    display: none;
+  }
 }
 
 .flicking-camera {
@@ -421,6 +431,10 @@ export default {
   align-content: center;
   justify-content: space-between;
   gap: 10px;
+
+  @media screen and (max-width: 440px) {
+    display: none;
+  }
 }
 
 .list-icon {

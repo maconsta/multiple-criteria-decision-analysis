@@ -132,6 +132,12 @@ export default {
     cursor: pointer;
     transition: 0.1s ease-in-out;
   }
+
+  @media screen and (max-width: 440px) {
+    &__text {
+      display: none;
+    }
+  }
 }
 
 .save-alternative-btn {

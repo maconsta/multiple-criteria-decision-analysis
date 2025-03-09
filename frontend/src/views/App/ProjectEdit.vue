@@ -288,6 +288,12 @@ export default defineComponent({
     cursor: pointer;
     transition: 0.1s ease-in-out;
   }
+
+  @media screen and (max-width: 440px) {
+    &__text {
+      display: none;
+    }
+  }
 }
 
 .btn-container {
@@ -314,6 +320,12 @@ export default defineComponent({
     color: #fff;
     white-space: nowrap;
   }
+
+  @media screen and (max-width: 440px){
+    &__text {
+      display: none;
+    }
+  }
 }
 
 .share-btn {
@@ -338,6 +350,12 @@ export default defineComponent({
     font-size: 0.875rem;
     font-weight: 600;
     white-space: nowrap;
+  }
+
+  @media screen and (max-width: 440px){
+    &__text {
+      display: none;
+    }
   }
 }
 

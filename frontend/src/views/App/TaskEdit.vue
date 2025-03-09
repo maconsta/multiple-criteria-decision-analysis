@@ -31,5 +31,6 @@ export default {
   column-gap: 35px;
   width: 100%;
   padding-right: 20px;
+  overflow-x: hidden;
 }
 </style>

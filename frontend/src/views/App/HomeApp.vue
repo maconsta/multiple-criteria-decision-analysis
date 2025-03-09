@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <TheHeader />
-    <h1 class="full-width empty-placeholder mt-45">Under construction...</h1>
+    <h1 class="full-width empty-placeholder mt-45"></h1>
   </div>
 </template>
 
@@ -41,7 +41,7 @@ export default {
   ),
   url("@/assets/images/under-construction-barrier-icon.svg");
   background-size: 300px;
-  background-position: center right 20px;
+  background-position: center;
   background-repeat: no-repeat;
   height: 340px;
   width: 100%;

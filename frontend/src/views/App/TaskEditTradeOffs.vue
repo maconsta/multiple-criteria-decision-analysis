@@ -120,6 +120,12 @@ export default {
     font-weight: 600;
     font-size: 1.25rem;
   }
+
+  @media screen and (max-width: 440px) {
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+  }
 }
 
 .btn-container {
@@ -180,6 +186,12 @@ export default {
     color: #fff;
     white-space: nowrap;
   }
+
+  @media screen and (max-width: 700px) {
+    &__text {
+      display: none;
+    }
+  }
 }
 
 .delete-trade-off-btn {
@@ -191,6 +203,7 @@ export default {
   width: fit-content;
   padding: 8px 12px 6px;
   cursor: not-allowed;
+  min-width: 54px;
 
   .plus-icon {
     background-size: 24px;
@@ -205,6 +218,13 @@ export default {
     line-height: 2em;
     color: #fff;
     white-space: nowrap;
+  }
+
+  @media screen and (max-width: 700px) {
+    justify-content: center;
+    &__text {
+      display: none;
+    }
   }
 }
 </style>
