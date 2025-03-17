@@ -23,7 +23,7 @@
         />
       </div>
       <div class="alternative__description mt-15">
-        <label for="description">Description (Required)</label>
+        <label for="description">Description (Optional)</label>
         <textarea
             type="text"
             name="description"
@@ -52,12 +52,12 @@ export default {
       const taskID = this.route.params.taskID;
       const projectID = this.route.params.projectID;
 
-      if (name.length === 0 || description.length === 0) {
+      if (name.length === 0) {
         Swal.fire({
           position: "top-end",
           toast: true,
           icon: "error",
-          title: "Please enter name and description!",
+          title: "Please enter a name!",
           showConfirmButton: false,
           timer: 3000,
         });
