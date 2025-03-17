@@ -10,11 +10,10 @@ class Alternative(TimeStampedModel):
     alternative_id = Column(Integer, primary_key=True, autoincrement=True)
     alternative_name = Column(String(80), nullable=False)
     description = Column(String(500))
-    task_id = Column(Integer, ForeignKey("tasks.task_id", ondelete="Cascade"), nullable = False, index = True)
+    task_id = Column(Integer, ForeignKey("tasks.task_id", ondelete="Cascade"), nullable=False, index=True)
 
     task = Relationship('Task', back_populates='alternatives')
-    
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}, alternative name: {self.alternative_name}, values: {self.values}, "
+        return (f"{self.__class__.__name__}, alternative name: {self.alternative_name} "
                 f"description: {self.description}")

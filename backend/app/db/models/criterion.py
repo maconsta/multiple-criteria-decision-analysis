@@ -10,6 +10,7 @@ class Criterion(TimeStampedModel):
 
     criterion_id = Column(Integer, primary_key=True, autoincrement=True)
     criterion_name = Column(String(80), nullable=False)
+    criterion_type = Column(String(80), nullable=False)
     min_max = Column(String(3), nullable=False)
     alternatives_values = Column(pg.ARRAY(Numeric))
     description = Column(String(500))
