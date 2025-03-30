@@ -15,11 +15,19 @@
       />
       <SidebarButton
         :image-url="trade_offs_image"
-        route-name="taskEditTradeOffs"
-        button-text="Trade-Offs"
+        route-name="taskEditMethod"
+        button-text="Method"
         @click="openSidebar"
       />
+      <SidebarButton
+          :image-url="trade_offs_image"
+          route-name="taskEditTradeOff"
+          button-text="Trade-Off"
+          @click="openSidebar"
+      />
+
       <div class="line mt-10 mb-10"></div>
+
       <SidebarButton
         image-url="cpu.svg"
         route-name="result"

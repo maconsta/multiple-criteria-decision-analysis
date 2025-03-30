@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
 from backend.app.routes.utils import save_task_in_session, delete_task_from_session
+from backend.mcda.methods.ahp import AHP
 from backend.mcda.methods.electre import Electre
 from backend.mcda.methods.promethee import Promethee
 from backend.mcda.methods.topsis import Topsis
@@ -22,18 +23,18 @@ from backend.mcda.core.core import Criterion as Crit, Alternative as Alt, Decisi
 def save_trade_off_to_db():
     post_data = request.get_json()
     criteria_weights = post_data['weights']
-    decision_method = post_data['decisionMethod']
-    normalization_method = post_data['normalizationMethod']
     task_id = post_data['taskID']
-    pairwise = post_data['pairwise']
 
-    if pairwise:
-        pw = Pairwise(criteria_weights)
-        criteria_weights = pw.calculate_eigenvector()
+    criteria_weights = [float(value) for value in criteria_weights]
+    criteria_weights_raw = criteria_weights
 
-    new_trade_off = TradeOff(criteria_weights=criteria_weights, decision_method=decision_method,
-                             normalization_method=normalization_method, task_id=task_id)
-    sql_session.add(new_trade_off)
+    pw = Pairwise(criteria_weights)
+    criteria_weights_clean = pw.calculate_eigenvector()
+
+    trade_off = TradeOff.query.filter_by(task_id=task_id).first()
+    trade_off.criteria_weights = criteria_weights_clean
+    trade_off.criteria_weights_raw = criteria_weights_raw
+    sql_session.add(trade_off)
 
     try:
         sql_session.commit()
@@ -42,8 +43,6 @@ def save_trade_off_to_db():
         sql_session.flush()
         response = {"result": "Trade-Off not saved, error: " + str(e) + "!"}
     else:
-        # save_task_in_session(task_id=new_task.task_id, task_name=new_task.task_name, project_id=project_id)
-
         response = {"result": "success"}
 
     return jsonify(response)
@@ -57,7 +56,8 @@ def get_trade_off_by_task_id():
 
     trade_off = (
         sql_session
-        .query(TradeOff.task_id, TradeOff.criteria_weights, TradeOff.decision_method, TradeOff.normalization_method)
+        .query(TradeOff.task_id, TradeOff.criteria_weights, TradeOff.decision_method, TradeOff.normalization_method,
+               TradeOff.criteria_weights_raw)
         .filter(TradeOff.task_id == task_id)
         .first()
     )
@@ -66,7 +66,8 @@ def get_trade_off_by_task_id():
         result = {"success": False, "error": "Resource Not Found."}, 404
     else:
         result = {"success": True, "decisionMethod": trade_off.decision_method,
-                  "normalizationMethod": trade_off.normalization_method, "weigths": trade_off.criteria_weights}
+                  "normalizationMethod": trade_off.normalization_method, "weights": trade_off.criteria_weights,
+                  "criteriaWeightsRaw": trade_off.criteria_weights_raw}
 
     return jsonify(result)
 
@@ -155,10 +156,11 @@ def calculate_result():
         topsis = Topsis(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
         result.update({"ranking": topsis.calculate_topsis()})
     elif decision_method == 'ahp':
-        pass
+        ahp = AHP(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
+        result.update({"ranking": ahp.calculate_ahp()})
     elif decision_method == 'electre':
         electre = Electre(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
-        result.update({"ranking":electre.calculate_electre()})
+        result.update({"ranking": electre.calculate_electre()})
     elif decision_method == 'wsm':
         wsm = WeightedSum(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
         result = wsm.calculate_weighted_sum()
@@ -169,3 +171,28 @@ def calculate_result():
         result = {"success": False}
 
     return jsonify(result)
+
+
+@app.route("/api/save-method-to-db", methods=['POST'])
+@jwt_required()
+def save_method_to_db():
+    post_data = request.get_json()
+    decision_method = post_data['decisionMethod']
+    normalization_method = post_data['normalizationMethod']
+    task_id = post_data['taskID']
+
+    trade_off = TradeOff.query.filter_by(task_id=task_id).first()
+    trade_off.decision_method = decision_method
+    trade_off.normalization_method = normalization_method
+    sql_session.add(trade_off)
+
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        response = {"result": "Method not saved, error: " + str(e) + "!"}
+    else:
+        response = {"result": "success"}
+
+    return jsonify(response)

@@ -30,12 +30,12 @@
         </select>
       </div>
       <div class="criterion__dropdown mt-15">
-        <label for="type">Criterion Type (Required)</label>
-        <select id="type" @change="onCritTypeChange($event)">
-          <option value="section-quantitative">Quantitative</option>
-          <option value="section-ranking">Ranking</option>
-          <option value="section-qualitative">Qualitative</option>
-          <option value="section-weighting">Weighting</option>
+        <label for="criterion-type">Criterion Type (Required)</label>
+        <select id="criterion-type" @change="onCritTypeChange">
+          <option value="quantitative">Quantitative</option>
+          <option value="ranking">Ranking</option>
+          <option value="qualitative">Qualitative</option>
+          <option value="weighting">Weighting</option>
         </select>
       </div>
       <div class="criterion__description mt-15">
@@ -54,7 +54,7 @@
       <div class="line mb-30 mt-30"></div>
       <span>Alternative Values (Required)</span>
 
-      <div id="section-quantitative" class="section">
+      <div id="quantitative" class="section">
         <div
             v-for="(alternative, index) in alternatives"
             :key="index"
@@ -71,7 +71,7 @@
         </div>
       </div>
 
-      <div id="section-ranking" class="section disabled">
+      <div id="ranking" class="section disabled">
         <ul id="draggable" class="mt-15">
           <li v-for="(alternative, index) in alternatives" :key="index">
             <span class="alt-name">{{ alternative.name }}</span>
@@ -80,7 +80,7 @@
         </ul>
       </div>
 
-      <div id="section-qualitative" class="section disabled mt-15">
+      <div id="qualitative" class="section disabled mt-15">
         <div id="radio-buttons">
           <div
               v-for="(alternative, index) in alternatives"
@@ -89,11 +89,11 @@
           >
             <span class="mt-10">{{ alternative.name }}</span>
             <div class="radio-container mt-10">
-              <label :for="'terrible' + index">Terrible</label>
+              <label :for="'terrible-' + index">Terrible</label>
               <input
                   type="radio"
                   :name="'qualitative-value-' + index"
-                  :id="'terrible' + index"
+                  :id="'terrible-' + index"
                   value="1"
               />
             </div>
@@ -173,7 +173,7 @@
         </div>
       </div>
 
-      <div id="section-weighting" class="section disabled">
+      <div id="weighting" class="section disabled">
         <div
             v-for="(pair, index) in weightingAlternatives"
             class="mt-15"
@@ -222,6 +222,7 @@ import axiosExtended from "@/router/axiosExtended";
 import Swal from "sweetalert2";
 import {alternatives, criteria as storedCriteria} from "@/store/store";
 import Sortable from "sortablejs";
+import {toRaw} from "vue";
 
 export default {
   name: "TaskEditNewCriterion",
@@ -231,7 +232,7 @@ export default {
       const beneficiality = document.getElementById("beneficiality").value;
       const description = document.getElementById("description").value;
       const taskID = this.route.params.taskID;
-      const section = document.querySelector(".section:not(.disabled)").id;
+      const critType = document.getElementById("criterion-type").value;
 
       if (name.length === 0) {
         Swal.fire({
@@ -247,7 +248,7 @@ export default {
 
       let pairwise = false;
       let values = [];
-      if (section === "section-quantitative") {
+      if (critType === "quantitative") {
         document.querySelectorAll(".alternative input").forEach((input) => {
           if (!input.value) {
             values.push(1);
@@ -255,7 +256,7 @@ export default {
             values.push(parseFloat(input.value));
           }
         });
-      } else if (section === "section-ranking") {
+      } else if (critType === "ranking") {
         // FORMULA FOR CALCULATING THE RANKING SCORE FOR EACH INDIVIDUAL ALTERNATIVE
         // score = alternatives_length - current_order_number + 1
 
@@ -271,7 +272,7 @@ export default {
             }
           }
         });
-      } else if (section === "section-qualitative") {
+      } else if (critType === "qualitative") {
         for (let i = 0; i < this.alternatives.length; i++) {
           let val;
           try {
@@ -285,7 +286,7 @@ export default {
           }
           values.push(val);
         }
-      } else if (section === "section-weighting") {
+      } else if (critType === "weighting") {
         document
             .querySelectorAll(".slider-container input")
             .forEach((input) => {
@@ -304,6 +305,8 @@ export default {
         pairwise = true;
       }
 
+      const criterionID = this.route.params.criterionID ? this.route.params.criterionID : "";
+
       const axiosPromise = axiosExtended.post("/save-criterion-to-db", {
         name: name,
         beneficiality: beneficiality,
@@ -311,6 +314,8 @@ export default {
         taskID: taskID,
         values: values,
         pairwise: pairwise,
+        critType: critType,
+        criterionID: criterionID,
       });
 
       const router = this.$router;
@@ -348,6 +353,11 @@ export default {
           .then((response) => {
             this.alternatives = response.data;
             this.fillWeightingAlternatives();
+
+            const criterionID = this.route.params.criterionID;
+            if (criterionID) {
+              this.fillInputFields(criterionID);
+            }
           })
           .catch(() => {
             console.log(
@@ -355,13 +365,14 @@ export default {
             );
           });
     },
-    onCritTypeChange(event) {
-      const selectedSection = document.getElementById(event.target.value);
+    onCritTypeChange() {
+      const selectedCriterionType = document.getElementById("criterion-type").value;
+
       const allSections = document.getElementsByClassName("section");
       for (const section of allSections) {
         section.classList.add("disabled");
       }
-      selectedSection.classList.remove("disabled");
+      document.getElementById(selectedCriterionType).classList.remove("disabled");
     },
     fillWeightingAlternatives() {
       for (let i = 0; i < this.alternatives.length - 1; i++) {
@@ -373,10 +384,10 @@ export default {
         }
       }
     },
-    updateValue(event) {
-      const sliderID = event.target.id;
+    handleInput(input) {
+      const sliderID = input.id;
 
-      let val = parseInt(event.target.value);
+      let val = parseInt(input.value);
       if (val < 0) {
         val *= -1;
       }
@@ -404,6 +415,74 @@ export default {
 
       document.querySelector("label[for='" + sliderID + "'] output").innerHTML =
           text;
+    },
+    updateValue(event) {
+      if (event.type === "input") {
+        this.handleInput(event.target);
+      }
+    },
+    fillInputFields(criterionID) {
+      const axiosPromise = axiosExtended.post("/get-criterion-info", {
+        criterionID: criterionID,
+      });
+
+      axiosPromise
+          .then((response) => {
+            document.getElementById("name").value = response.data.name;
+            document.getElementById("beneficiality").value = response.data.beneficiality;
+            document.getElementById("description").value = response.data.description;
+
+            const critType = response.data.criterion_type;
+            document.getElementById("criterion-type").value = critType;
+            this.onCritTypeChange();
+
+            const alternativesValues = response.data.alternatives_values;
+
+            if (critType === "quantitative") {
+              let index = 0;
+              document.querySelectorAll(".alternative input").forEach((input) => {
+                input.value = alternativesValues[index];
+                index++;
+              });
+            } else if (critType === "ranking") {
+              this.alternatives.sort((a, b) => {
+                const indexA = this.alternatives.indexOf(a);
+                const indexB = this.alternatives.indexOf(b);
+                const orderA = this.alternatives.length - alternativesValues[indexA] + 1;
+                const orderB = this.alternatives.length - alternativesValues[indexB] + 1;
+                return orderA - orderB;
+              });
+            } else if (critType === "qualitative") {
+              for (let i = 0; i < this.alternatives.length; i++) {
+                const radioButton = document.querySelector(
+                    "input[name='qualitative-value-" + i + "'][value='" + alternativesValues[i] + "']"
+                );
+                radioButton.checked = true;
+              }
+            } else if (critType === "weighting") {
+              const raw_values = response.data.alternatives_values_raw;
+
+              document
+                  .querySelectorAll(".slider-container input")
+                  .forEach((input, index) => {
+                    let val = raw_values[index];
+                    if (val < 1) {
+                      val = 1 / val;
+                      val *= -1;
+                      val += 1;
+                    } else {
+                      val -= 1;
+                    }
+
+                    input.value = val;
+                    this.handleInput(input);
+                  });
+            }
+
+          })
+          .catch(() => {
+
+          });
     },
   },
   created() {

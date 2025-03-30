@@ -13,6 +13,7 @@ class Criterion(TimeStampedModel):
     criterion_type = Column(String(80), nullable=False)
     min_max = Column(String(3), nullable=False)
     alternatives_values = Column(pg.ARRAY(Numeric))
+    alternatives_values_raw = Column(pg.ARRAY(Numeric))
     description = Column(String(500))
     task_id = Column(Integer, ForeignKey("tasks.task_id", ondelete="Cascade"), nullable = False, index = True)
 
