@@ -104,7 +104,6 @@ export default {
 
 <template>
   <div class="main">
-    <TheHeader/>
     <div class="full-width mt-45 pb-20">
       <h2>Result</h2>
       <table class="mt-30">

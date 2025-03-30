@@ -1,42 +1,9 @@
 <template>
   <div class="w-100 mt-30 pb-20">
     <div class="topbar w-100">
-      <router-link :to="{ name: 'taskEditTradeOffs' }" class="back-btn">
-        <div class="chevron chevron--left"></div>
-        <div class="back-btn__text">Back to Trade-Offs</div>
-      </router-link>
-      <div class="save-trade-off-btn" @click="saveTradeOff">
-        <div class="save-trade-off-btn__text">Save Trade-Off</div>
-      </div>
+      <h2>Trade-Offs</h2>
     </div>
     <div class="methods mt-30">
-      <label for="decision-method">Decision Methods (Required)</label>
-      <select
-          id="decision-method"
-          name="decision-method"
-          class="methods__dropdown"
-      >
-        <option value="topsis">Topsis</option>
-        <option value="ahp">AHP</option>
-        <option value="electre">Electre</option>
-        <option value="wsm">Weighted Sum</option>
-        <option value="prometheeii">PROMETHEE II</option>
-      </select>
-      <label for="normalization-method" class="mt-15"
-      >Normalization Method</label
-      >
-      <select
-          id="normalization-method"
-          name="normalization-method"
-          class="methods__dropdown"
-      >
-        <option value="linear">Linear Normalization</option>
-        <option value="l1">L1 Normalization</option>
-        <option value="l2">L2 Normalization</option>
-      </select>
-    </div>
-    <div class="line mb-30 mt-30"></div>
-    <div class="methods">
       <label>Add Weights (Required)</label>
       <div v-for="(pair, index) in pairwiseCriteria" class="mt-15" :key="index">
         <div class="slider-container">
@@ -52,6 +19,7 @@
               class="slider"
               :id="'input-slider-' + index"
               @input="updateValue($event)"
+              @change="updateValue($event)"
               list="markers"
           />
           <datalist id="markers">
@@ -88,7 +56,7 @@ import {useRoute} from "vue-router";
 import Swal from "sweetalert2";
 
 export default {
-  name: "TaskEditNewTradeOff",
+  name: "TaskEditTradeOff",
   methods: {
     getCriteriaByTaskID() {
       const axiosPromise = axiosExtended.post("/get-criteria-by-task-id", {
@@ -98,74 +66,11 @@ export default {
       axiosPromise
           .then((response) => {
             this.criteria = response.data;
-            for (const crit of this.criteria) {
-              crit.beneficiality =
-                  crit.beneficiality === "max" ? "Beneficial" : "Non-beneficial";
-            }
-
             this.fillPairwiseCriteria();
+            this.loadValuesIntoSliders();
           })
           .catch(() => {
             console.log("Error when querying for criteria. Please try again...");
-          });
-    },
-    saveTradeOff() {
-      const decisionMethod = document.getElementById("decision-method").value;
-      const normalizationMethod = document.getElementById(
-          "normalization-method"
-      ).value;
-      const taskID = this.route.params.taskID;
-
-      let pairwise = false;
-      const weights = [];
-      document.querySelectorAll(".slider-container input").forEach((input) => {
-        let val = parseInt(input.value);
-        if (val < 0) {
-          val *= -1;
-          val += 1;
-          val = 1 / val;
-        } else {
-          val += 1;
-        }
-
-        weights.push(val);
-      });
-
-      pairwise = true;
-
-      // direct weight input method; TODO add option to add weights directly for testing purposes
-      // document.querySelectorAll(".criterion input").forEach(input => {
-      //   weights.push(parseFloat(input.value));
-      // });
-
-      const axiosPromise = axiosExtended.post("/save-trade-off-to-db", {
-        decisionMethod: decisionMethod,
-        normalizationMethod: normalizationMethod,
-        taskID: taskID,
-        weights: weights,
-        pairwise: pairwise,
-      });
-
-      const router = this.$router;
-      axiosPromise
-          .then((result) => {
-            Swal.fire({
-              position: "top-end",
-              toast: true,
-              icon: "success",
-              title: "Trade Off has been saved",
-              showConfirmButton: false,
-              timer: 3000,
-            });
-
-            router.push({
-              name: "taskEditTradeOffs",
-            });
-          })
-          .catch(() => {
-            console.log(
-                "Error when creating a new trade-off. Please try again..."
-            );
           });
     },
     fillPairwiseCriteria() {
@@ -178,10 +83,10 @@ export default {
         }
       }
     },
-    updateValue(event) {
-      const sliderID = event.target.id;
+    handleInput(input) {
+      const sliderID = input.id;
 
-      let val = parseInt(event.target.value);
+      let val = parseInt(input.value);
       if (val < 0) {
         val *= -1;
       }
@@ -210,6 +115,80 @@ export default {
       document.querySelector("label[for='" + sliderID + "'] output").innerHTML =
           text;
     },
+    handleChange() {
+      const taskID = this.route.params.taskID;
+      const weights = []
+      document.querySelectorAll(".slider-container input").forEach((input) => {
+        let val = parseInt(input.value);
+        if (val < 0) {
+          val *= -1;
+          val += 1;
+          val = 1 / val;
+        } else {
+          val += 1;
+        }
+
+        weights.push(val);
+      });
+
+      // direct weight input method; TODO add option to add weights directly for testing purposes
+      // document.querySelectorAll(".criterion input").forEach(input => {
+      //   weights.push(parseFloat(input.value));
+      // });
+
+      const axiosPromise = axiosExtended.post("/save-trade-off-to-db", {
+        taskID: taskID,
+        weights: weights,
+      });
+
+      const router = this.$router;
+      axiosPromise
+          .then((result) => {
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: "Trade Off has been saved",
+              showConfirmButton: false,
+              timer: 3000,
+            });
+          })
+          .catch(() => {
+          });
+    },
+    updateValue(event) {
+      if (event.type === "input") {
+        this.handleInput(event.target);
+      } else if (event.type === "change") {
+        this.handleChange();
+      }
+    },
+    loadValuesIntoSliders() {
+      const axiosPromise = axiosExtended.post("/get-trade-off-by-task-id", {
+        taskID: this.route.params.taskID,
+      });
+
+      axiosPromise.then((response) => {
+        const rawValues = response.data.criteriaWeightsRaw;
+        if (rawValues) {
+          document
+              .querySelectorAll(".slider-container input")
+              .forEach((input, index) => {
+                let val = rawValues[index];
+                if (val < 1) {
+                  val = 1 / val;
+                  val *= -1;
+                  val += 1;
+                } else {
+                  val -= 1;
+                }
+
+                input.value = val;
+                this.handleInput(input);
+              });
+        }
+      });
+    },
   },
   data() {
     return {
@@ -218,13 +197,6 @@ export default {
       route: null,
       pairwiseCriteria: [],
     };
-  },
-  mounted() {
-    if (selectedMethod.method) {
-      document
-          .querySelector("div[data-method='" + selectedMethod.method + "']")
-          .click();
-    }
   },
   created() {
     this.route = useRoute();

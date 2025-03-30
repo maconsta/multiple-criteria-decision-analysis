@@ -126,6 +126,7 @@ export default {
 
       const axiosPromise = axiosExtended.post("/delete-alternatives-by-id", {
         alternativesIDs: selectedAlternativesIDs,
+        taskID: this.route.params.taskID,
       });
 
       axiosPromise

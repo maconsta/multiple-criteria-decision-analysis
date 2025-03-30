@@ -15,6 +15,14 @@
           <div class="trash-icon trash-icon--white"></div>
           <div class="add-criteria-btn__text">Delete</div>
         </div>
+        <div
+            class="edit-criterion-btn"
+            @click="editCriterion"
+            role="button"
+        >
+          <span class="edit-icon edit-icon--white edit"></span>
+          <div class="edit-criterion-btn__text">Edit</div>
+        </div>
       </div>
     </div>
     <div class="criteria mt-30">
@@ -57,6 +65,15 @@ export default {
         name: "taskEditNewCriterion",
       });
     },
+    editCriterion() {
+      if (this.numberOfSelectedCrit === 1) {
+        const criterionID = document.querySelector(".criterion[data-selected='true']").dataset.criterionId;
+        this.$router.push({
+          name: "taskEditNewCriterion",
+          params: {criterionID: criterionID},
+        });
+      }
+    },
     getCriteriaByTaskID() {
       const axiosPromise = axiosExtended.post("/get-criteria-by-task-id", {
         taskID: this.route.params.taskID,
@@ -87,6 +104,7 @@ export default {
       }
 
       this.updateDeleteButtonVisibility();
+      this.updateEditButtonVisibility();
 
       // helpText.text = "Test Criteria";
 
@@ -98,6 +116,14 @@ export default {
         deleteButton.classList.add("delete-criteria-btn--active");
       } else {
         deleteButton.classList.remove("delete-criteria-btn--active");
+      }
+    },
+    updateEditButtonVisibility() {
+      const editButton = document.querySelector(".edit-criterion-btn");
+      if (this.numberOfSelectedCrit === 1) {
+        editButton.classList.add("edit-criterion-btn--active");
+      } else {
+        editButton.classList.remove("edit-criterion-btn--active");
       }
     },
     deleteSelectedCriteria() {
@@ -116,6 +142,7 @@ export default {
 
       const axiosPromise = axiosExtended.post("/delete-criteria-by-id", {
         criteriaIDs: selectedCriteriaIDs,
+        taskID: this.route.params.taskID,
       });
 
       axiosPromise
@@ -138,6 +165,10 @@ export default {
           .catch(() => {
             console.log("Error when deleting criteria. Please try again...");
           });
+
+      this.numberOfSelectedCrit--;
+      this.updateDeleteButtonVisibility();
+      this.updateEditButtonVisibility();
     },
     deselectAllCriteria() {
       const checkboxes = document.getElementsByClassName("checkbox");
@@ -290,6 +321,37 @@ export default {
   &:hover {
     border-color: $main-blue-20;
     background-color: $main-blue-20;
+  }
+}
+
+.edit-criterion-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: $gray;
+  border-radius: 8px;
+  width: fit-content;
+  padding: 8px 12px 6px;
+  cursor: not-allowed;
+  min-width: 54px;
+
+  .plus-icon {
+    background-size: 24px;
+  }
+
+  &--active {
+    cursor: pointer;
+    background-color: $dark-gray;
+  }
+
+  &__text {
+    line-height: 2em;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 700px) {
+    justify-content: center;
   }
 }
 </style>

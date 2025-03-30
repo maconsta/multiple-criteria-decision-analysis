@@ -1,6 +1,6 @@
 from flask import request, jsonify, session as flask_session
 
-from backend.app.db.models import session as sql_session, Task
+from backend.app.db.models import session as sql_session, Task, TradeOff
 from backend.app import app
 
 from flask_jwt_extended import jwt_required
@@ -26,9 +26,21 @@ def save_task_to_db():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Criteria not deleted, error: " + str(e) + "!"}
+        return jsonify({"result": "Criteria not saved, error: " + str(e) + "!"})
+
+    # the task also creates sets the default method for the task
+    # current default method is TOPSIS with LINEAR NORMALIZATION
+    new_trade_off = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task.task_id)
+    sql_session.add(new_trade_off)
+
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        return jsonify({"result": "Criteria not saved, error: " + str(e) + "!"})
     else:
-        response = {"result": "success"}
+        return jsonify({"result": "success"})
 
     return jsonify(response)
 

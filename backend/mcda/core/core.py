@@ -201,6 +201,11 @@ class Pairwise:
         return matrix
 
     def calculate_eigenvector(self):
+        # the following check is important, but TODO implement a better eigenvector method
+        # if all(val == self.values[0] for val in self.values):
+        #     uniform_eigenvector = np.ones(self.entries_count) / self.entries_count
+        #     return uniform_eigenvector
+
         eigenvector = np.zeros(self.entries_count)
         temp_matrix = self.pairwise_matrix
         while True:
@@ -209,7 +214,7 @@ class Pairwise:
             row_sum_totals = np.sum(row_sums)
             new_eigenvector = row_sums / row_sum_totals
             if np.all(np.isclose(eigenvector, new_eigenvector)):
-                return eigenvector
+                return eigenvector.tolist()
 
             eigenvector = new_eigenvector
 

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, REAL
+from sqlalchemy import Column, Integer, String, ForeignKey, REAL, Numeric
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import Relationship
 
@@ -10,6 +10,7 @@ class TradeOff(TimeStampedModel):
 
     trade_off_id = Column(Integer, primary_key=True, autoincrement=True)
     criteria_weights = Column(pg.ARRAY(REAL))
+    criteria_weights_raw = Column(pg.ARRAY(Numeric))
     decision_method = Column(String(80))
     normalization_method = Column(String(80))
     task_id = Column(Integer, ForeignKey("tasks.task_id", ondelete="Cascade"), nullable = False, index = True)
