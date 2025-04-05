@@ -38,6 +38,7 @@
             content: '<b>Description</b>: ' + alternative.description,
             html: true,
           }"
+          @click="showTooltip($event, alternative.description)"
         ></span>
       </div>
     </div>
@@ -56,6 +57,21 @@ export default {
       this.$router.push({
         name: "taskEditNewAlternative",
       });
+    },
+    showTooltip(event, description) {
+      event.stopPropagation(); // Prevents checkbox selection
+
+      if (this.isTouchDevice()) {
+        Swal.fire({
+          title: "Description",
+          html: `<b>Description</b>: ${description}`,
+          icon: "info",
+          confirmButtonText: "OK",
+        });
+      }
+    },
+    isTouchDevice() {
+      return "ontouchstart" in window || navigator.maxTouchPoints > 0;
     },
     getAlternativesByTaskID() {
       let loader = this.$loading.show({

@@ -46,6 +46,7 @@
               criterion.beneficiality,
             html: true,
           }"
+          @click="showTooltip($event, criterion.description, criterion.beneficiality)"
         ></span>
       </div>
     </div>
@@ -73,6 +74,21 @@ export default {
           params: {criterionID: criterionID},
         });
       }
+    },
+    showTooltip(event, description, beneficiality) {
+      event.stopPropagation(); // Prevents checkbox selection
+
+      if (this.isTouchDevice()) {
+        Swal.fire({
+          title: "Description",
+          html: `<b>Description</b>: ${description}, <b>Beneficiality</b>: ${beneficiality}`,
+          icon: "info",
+          confirmButtonText: "OK",
+        });
+      }
+    },
+    isTouchDevice() {
+      return "ontouchstart" in window || navigator.maxTouchPoints > 0;
     },
     getCriteriaByTaskID() {
       let loader = this.$loading.show({

@@ -1,6 +1,13 @@
 from flask import request, jsonify
 
-from backend.app.db.models import session as sql_session, Task, TradeOff, Alternative, Criterion, trade_off
+from backend.app.db.models import (
+    session as sql_session,
+    Task,
+    TradeOff,
+    Alternative,
+    Criterion,
+    trade_off,
+)
 from backend.app import app
 
 from flask_jwt_extended import jwt_required
@@ -15,15 +22,20 @@ from backend.mcda.methods.weightedSum import WeightedSum
 
 jwt = JWTManager(app)
 
-from backend.mcda.core.core import Criterion as Crit, Alternative as Alt, DecisionMatrix, Pairwise
+from backend.mcda.core.core import (
+    Criterion as Crit,
+    Alternative as Alt,
+    DecisionMatrix,
+    Pairwise,
+)
 
 
-@app.route("/api/save-trade-off-to-db", methods=['POST'])
+@app.route("/api/save-trade-off-to-db", methods=["POST"])
 @jwt_required()
 def save_trade_off_to_db():
     post_data = request.get_json()
-    criteria_weights = post_data['weights']
-    task_id = post_data['taskID']
+    criteria_weights = post_data["weights"]
+    task_id = post_data["taskID"]
 
     criteria_weights = [float(value) for value in criteria_weights]
     criteria_weights_raw = criteria_weights
@@ -52,12 +64,16 @@ def save_trade_off_to_db():
 @jwt_required()
 def get_trade_off_by_task_id():
     post_data = request.get_json()
-    task_id = post_data['taskID']
+    task_id = post_data["taskID"]
 
     trade_off = (
-        sql_session
-        .query(TradeOff.task_id, TradeOff.criteria_weights, TradeOff.decision_method, TradeOff.normalization_method,
-               TradeOff.criteria_weights_raw)
+        sql_session.query(
+            TradeOff.task_id,
+            TradeOff.criteria_weights,
+            TradeOff.decision_method,
+            TradeOff.normalization_method,
+            TradeOff.criteria_weights_raw,
+        )
         .filter(TradeOff.task_id == task_id)
         .first()
     )
@@ -65,9 +81,13 @@ def get_trade_off_by_task_id():
     if not trade_off:
         result = {"success": False, "error": "Resource Not Found."}, 404
     else:
-        result = {"success": True, "decisionMethod": trade_off.decision_method,
-                  "normalizationMethod": trade_off.normalization_method, "weights": trade_off.criteria_weights,
-                  "criteriaWeightsRaw": trade_off.criteria_weights_raw}
+        result = {
+            "success": True,
+            "decisionMethod": trade_off.decision_method,
+            "normalizationMethod": trade_off.normalization_method,
+            "weights": trade_off.criteria_weights,
+            "criteriaWeightsRaw": trade_off.criteria_weights_raw,
+        }
 
     return jsonify(result)
 
@@ -76,7 +96,7 @@ def get_trade_off_by_task_id():
 @jwt_required()
 def delete_trade_off_by_task_id():
     post_data = request.get_json()
-    task_id = post_data['taskID']
+    task_id = post_data["taskID"]
 
     trade_off = TradeOff.query.filter(TradeOff.task_id == task_id).first()
     sql_session.delete(trade_off)
@@ -98,28 +118,42 @@ def delete_trade_off_by_task_id():
 @jwt_required()
 def calculate_result():
     post_data = request.get_json()
-    task_id = post_data['taskID']
-    project_id = post_data['projectID']
+    task_id = post_data["taskID"]
+    project_id = post_data["projectID"]
 
+    # Fetch Alternatives
     alternatives_raw = (
-        sql_session
-        .query(Alternative.task_id, Alternative.alternative_name, Alternative.alternative_id, Alternative.description,
-               )
+        sql_session.query(
+            Alternative.task_id,
+            Alternative.alternative_name,
+            Alternative.alternative_id,
+            Alternative.description,
+        )
         .filter(Alternative.task_id == task_id)
         .all()
     )
 
+    # Fetch Criteria
     criteria_raw = (
-        sql_session
-        .query(Criterion.task_id, Criterion.criterion_name, Criterion.criterion_id,
-               Criterion.min_max, Criterion.alternatives_values)
+        sql_session.query(
+            Criterion.task_id,
+            Criterion.criterion_name,
+            Criterion.criterion_id,
+            Criterion.min_max,
+            Criterion.alternatives_values,
+        )
         .filter(Criterion.task_id == task_id)
         .all()
     )
 
+    # Fetch Trade-Off
     trade_off_raw = (
-        sql_session
-        .query(TradeOff.task_id, TradeOff.criteria_weights, TradeOff.decision_method, TradeOff.normalization_method)
+        sql_session.query(
+            TradeOff.task_id,
+            TradeOff.criteria_weights,
+            TradeOff.decision_method,
+            TradeOff.normalization_method,
+        )
         .filter(TradeOff.task_id == task_id)
         .first()
     )
@@ -132,57 +166,89 @@ def calculate_result():
     for criterion in criteria_raw:
         criteria.append(Crit(name=criterion.criterion_name, min_max=criterion.min_max))
 
-        for (index, val) in enumerate(criterion.alternatives_values):
+        for index, val in enumerate(criterion.alternatives_values):
             if index in values:
                 values[index].append(val)
             else:
                 values[index] = [val]
 
     alternatives = []
-    for (index, alt) in enumerate(alternatives_raw):
+    for index, alt in enumerate(alternatives_raw):
         alternatives.append(Alt(name=alt.alternative_name, values=values[index]))
 
+    # Select Normalization Method
     normalization_method = trade_off_raw.normalization_method
     if normalization_method == "linear":
-        decision_matrix = DecisionMatrix(criteria=criteria, alternatives=alternatives,
-                                         normalization_method=DecisionMatrix.normalize)
+        decision_matrix = DecisionMatrix(
+            criteria=criteria,
+            alternatives=alternatives,
+            normalization_method=DecisionMatrix.normalize,
+        )
     elif normalization_method == "l1":
-        decision_matrix = DecisionMatrix(criteria=criteria, alternatives=alternatives,
-                                         normalization_method=DecisionMatrix.normalize_l1)
+        decision_matrix = DecisionMatrix(
+            criteria=criteria,
+            alternatives=alternatives,
+            normalization_method=DecisionMatrix.normalize_l1,
+        )
     elif normalization_method == "l2":
-        decision_matrix = DecisionMatrix(criteria=criteria, alternatives=alternatives,
-                                         normalization_method=DecisionMatrix.normalize_l2)
+        decision_matrix = DecisionMatrix(
+            criteria=criteria,
+            alternatives=alternatives,
+            normalization_method=DecisionMatrix.normalize_l2,
+        )
 
+    # Format Decision Matrix for Response
+    decision_matrix_data = {
+        "criteria": [criterion.name for criterion in criteria],
+        "alternatives": [alternative.name for alternative in alternatives],
+        "values": [alternative.values for alternative in alternatives],
+    }
+
+    # Process Decision Method
     decision_method = trade_off_raw.decision_method
     result = {"success": True}
-    if decision_method == 'topsis':
-        topsis = Topsis(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
+
+    if decision_method == "topsis":
+        topsis = Topsis(
+            decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
+        )
         result.update({"ranking": topsis.calculate_topsis()})
-    elif decision_method == 'ahp':
-        ahp = AHP(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
+    elif decision_method == "ahp":
+        ahp = AHP(
+            decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
+        )
         result.update({"ranking": ahp.calculate_ahp()})
-    elif decision_method == 'electre':
-        electre = Electre(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
+    elif decision_method == "electre":
+        electre = Electre(
+            decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
+        )
         result.update({"ranking": electre.calculate_electre()})
-    elif decision_method == 'wsm':
-        wsm = WeightedSum(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
+    elif decision_method == "wsm":
+        wsm = WeightedSum(
+            decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
+        )
         result = wsm.calculate_weighted_sum()
-    elif decision_method == 'prometheeii':
-        promethee = Promethee(decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights)
+    elif decision_method == "prometheeii":
+        promethee = Promethee(
+            decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
+        )
         result.update({"ranking": promethee.calculate_promethee()})
     else:
         result = {"success": False}
 
+    # Add Decision Matrix to Response
+    result.update({"decision_matrix": decision_matrix_data})
+
     return jsonify(result)
 
 
-@app.route("/api/save-method-to-db", methods=['POST'])
+@app.route("/api/save-method-to-db", methods=["POST"])
 @jwt_required()
 def save_method_to_db():
     post_data = request.get_json()
-    decision_method = post_data['decisionMethod']
-    normalization_method = post_data['normalizationMethod']
-    task_id = post_data['taskID']
+    decision_method = post_data["decisionMethod"]
+    normalization_method = post_data["normalizationMethod"]
+    task_id = post_data["taskID"]
 
     trade_off = TradeOff.query.filter_by(task_id=task_id).first()
     trade_off.decision_method = decision_method
