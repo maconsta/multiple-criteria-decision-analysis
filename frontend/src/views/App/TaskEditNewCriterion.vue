@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 mt-30 pb-20">
+  <div class="w-100 mt-30 pb-20" id="loader-container">
     <div class="topbar w-100">
       <router-link :to="{ name: 'taskEditCriteria' }" class="back-btn">
         <div class="chevron chevron--left"></div>
@@ -344,6 +344,10 @@ export default {
           });
     },
     getAlternativesByTaskID() {
+      let loader = this.$loading.show({
+        container: document.getElementById("loader-container"),
+      });
+
       const axiosPromise = axiosExtended.post("/get-alternatives-by-task-id", {
         taskID: this.route.params.taskID,
         projectID: this.route.params.projectID,
@@ -363,6 +367,9 @@ export default {
             console.log(
                 "Error when querying for alternatives. Please try again..."
             );
+          })
+          .finally(() => {
+            loader.hide();
           });
     },
     onCritTypeChange() {
@@ -422,6 +429,10 @@ export default {
       }
     },
     fillInputFields(criterionID) {
+      let loader = this.$loading.show({
+        container: document.getElementById("loader-container"),
+      });
+
       const axiosPromise = axiosExtended.post("/get-criterion-info", {
         criterionID: criterionID,
       });
@@ -478,18 +489,20 @@ export default {
                     this.handleInput(input);
                   });
             }
-
           })
           .catch(() => {
-
+          })
+          .finally(() => {
+            loader.hide()
           });
     },
   },
   created() {
     this.route = useRoute();
-    this.getAlternativesByTaskID();
   },
   mounted() {
+    this.getAlternativesByTaskID();
+
     // clear the text fields
     document.getElementById("name").value = "";
     document.getElementById("description").value = "";

@@ -47,7 +47,6 @@ export default {
   width: 100%;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 7px $dark-gray;
 
   display: flex;
   align-items: center;

@@ -93,7 +93,7 @@
           </Flicking>
         </div>
       </nav>
-      <nav class="dashboard">
+      <nav class="dashboard" id="loader-container">
         <div class="dashboard__top mt-45">
           <h3 class="dashboard__heading">All Projects</h3>
           <div class="dashboard__icons">
@@ -227,6 +227,10 @@ export default {
       });
     },
     getAllProjects() {
+      let loader = this.$loading.show({
+        container: document.getElementById("loader-container"),
+      });
+
       const axiosPromise = axiosExtended.get("/get-projects-by-user-id");
 
       axiosPromise
@@ -256,6 +260,9 @@ export default {
             console.log(
                 "Error when querying for all projects. Please try again..."
             );
+          })
+          .finally(() => {
+            loader.hide()
           });
     },
     handleClickOnFolder(id, event) {
@@ -478,7 +485,6 @@ export default {
   width: 100%;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 7px $dark-gray;
 
   display: flex;
   align-items: center;

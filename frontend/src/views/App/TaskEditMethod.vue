@@ -7,6 +7,8 @@ export default {
   name: "TaskEditMethod",
   created() {
     this.route = useRoute();
+  },
+  mounted() {
     this.getTradeOffByTaskId();
   },
   data() {
@@ -16,6 +18,10 @@ export default {
   },
   methods: {
     getTradeOffByTaskId() {
+      let loader = this.$loading.show({
+        container: document.getElementById("loader-container"),
+      });
+
       const axiosPromise = axiosExtended.post("/get-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
       });
@@ -26,6 +32,9 @@ export default {
             document.getElementById("normalization-method").value = response.data.normalizationMethod;
           })
           .catch(() => {
+          })
+          .finally(() => {
+            loader.hide();
           });
     },
     handleDropdownChange() {
@@ -62,7 +71,7 @@ export default {
 </script>
 
 <template>
-  <div class="w-100 mt-30">
+  <div class="w-100 mt-30" id="loader-container">
     <div class="topbar w-100">
       <h2>Decision Method</h2>
     </div>

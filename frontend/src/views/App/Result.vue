@@ -5,6 +5,7 @@ import * as echarts from "echarts";
 import { useRoute } from "vue-router";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import Swal from "sweetalert2";
 
 export default {
   name: "Result",
@@ -20,10 +21,9 @@ export default {
       chartInstance: null,
     };
   },
-  computed: {
-    routeParams() {
-      return this.$route.params; // Using $route directly for Vue 2 compatibility
-    },
+  components: {TheHeader},
+  created() {
+    this.route = useRoute();
   },
   mounted() {
     this.calculateResult();
@@ -36,24 +36,33 @@ export default {
     return number.toFixed(decimals);
   },
     calculateResult() {
+      let loader = this.$loading.show({
+        container: document.getElementById("loader-container"),
+      });
+
       axiosExtended
-        .post("/calculate-result", {
-          projectID: this.routeParams.projectID,
-          taskID: this.routeParams.taskID,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            this.ranking = response.data.ranking;
-            this.decisionMatrix = response.data.decision_matrix;
-            this.renderChart();
-          } else {
-            alert("Failed to fetch ranking results. Please try again.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching results:", error);
-          alert("An error occurred while retrieving the results.");
-        });
+          .post("/calculate-result", {
+            projectID: this.route.params.projectID,
+            taskID: this.route.params.taskID,
+          })
+          .then((response) => {
+            if (response.data.success) {
+              this.ranking = response.data.ranking;
+              this.decisionMatrix = response.data.decision_matrix;
+              this.renderChart(); // Render chart after data is loaded
+            }
+            loader.hide();
+          })
+          .catch(() => {
+            Swal.fire({
+              icon: "error",
+              text: "Error when calculating result. Check if all variables are set!",
+              position: "top-end",
+              toast: true,
+              showConfirmButton: false,
+              timer: 5000,
+            });
+          });
     },
     renderChart() {
       const chartDom = document.getElementById("resultChart");
@@ -127,7 +136,7 @@ export default {
 
 <template>
   <div class="main">
-    <div class="full-width mt-45 pb-20">
+    <div class="full-width mt-45 pb-20" id="loader-container">
       <h2>Result</h2>
 
       <div class="tables-container">
