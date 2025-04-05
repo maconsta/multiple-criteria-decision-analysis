@@ -5,6 +5,7 @@ import * as echarts from "echarts";
 import {useRoute} from "vue-router";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import Swal from "sweetalert2";
 
 export default {
   name: "Result",
@@ -18,6 +19,8 @@ export default {
   components: {TheHeader},
   created() {
     this.route = useRoute();
+  },
+  mounted() {
     this.calculateResult();
   },
   methods: {
@@ -25,6 +28,10 @@ export default {
       return number.toFixed(decimals);
     },
     calculateResult() {
+      let loader = this.$loading.show({
+        container: document.getElementById("loader-container"),
+      });
+
       axiosExtended
           .post("/calculate-result", {
             projectID: this.route.params.projectID,
@@ -35,9 +42,17 @@ export default {
               this.ranking = response.data.ranking;
               this.renderChart(); // Render chart after data is loaded
             }
+            loader.hide();
           })
           .catch(() => {
-            console.log("Error when creating a new project. Please try again...");
+            Swal.fire({
+              icon: "error",
+              text: "Error when calculating result. Check if all variables are set!",
+              position: "top-end",
+              toast: true,
+              showConfirmButton: false,
+              timer: 5000,
+            });
           });
     },
     renderChart() {
@@ -104,7 +119,7 @@ export default {
 
 <template>
   <div class="main">
-    <div class="full-width mt-45 pb-20">
+    <div class="full-width mt-45 pb-20" id="loader-container">
       <h2>Result</h2>
       <table class="mt-30">
         <thead>

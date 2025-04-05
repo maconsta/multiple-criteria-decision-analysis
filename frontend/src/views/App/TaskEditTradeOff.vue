@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 mt-30 pb-20">
+  <div class="w-100 mt-30 pb-20" id="loader-container">
     <div class="topbar w-100">
       <h2>Trade-Offs</h2>
     </div>
@@ -59,6 +59,10 @@ export default {
   name: "TaskEditTradeOff",
   methods: {
     getCriteriaByTaskID() {
+      let loader = this.$loading.show({
+        container: document.getElementById("loader-container"),
+      });
+
       const axiosPromise = axiosExtended.post("/get-criteria-by-task-id", {
         taskID: this.route.params.taskID,
       });
@@ -71,6 +75,9 @@ export default {
           })
           .catch(() => {
             console.log("Error when querying for criteria. Please try again...");
+          })
+          .finally(() => {
+            loader.hide();
           });
     },
     fillPairwiseCriteria() {
@@ -200,6 +207,8 @@ export default {
   },
   created() {
     this.route = useRoute();
+  },
+  mounted() {
     this.getCriteriaByTaskID();
   },
 };

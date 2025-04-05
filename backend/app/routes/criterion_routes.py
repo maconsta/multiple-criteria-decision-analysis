@@ -42,7 +42,7 @@ def save_criterion_to_db():
         new_criterion.name = criterion_name
         new_criterion.beneficiality = criterion_beneficiality
         new_criterion.description = criterion_description
-        new_criterion.type = criterion_type
+        new_criterion.criterion_type = criterion_type
         new_criterion.alternatives_values = values
         new_criterion.alternatives_values_raw = raw_values
     else:
