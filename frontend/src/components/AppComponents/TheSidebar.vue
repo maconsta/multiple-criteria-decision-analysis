@@ -32,7 +32,7 @@
         image-url="cpu.svg"
         route-name="result"
         button-text="Calculate"
-        @click="openSidebar"
+        @click="closeSidebar"
       />
     </div>
 
