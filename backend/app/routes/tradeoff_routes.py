@@ -227,7 +227,7 @@ def calculate_result():
         wsm = WeightedSum(
             decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
         )
-        result = wsm.calculate_weighted_sum()
+        result.update({"ranking": wsm.calculate_weighted_sum()})
     elif decision_method == "prometheeii":
         promethee = Promethee(
             decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
