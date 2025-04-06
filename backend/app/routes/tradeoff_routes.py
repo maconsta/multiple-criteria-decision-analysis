@@ -159,7 +159,7 @@ def calculate_result():
     )
 
     if not trade_off_raw or not trade_off_raw.criteria_weights:
-        raise ValueError("Add trade-offs!") # could have issues with prometheus, check later TODO
+        raise ValueError("Add trade-offs!")  # could have issues with prometheus, check later TODO
 
     criteria = []
     values = {}
