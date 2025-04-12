@@ -15,6 +15,9 @@ class Criterion(TimeStampedModel):
     alternatives_values = Column(pg.ARRAY(Numeric))
     alternatives_values_raw = Column(pg.ARRAY(Numeric))
     description = Column(String(500))
+    preference_function = Column(String(80))
+    q_value = Column(Numeric)
+    p_value = Column(Numeric)
     task_id = Column(Integer, ForeignKey("tasks.task_id", ondelete="Cascade"), nullable = False, index = True)
 
     task = Relationship('Task', back_populates='criteria')

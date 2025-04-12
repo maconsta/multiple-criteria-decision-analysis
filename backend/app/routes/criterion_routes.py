@@ -72,7 +72,8 @@ def get_criteria_by_task_id():
     criteria = (
         sql_session
         .query(Criterion.task_id, Criterion.criterion_name, Criterion.criterion_id, Criterion.description,
-               Criterion.min_max)
+               Criterion.min_max, Criterion.alternatives_values_raw, Criterion.preference_function, Criterion.p_value,
+               Criterion.q_value)
         .filter(Criterion.task_id == task_id)
         .order_by(Criterion.criterion_id)
         .all()
@@ -82,7 +83,9 @@ def get_criteria_by_task_id():
     for crit in criteria:
         result.append(
             {"taskID": crit.task_id, "name": crit.criterion_name, "criterionID": crit.criterion_id,
-             "description": crit.description, "beneficiality": crit.min_max})
+             "description": crit.description, "beneficiality": crit.min_max,
+             "alternativesValuesRaw": crit.alternatives_values_raw, "preferenceFunction": crit.preference_function,
+             "q-value": crit.q_value, "p-value": crit.p_value})
 
     return jsonify(result)
 
@@ -111,10 +114,13 @@ def delete_criteria_by_id():
             temp_criteria_weights_raw = [item for i, item in enumerate(trade_off.criteria_weights_raw[:]) if
                                          i not in indexes_to_remove]
 
-            trade_off.criteria_weights_raw = temp_criteria_weights_raw
-            pw = Pairwise(temp_criteria_weights_raw)
-            new_criteria_weights = pw.calculate_eigenvector()
-            trade_off.criteria_weights = new_criteria_weights
+            if temp_criteria_weights_raw:
+                trade_off.criteria_weights_raw = temp_criteria_weights_raw
+                pw = Pairwise(temp_criteria_weights_raw)
+                new_criteria_weights = pw.calculate_eigenvector()
+            else:
+                trade_off.criteria_weights_raw = []
+                trade_off.criteria_weights = []
 
             sql_session.add(trade_off)
             sql_session.delete(crit)
@@ -152,3 +158,58 @@ def get_criterion_info():
         status_code = 400
 
     return jsonify(result), status_code
+
+
+@app.route("/api/save-preference-functions", methods=["POST"])
+@jwt_required()
+def save_preference_functions():
+    post_data = request.get_json()
+    preference_functions = post_data["preferenceFunctions"]
+    task_id = post_data["taskID"]
+
+    criteria = Criterion.query.filter_by(task_id=task_id).order_by(Criterion.criterion_id).all()
+    if len(criteria) > 0:
+        for index, crit in enumerate(criteria):
+            crit.preference_function = preference_functions[index]
+            sql_session.add(crit)
+
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        response = {"result": "Preference functions not saved, error: " + str(e) + "!"}
+    else:
+        response = {"result": "success"}
+
+    return jsonify(response)
+
+
+@app.route("/api/save-threshold", methods=["POST"])
+@jwt_required()
+def save_threshold():
+    post_data = request.get_json()
+    threshold = post_data["threshold"]
+    threshold_name = post_data["thresholdName"]
+    task_id = post_data["taskID"]
+    crit_name = post_data["critName"]
+
+    criterion = Criterion.query.filter_by(task_id=task_id, criterion_name=crit_name).first()
+    if criterion:
+        if threshold_name == "q-value":
+            criterion.q_value = threshold
+        elif threshold_name == "p-value":
+            criterion.p_value = threshold
+
+        sql_session.add(criterion)
+
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        response = {"result": "Threshold not saved, error: " + str(e) + "!"}
+    else:
+        response = {"result": "success"}
+
+    return jsonify(response)

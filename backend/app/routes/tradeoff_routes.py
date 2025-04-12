@@ -141,6 +141,9 @@ def calculate_result():
             Criterion.criterion_id,
             Criterion.min_max,
             Criterion.alternatives_values,
+            Criterion.preference_function,
+            Criterion.q_value,
+            Criterion.p_value
         )
         .filter(Criterion.task_id == task_id)
         .all()
@@ -163,8 +166,13 @@ def calculate_result():
 
     criteria = []
     values = {}
+    preference_function = []
+    q_values, p_values = [], []
     for criterion in criteria_raw:
         criteria.append(Crit(name=criterion.criterion_name, min_max=criterion.min_max))
+        preference_function.append(criterion.preference_function)
+        p_values.append(float(criterion.p_value))
+        q_values.append(float(criterion.q_value))
 
         for index, val in enumerate(criterion.alternatives_values):
             if index in values:
@@ -230,7 +238,9 @@ def calculate_result():
         result.update({"ranking": wsm.calculate_weighted_sum()})
     elif decision_method == "prometheeii":
         promethee = Promethee(
-            decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights
+            decision_matrix=decision_matrix, weights=trade_off_raw.criteria_weights,
+            preference_type=preference_function,
+            q_values=q_values, p_values=p_values
         )
         result.update({"ranking": promethee.calculate_promethee()})
     else:
