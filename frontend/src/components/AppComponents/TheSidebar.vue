@@ -2,22 +2,22 @@
   <div class="sidebar sidebar--open">
     <div class="sidebar-btn-container mt-15">
       <SidebarButton
-        :image-url="alt_image"
-        route-name="taskEditAlternatives"
-        button-text="Alternatives"
-        @click="openSidebar"
+          :image-url="alt_image"
+          route-name="taskEditAlternatives"
+          button-text="Alternatives"
+          @click="openSidebar"
       />
       <SidebarButton
-        :image-url="crit_image"
-        route-name="taskEditCriteria"
-        button-text="Criteria"
-        @click="openSidebar"
+          :image-url="crit_image"
+          route-name="taskEditCriteria"
+          button-text="Criteria"
+          @click="openSidebar"
       />
       <SidebarButton
-        :image-url="trade_offs_image"
-        route-name="taskEditMethod"
-        button-text="Method"
-        @click="openSidebar"
+          :image-url="trade_offs_image"
+          route-name="taskEditMethod"
+          button-text="Method"
+          @click="openSidebar"
       />
       <SidebarButton
           :image-url="trade_offs_image"
@@ -29,16 +29,16 @@
       <div class="line mt-10 mb-10"></div>
 
       <SidebarButton
-        image-url="cpu.svg"
-        route-name="result"
-        button-text="Calculate"
-        @click="closeSidebar"
+          image-url="cpu.svg"
+          route-name="result"
+          button-text="Calculate"
+          @click="openSidebar"
       />
     </div>
 
     <div
-      class="toggle-sidebar-btn chevron chevron--left mb-15"
-      @click="toggleSidebar"
+        class="toggle-sidebar-btn chevron chevron--left mb-15"
+        @click="toggleSidebar"
     ></div>
   </div>
 </template>
@@ -87,6 +87,12 @@ export default {
       } else {
         this.openSidebar();
       }
+    },
+  },
+  watch: {
+    $route() {
+      // Trigger the method when the route changes
+      this.openSidebar();
     },
   },
   data() {

@@ -3,71 +3,67 @@ from backend.mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class Promethee:
-    def __init__(self, decision_matrix: DecisionMatrix, weights):
+    def __init__(self, decision_matrix: DecisionMatrix, weights: list, preference_type: list, p_values: list = [], q_values: list = []):
         self.decision_matrix = decision_matrix
         self.weights = weights
-        self.performance_index_matrix = np.zeros(
-            (self.decision_matrix.alt_count, self.decision_matrix.alt_count))
+        self.preference_type = preference_type
+        self.q_values = q_values
+        self.p_values = p_values
+        self.net_flows = None
+
+    def preference_function(self, d, crit_index):
+        pref_type = self.preference_type[crit_index]
+        p = float(self.p_values[crit_index])
+        q = float(self.q_values[crit_index])
+
+        if pref_type == "usual":
+            return 0 if d <= 0 else 1
+        elif pref_type == "u-shape":
+            return 0 if abs(d) <= q else 1
+        elif pref_type == "v-shape":
+            return 0 if abs(d) <= 0 else min(abs(d) / p, 1)
+        elif pref_type == "level":
+            if abs(d) <= q:
+                return 0
+            elif abs(d) <= p:
+                return 0.5
+            else:
+                return 1
+        elif pref_type == "linear":
+            return 0 if abs(d) <= q else min((abs(d) - q) / (p - q), 1)
+        elif pref_type == "gaussian":
+            return 1 - np.exp(- (d ** 2) / (2 * p ** 2))
+        else:
+            return 0 if d <= 0 else 1
+
+    def calculate_flows(self):
+        alt_count = self.decision_matrix.alt_count
+        crit_count = self.decision_matrix.crit_count
+        preference_matrix = np.zeros((alt_count, alt_count))
+
+        for i in range(alt_count):
+            for j in range(alt_count):
+                if i == j:
+                    continue
+                preference_sum = 0
+                for k in range(crit_count):
+                    d = self.decision_matrix.matrix[i][k] - self.decision_matrix.matrix[j][k]
+                    pref = self.preference_function(d, k)
+                    weighted_pref = self.weights[k] * pref
+                    preference_sum += weighted_pref
+                preference_matrix[i][j] = preference_sum
+
+        positive_flows = np.sum(preference_matrix, axis=1)
+        negative_flows = np.sum(preference_matrix, axis=0)
+        self.net_flows = positive_flows - negative_flows
 
     def calculate_promethee(self):
-
-        # normalise using a weird method
-        # is this normalization method OK, or should another one be used?
-        max_values = np.max(self.decision_matrix.matrix, axis=0)
-        min_values = np.min(self.decision_matrix.matrix, axis=0)
-        for i in range(self.decision_matrix.alt_count):
-            for j in range(self.decision_matrix.crit_count):
-                self.decision_matrix.normalized_matrix[i][j] = (
-                    self.decision_matrix.matrix[i][j]-min_values[j]) / (max_values[j]-min_values[j])
-        # print(self.decision_matrix.normalized_matrix)
-
-        net_flows = np.zeros(self.decision_matrix.alt_count)
-        positive_flows = np.zeros(self.decision_matrix.alt_count)
-        negative_flows = np.zeros(self.decision_matrix.alt_count)
-
-        for i in range(self.decision_matrix.alt_count):
-            for j in range(self.decision_matrix.alt_count):
-                if i != j:
-                    for k in range(self.decision_matrix.crit_count):
-                        diff = self.decision_matrix.normalized_matrix[i][k] - \
-                            self.decision_matrix.normalized_matrix[j][k]
-                        if diff > 0:
-                            positive_flows[i] += self.weights[k] * diff
-                        else:
-                            negative_flows[i] += self.weights[k] * (-diff)
-
-            net_flows[i] = positive_flows[i] - negative_flows[i]
-
-        # print(positive_flows)
-        # print(negative_flows)
-        # print(net_flows)
+        self.calculate_flows()
 
         result = []
-        for i in range(len(net_flows)):
+        for i in range(self.decision_matrix.alt_count):
             name = self.decision_matrix.alternatives[i].name
-            result.append({"name": name, "score": net_flows[i]})
+            result.append({"name": name, "score": self.net_flows[i]})
 
         result = sorted(result, key=lambda d: d['score'], reverse=True)
-
         return result
-
-
-# c1 = Criterion("c1", "max")
-# c2 = Criterion("c2", "max")
-# c3 = Criterion("c3", "max")
-# c4 = Criterion("c4", "max")
-# c5 = Criterion("c5", "max")
-# c6 = Criterion("c6", "max")
-# criteria = [c1, c2, c3, c4, c5, c6]
-
-# a1 = Alternative("a1", [1350, 1850, 7.5, 2.58, 93.5, 0.045])
-# a2 = Alternative("a2", [1680, 1650, 8.5, 3.75, 95.3, 0.068])
-# a3 = Alternative("a3", [1560, 1950, 6.5, 4.86, 88.6, 0.095])
-# a4 = Alternative("a4", [1470, 1850, 9.5, 3.16, 98.4, 0.072])
-# alternatives = [a1, a2, a3, a4]
-
-# dm = DecisionMatrix(criteria, alternatives)
-# weights = [0.2336, 0.1652, 0.3355, 0.1021, 0.0424, 0.1212]
-
-# promethee = Promethee(dm, weights)
-# print(promethee.calculate_promethee())

@@ -30,6 +30,11 @@ export default {
           .then((response) => {
             document.getElementById("decision-method").value = response.data.decisionMethod;
             document.getElementById("normalization-method").value = response.data.normalizationMethod;
+
+            const decisionMethod = document.getElementById("decision-method").value;
+            if (decisionMethod === "prometheeii") {
+              document.getElementById("normalization-container").classList.add("hidden");
+            }
           })
           .catch(() => {
           })
@@ -39,6 +44,13 @@ export default {
     },
     handleDropdownChange() {
       const decisionMethod = document.getElementById("decision-method").value;
+
+      if (decisionMethod === "prometheeii") {
+        document.getElementById("normalization-container").classList.add("hidden");
+      } else {
+        document.getElementById("normalization-container").classList.remove("hidden");
+      }
+
       const normalizationMethod = document.getElementById("normalization-method").value;
       const taskID = this.route.params.taskID;
 
@@ -89,19 +101,21 @@ export default {
         <option value="wsm">Weighted Sum</option>
         <option value="prometheeii">PROMETHEE II</option>
       </select>
-      <label for="normalization-method" class="mt-15"
-      >Normalization Method (Required)</label
-      >
-      <select
-          id="normalization-method"
-          name="normalization-method"
-          class="methods__dropdown"
-          @change="handleDropdownChange"
-      >
-        <option value="linear">Linear Normalization</option>
-        <option value="l1">L1 Normalization</option>
-        <option value="l2">L2 Normalization</option>
-      </select>
+      <div class="mt-15" id="normalization-container">
+        <label for="normalization-method">
+          Normalization Method (Required)
+        </label>
+        <select
+            id="normalization-method"
+            name="normalization-method"
+            class="methods__dropdown"
+            @change="handleDropdownChange"
+        >
+          <option value="linear">Linear Normalization</option>
+          <option value="l1">L1 Normalization</option>
+          <option value="l2">L2 Normalization</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -161,6 +175,12 @@ export default {
   //    display: table;
   //  }
   //}
+}
+
+#normalization-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .add-trade-off-btn {
