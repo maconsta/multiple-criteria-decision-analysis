@@ -10,6 +10,7 @@ class Promethee:
         self.q_values = q_values
         self.p_values = p_values
         self.net_flows = None
+        self.decision_matrix.beneficiate_matrix()
 
     def preference_function(self, d, crit_index):
         pref_type = self.preference_type[crit_index]
@@ -47,7 +48,7 @@ class Promethee:
                     continue
                 preference_sum = 0
                 for k in range(crit_count):
-                    d = self.decision_matrix.matrix[i][k] - self.decision_matrix.matrix[j][k]
+                    d = self.decision_matrix.beneficial_matrix[i][k] - self.decision_matrix.beneficial_matrix[j][k]
                     pref = self.preference_function(d, k)
                     weighted_pref = self.weights[k] * pref
                     preference_sum += weighted_pref

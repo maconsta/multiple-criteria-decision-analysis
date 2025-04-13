@@ -57,13 +57,13 @@ class Alternative:
 
 class DecisionMatrix:
     def __init__(self, criteria: list, alternatives: list, normalization_method):
-
-        self.criteria = criteria  # this is the old one
+        self.criteria = criteria
         self.alternatives = alternatives
         self.crit_count = len(criteria)
         self.alt_count = len(alternatives)
         self.matrix = np.array([alt.values for alt in alternatives], dtype=np.float64)
         self.normalized_matrix = np.zeros((self.alt_count, self.crit_count), dtype=np.float64)
+        self.beneficial_matrix = np.zeros((self.alt_count, self.crit_count), dtype=np.float64)
 
         if normalization_method is None:
             normalization_method = self.normalize
@@ -141,6 +141,15 @@ class DecisionMatrix:
                     self.normalized_matrix[:, j] *= -1
             except IndexError:
                 raise IndexError(f"Criteria index {j} is out of range. Length of criteria list: {len(self.criteria)}")
+
+    def beneficiate_matrix(self):
+        for i in range(self.alt_count):
+            for j in range(self.crit_count):
+                if self.criteria[j].min_max == 'min':
+                    self.beneficial_matrix[i][j] = self.matrix[i][j] * -1
+                else:
+                    self.beneficial_matrix[i][j] = self.matrix[i][j] * 1
+
 
 
 # ---------------------------------------------CLASS_DECISION_MATRIX_END-----------------------------------------------
