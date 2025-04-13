@@ -132,7 +132,11 @@ export default {
                 for (let i = 0; i < this.criteria.length; i++) {
                   const dropdown = document.getElementById("criterion-dropdown-" + i);
                   const preferenceFunction = response.data[i]['preferenceFunction'];
-                  dropdown.value = preferenceFunction;
+                  if (!preferenceFunction) {
+                    dropdown.value = "usual";
+                  } else {
+                    dropdown.value = preferenceFunction;
+                  }
 
                   const qInput = document.getElementById("criterion-input-q-" + i);
                   const pInput = document.getElementById("criterion-input-p-" + i);

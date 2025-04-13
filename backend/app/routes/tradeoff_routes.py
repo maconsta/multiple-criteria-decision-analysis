@@ -171,8 +171,14 @@ def calculate_result():
     for criterion in criteria_raw:
         criteria.append(Crit(name=criterion.criterion_name, min_max=criterion.min_max))
         preference_function.append(criterion.preference_function)
-        p_values.append(float(criterion.p_value))
-        q_values.append(float(criterion.q_value))
+        if criterion.p_value:
+            p_values.append(float(criterion.p_value))
+        else:
+            p_values.append(1)
+        if criterion.q_value:
+            q_values.append(float(criterion.q_value))
+        else:
+            q_values.append(0)
 
         for index, val in enumerate(criterion.alternatives_values):
             if index in values:
