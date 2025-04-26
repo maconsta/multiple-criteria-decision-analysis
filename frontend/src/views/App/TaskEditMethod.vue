@@ -32,9 +32,6 @@ export default {
             document.getElementById("normalization-method").value = response.data.normalizationMethod;
 
             const decisionMethod = document.getElementById("decision-method").value;
-            if (decisionMethod === "prometheeii") {
-              document.getElementById("normalization-container").classList.add("hidden");
-            }
           })
           .catch(() => {
           })
@@ -44,12 +41,6 @@ export default {
     },
     handleDropdownChange() {
       const decisionMethod = document.getElementById("decision-method").value;
-
-      if (decisionMethod === "prometheeii") {
-        document.getElementById("normalization-container").classList.add("hidden");
-      } else {
-        document.getElementById("normalization-container").classList.remove("hidden");
-      }
 
       const normalizationMethod = document.getElementById("normalization-method").value;
       const taskID = this.route.params.taskID;
