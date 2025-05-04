@@ -2,18 +2,20 @@ from flask import request, jsonify, session as flask_session
 from datetime import timedelta
 
 from backend.app.db.models import session as sql_session, User, Alternative, Criterion
-from backend.app.routes.utils import save_alt_in_session, get_alts_from_session
 from backend.app import app
 
-from flask_jwt_extended import create_access_token, get_csrf_token, jwt_required
+from flask_jwt_extended import create_access_token, get_csrf_token, jwt_required, get_jwt_identity
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
+
+from backend.app.routes.utils import authorize_request
 
 jwt = JWTManager(app)
 
 
 @app.route("/api/save-alternative-to-db", methods=['POST'])
 @jwt_required()
+@authorize_request
 def save_alternative_to_db():
     post_data = request.get_json()
     alternative_name = post_data['name']
@@ -51,12 +53,11 @@ def save_alternative_to_db():
 
 
 @app.route("/api/get-alternatives-by-task-id", methods=['POST'])
+@jwt_required()
+@authorize_request
 def get_alternatives_by_task_id():
     post_data = request.get_json()
     task_id = post_data['taskID']
-    # project_id = post_data['projectID']
-
-    # print(get_alts_from_session(project_id=project_id, task_id=task_id))
 
     alternatives = (
         sql_session
@@ -77,6 +78,8 @@ def get_alternatives_by_task_id():
 
 
 @app.route("/api/delete-alternatives-by-id", methods=['POST'])
+@jwt_required()
+@authorize_request
 def delete_alternatives_by_id():
     post_data = request.get_json()
     alternatives_ids = post_data['alternativesIDs']

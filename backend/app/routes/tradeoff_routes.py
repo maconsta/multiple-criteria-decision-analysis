@@ -13,7 +13,7 @@ from backend.app import app
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
-from backend.app.routes.utils import save_task_in_session, delete_task_from_session
+from backend.app.routes.utils import authorize_request
 from backend.mcda.methods.ahp import AHP
 from backend.mcda.methods.electre import Electre
 from backend.mcda.methods.promethee import Promethee
@@ -32,6 +32,7 @@ from backend.mcda.core.core import (
 
 @app.route("/api/save-trade-off-to-db", methods=["POST"])
 @jwt_required()
+@authorize_request
 def save_trade_off_to_db():
     post_data = request.get_json()
     criteria_weights = post_data["weights"]
@@ -62,6 +63,7 @@ def save_trade_off_to_db():
 
 @app.route("/api/get-trade-off-by-task-id", methods=["POST"])
 @jwt_required()
+@authorize_request
 def get_trade_off_by_task_id():
     post_data = request.get_json()
     task_id = post_data["taskID"]
@@ -116,6 +118,7 @@ def delete_trade_off_by_task_id():
 
 @app.route("/api/calculate-result", methods=["POST"])
 @jwt_required()
+@authorize_request
 def calculate_result():
     post_data = request.get_json()
     task_id = post_data["taskID"]
@@ -260,6 +263,7 @@ def calculate_result():
 
 @app.route("/api/save-method-to-db", methods=["POST"])
 @jwt_required()
+@authorize_request
 def save_method_to_db():
     post_data = request.get_json()
     decision_method = post_data["decisionMethod"]

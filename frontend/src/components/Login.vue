@@ -9,7 +9,7 @@
     <div>
       <div class="container" id="container" :class="{ active: isActive }">
         <div class="form-container sign-up">
-          <form @submit.prevent="validateSignUp">
+          <form @submit.prevent="validateSignUp" @keydown.enter="validateSignUp">
             <h1>Create Account</h1>
             <div class="social-icons">
               <a href="#" class="google-icon" aria-label="Google">
@@ -52,7 +52,7 @@
           </form>
         </div>
         <div class="form-container sign-in">
-          <form @submit.prevent="validateSignIn">
+          <form @submit.prevent="validateSignIn" @keydown.enter="validateSignIn">
             <h1>Sign In</h1>
             <div class="social-icons">
               <a href="#" class="google-icon" aria-label="Google">
@@ -143,6 +143,9 @@ export default {
     };
   },
   methods: {
+    test() {
+      console.log("asdasd");
+    },
     updateOverflow() {
       if (window.innerWidth > 900) {
         document.body.style.overflow = "hidden"; // Prevent scrolling on large screens

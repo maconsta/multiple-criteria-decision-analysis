@@ -1,120 +1,34 @@
-from flask import session as flask_session
+from functools import wraps
 
-from backend.app.db.models import User
+from flask import request
+from werkzeug.exceptions import Forbidden
 
-"""
-    This file contains utility functions that manage the session. The session is structured in the following way:
-    
-    session["projects"] = {
-        "<project_id>": {
-            "projectName": "<project_name>" (str),
-            "projectID": <project_id> (int),
-            "owner": "<first_name + " " + last_name>" (str),
-            "visibility": "<visibility>" (str),
-            "tasks": {
-                "<task_id>": {
-                    "taskID": <task_id> (int),
-                    "taskName: "<task_name>" (str),
-                    "projectID": <project_id> (int)
-                    
-                    add alts, crits and methods here later!
-                }
-            }  
-        }
-    } 
-"""
+from backend.app.db.models import session as sql_session, Project, User
+
+from flask_jwt_extended import get_jwt_identity
 
 
-def save_project_in_session(project_id: int, project_name: str, user_id: int, visibility: str = "private"):
-    if flask_session.get("projects") is None:
-        flask_session["projects"] = {}
+def authorize_request(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user_id = int(get_jwt_identity())
+        if request.method == "POST":
+            post_data = request.get_json()
+            project_id = post_data.get("projectID")
+        elif request.method == "GET":
+            project_id = kwargs.get("project_id")
 
-    user = User.query.filter(User.user_id == user_id).first()
-    owner = user.first_name + " " + user.last_name
+        current_user = User.query.filter_by(user_id=user_id).first()
 
-    flask_session["projects"].update({
-        str(project_id): {
-            "projectID": project_id,
-            "projectName": project_name,
-            "owner": owner,
-            "visibility": visibility
-        }
-    })
+        project = (
+            sql_session
+            .query(Project)
+            .filter(Project.project_id == project_id)
+            .first()
+        )
 
-    flask_session.modified = True
+        if not project or (project.owner != user_id and current_user.email not in project.collaborators):
+            raise Forbidden()
 
-
-def delete_project_from_session(project_id: int):
-    projects = flask_session.get("projects")
-    if projects is None:
-        return None
-
-    del projects[str(project_id)]
-
-    flask_session.modified = True
-
-
-def save_task_in_session(task_id: int, task_name: str, project_id: int):
-    projects = flask_session.get("projects")
-    if projects is None:
-        return None
-
-    project = projects.get(project_id)
-    if project is None:
-        return None
-
-    if project.get("tasks") is None:
-        project["tasks"] = {}
-
-    project["tasks"].update({
-        task_id: {
-            "taskID": task_id,
-            "taskName": task_name,
-            "projectID": project_id
-        }
-    })
-
-    flask_session.modified = True
-
-
-def delete_task_from_session(task_id: int, project_id: int):
-    projects = flask_session.get("projects")
-    if projects is None:
-        return None
-
-    project = projects.get(project_id)
-    if project is None:
-        return None
-
-    tasks = project.get("tasks")
-    del tasks[str(task_id)]
-
-    flask_session.modified = True
-
-
-def save_alt_in_session(project_id: int, task_id: int, alt_id: int, alt_name: str, alt_description: str):
-    task = flask_session.get("projects").get(project_id).get("tasks").get(task_id)
-
-    if task.get("alternatives") is None:
-        task["alternatives"] = {}
-
-        task["alternatives"].update({
-            str(alt_id): {
-                "name": alt_name,
-                "alternativeID": alt_id,
-                "description": alt_description,
-                "task_id": task_id,
-            }
-        })
-
-    flask_session.modified = True
-
-
-def get_alts_from_session(project_id: int, task_id: int):
-    task = flask_session.get("projects")
-    print(task)
-    return
-
-    if task.get("alternatives") is not None:
-        result = [value for value in task.get("alternatives").values()]
-        return result
+        return f(*args, **kwargs)
+    return decorated

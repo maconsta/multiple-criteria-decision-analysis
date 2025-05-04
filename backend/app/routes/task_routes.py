@@ -1,18 +1,19 @@
-from flask import request, jsonify, session as flask_session
+from flask import request, jsonify
 
 from backend.app.db.models import session as sql_session, Task, TradeOff
 from backend.app import app
 
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_jwt_extended import JWTManager
 
-from backend.app.routes.utils import save_task_in_session, delete_task_from_session
+from backend.app.routes.utils import authorize_request
 
 jwt = JWTManager(app)
 
 
 @app.route("/api/save-task-to-db", methods=['POST'])
 @jwt_required()
+@authorize_request
 def save_task_to_db():
     post_data = request.get_json()
     task_name = post_data['name']
@@ -47,6 +48,7 @@ def save_task_to_db():
 
 @app.route("/api/get-tasks-by-project-id", methods=['POST'])
 @jwt_required()
+@authorize_request
 def get_tasks_by_project_id():
     post_data = request.get_json()
     project_id = post_data['projectID']
@@ -68,6 +70,7 @@ def get_tasks_by_project_id():
 
 @app.route("/api/delete-task-by-id", methods=['POST'])
 @jwt_required()
+@authorize_request
 def delete_task_by_id():
     post_data = request.get_json()
     task_id = post_data['taskID']

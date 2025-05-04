@@ -316,6 +316,7 @@ export default {
         pairwise: pairwise,
         critType: critType,
         criterionID: criterionID,
+        projectID: this.route.params.projectID
       });
 
       const router = this.$router;
@@ -435,6 +436,7 @@ export default {
 
       const axiosPromise = axiosExtended.post("/get-criterion-info", {
         criterionID: criterionID,
+        projectID: this.route.params.projectID
       });
 
       axiosPromise

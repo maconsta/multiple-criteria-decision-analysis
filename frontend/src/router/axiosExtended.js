@@ -31,6 +31,9 @@ axiosExtended.interceptors.response.use(
                 name: "signIn",
             });
         }
+        if (error.response && error.response.status === 403) {
+            router.push({name: "pageNotFound",})
+        }
     }
 );
 

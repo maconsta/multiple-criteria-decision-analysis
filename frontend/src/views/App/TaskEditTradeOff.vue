@@ -121,6 +121,7 @@ export default {
     getCriteriaByTaskID(decisionMethod) {
       const axiosPromise = axiosExtended.post("/get-criteria-by-task-id", {
         taskID: this.route.params.taskID,
+        projectID: this.route.params.projectID
       });
 
       axiosPromise
@@ -224,6 +225,7 @@ export default {
       const axiosPromise = axiosExtended.post("/save-trade-off-to-db", {
         taskID: taskID,
         weights: weights,
+        projectID: this.route.params.projectID
       });
 
       const router = this.$router;
@@ -251,6 +253,7 @@ export default {
     loadValuesIntoSliders() {
       const axiosPromise = axiosExtended.post("/get-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
+        projectID: this.route.params.projectID
       });
 
       axiosPromise.then((response) => {
@@ -281,6 +284,7 @@ export default {
 
       const axiosPromise = axiosExtended.post("/get-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
+        projectID: this.route.params.projectID
       });
 
       axiosPromise.then((response) => {
@@ -318,6 +322,7 @@ export default {
       const axiosPromise = axiosExtended.post("/save-preference-functions", {
         preferenceFunctions: preferenceFunctions,
         taskID: taskID,
+        projectID: this.route.params.projectID
       });
 
       const router = this.$router;
@@ -363,6 +368,7 @@ export default {
       const axiosPromise = axiosExtended.post("/save-threshold", {
         threshold: threshold,
         taskID: this.route.params.taskID,
+        projectID: this.route.params.projectID,
         critName: critName,
         thresholdName: thresholdName
       });

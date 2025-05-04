@@ -24,6 +24,7 @@ export default {
 
       const axiosPromise = axiosExtended.post("/get-trade-off-by-task-id", {
         taskID: this.route.params.taskID,
+        projectID: this.route.params.projectID
       });
 
       axiosPromise
@@ -49,6 +50,7 @@ export default {
         decisionMethod: decisionMethod,
         normalizationMethod: normalizationMethod,
         taskID: taskID,
+        projectID: this.route.params.projectID
       });
 
       const router = this.$router;
