@@ -2,6 +2,7 @@ from flask import request, jsonify, session as flask_session
 
 from backend.app.db.models import session as sql_session, User, Project, Criterion, TradeOff
 from backend.app import app
+from backend.app.routes.utils import authorize_request
 
 from backend.mcda.core.core import Pairwise
 
@@ -9,15 +10,12 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
-from backend.app.routes.utils import save_project_in_session, delete_project_from_session
-
-# from backend.mcda.core.core import Criterion
-
 jwt = JWTManager(app)
 
 
 @app.route("/api/save-criterion-to-db", methods=['POST'])
 @jwt_required()
+@authorize_request
 def save_criterion_to_db():
     post_data = request.get_json()
     criterion_name = post_data['name']
@@ -40,7 +38,7 @@ def save_criterion_to_db():
     if criterion_id:
         new_criterion = Criterion.query.filter_by(criterion_id=criterion_id).first()
         new_criterion.name = criterion_name
-        new_criterion.beneficiality = criterion_beneficiality
+        new_criterion.min_max = criterion_beneficiality
         new_criterion.description = criterion_description
         new_criterion.criterion_type = criterion_type
         new_criterion.alternatives_values = values
@@ -66,6 +64,7 @@ def save_criterion_to_db():
 
 @app.route("/api/get-criteria-by-task-id", methods=['POST'])
 @jwt_required()
+@authorize_request
 def get_criteria_by_task_id():
     post_data = request.get_json()
     task_id = post_data['taskID']
@@ -92,6 +91,7 @@ def get_criteria_by_task_id():
 
 @app.route("/api/delete-criteria-by-id", methods=['POST'])
 @jwt_required()
+@authorize_request
 def delete_criteria_by_id():
     post_data = request.get_json()
     criteria_ids = post_data['criteriaIDs']
@@ -111,8 +111,10 @@ def delete_criteria_by_id():
                         indexes_to_remove.append(cnt)
                     cnt += 1
 
-            temp_criteria_weights_raw = [item for i, item in enumerate(trade_off.criteria_weights_raw[:]) if
-                                         i not in indexes_to_remove]
+            temp_criteria_weights_raw = None
+            if trade_off.criteria_weights_raw:
+                temp_criteria_weights_raw = [item for i, item in enumerate(trade_off.criteria_weights_raw[:]) if
+                                             i not in indexes_to_remove]
 
             if temp_criteria_weights_raw:
                 trade_off.criteria_weights_raw = temp_criteria_weights_raw
@@ -140,6 +142,7 @@ def delete_criteria_by_id():
 
 @app.route("/api/get-criterion-info", methods=['POST'])
 @jwt_required()
+@authorize_request
 def get_criterion_info():
     post_data = request.get_json()
     criterion_id = post_data['criterionID']
@@ -162,6 +165,7 @@ def get_criterion_info():
 
 @app.route("/api/save-preference-functions", methods=["POST"])
 @jwt_required()
+@authorize_request
 def save_preference_functions():
     post_data = request.get_json()
     preference_functions = post_data["preferenceFunctions"]
@@ -187,6 +191,7 @@ def save_preference_functions():
 
 @app.route("/api/save-threshold", methods=["POST"])
 @jwt_required()
+@authorize_request
 def save_threshold():
     post_data = request.get_json()
     threshold = post_data["threshold"]

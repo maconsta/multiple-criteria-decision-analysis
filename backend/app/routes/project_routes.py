@@ -1,4 +1,4 @@
-from flask import request, jsonify, session as flask_session
+from flask import request, jsonify
 
 from backend.app.db.models import session as sql_session, User, Project
 from backend.app import app
@@ -8,6 +8,8 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
 from sqlalchemy import or_, any_
+
+from backend.app.routes.utils import authorize_request
 
 jwt = JWTManager(app)
 
@@ -38,16 +40,8 @@ def save_project_to_db():
 
 @app.route("/api/get-project-name-by-id/<project_id>", methods=["GET"])
 @jwt_required()
+@authorize_request
 def get_project(project_id):
-    project_name = ""
-    # projects = flask_session.get("projects")
-    # if projects:
-    #     project = projects.get(project_id)
-    #
-    #     if project:
-    #         project_name = project.get("projectName")
-    # else:
-
     project = Project.query.filter(Project.project_id == project_id).first()
     project_name = project.project_name
 
@@ -57,12 +51,6 @@ def get_project(project_id):
 @app.route("/api/get-projects-by-user-id", methods=["GET"])
 @jwt_required()
 def get_projects_by_user_id():
-
-    # projects = flask_session.get("projects")
-    # if projects:
-    #     result = [value for value in projects.values()]
-    #     return jsonify(result)
-
     user_id = get_jwt_identity()
 
     user = sql_session.query(User).filter_by(user_id=user_id).first()
@@ -103,6 +91,7 @@ def get_projects_by_user_id():
 
 @app.route("/api/delete-project-by-id", methods=["POST"])
 @jwt_required()
+@authorize_request
 def delete_project():
     post_data = request.get_json()
     project_id = post_data["projectID"]
@@ -124,6 +113,7 @@ def delete_project():
 
 @app.route("/api/change-project-name", methods=['POST'])
 @jwt_required()
+@authorize_request
 def change_project_name():
     post_data = request.get_json()
     project_id = post_data['projectID']
@@ -146,6 +136,7 @@ def change_project_name():
 
 @app.route("/api/share-project", methods=["POST"])
 @jwt_required()
+@authorize_request
 def share_project():
     data = request.get_json()
     project_id = data.get("project_id")

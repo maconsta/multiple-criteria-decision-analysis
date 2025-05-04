@@ -1,11 +1,12 @@
 from flask import jsonify
+from werkzeug.exceptions import InternalServerError
 
 from backend.app.db.models import (
     session as sql_session,
     Project,
     Task,
     Alternative,
-    Criterion,
+    Criterion, TradeOff,
 )
 from backend.app import app
 
@@ -29,36 +30,43 @@ def dream_home():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Project not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
     new_task_1 = Task(task_name="Location", project_id=new_project.project_id)
     new_task_2 = Task(
         task_name="Home heating system", project_id=new_project.project_id
     )
-    new_task_3 = Task(task_name="Window Frames", project_id=new_project.project_id)
-    new_task_4 = Task(task_name="Choosing materials", project_id=new_project.project_id)
-    new_task_5 = Task(
+    new_task_3 = Task(
         task_name="Interior Decorations", project_id=new_project.project_id
     )
 
     sql_session.add(new_task_1)
     sql_session.add(new_task_2)
     sql_session.add(new_task_3)
-    sql_session.add(new_task_4)
-    sql_session.add(new_task_5)
 
     try:
         sql_session.commit()
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Tasks not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Tasks created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
-    return jsonify(response)
+    new_trade_off_1 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_1.task_id)
+    new_trade_off_2 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_2.task_id)
+    new_trade_off_3 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_3.task_id)
+
+    sql_session.add(new_trade_off_1)
+    sql_session.add(new_trade_off_2)
+    sql_session.add(new_trade_off_3)
+
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        raise InternalServerError(e)
+
+    return jsonify({"projectID": new_project.project_id}), 200
 
 
 @app.route("/api/template/new-car", methods=["GET"])
@@ -74,32 +82,33 @@ def new_car():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Project not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
-    new_task_1 = Task(task_name="Choose Interior", project_id=new_project.project_id)
-    new_task_2 = Task(task_name="Engine Type", project_id=new_project.project_id)
-    new_task_3 = Task(task_name="Choose a Car", project_id=new_project.project_id)
+    new_task_1 = Task(task_name="Choose a Car", project_id=new_project.project_id)
 
     sql_session.add(new_task_1)
-    sql_session.add(new_task_2)
-    sql_session.add(new_task_3)
 
     try:
         sql_session.commit()
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Tasks not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Tasks created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
+
+    new_trade_off_1 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_1.task_id)
+    sql_session.add(new_trade_off_1)
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        raise InternalServerError(e)
 
     new_alt_1 = Alternative(
-        alternative_name="Tesla Model 3", task_id=new_task_3.task_id
+        alternative_name="Tesla Model 3", task_id=new_task_1.task_id
     )
-    new_alt_2 = Alternative(alternative_name="Toyota Camry", task_id=new_task_3.task_id)
-    new_alt_3 = Alternative(alternative_name="BMW 3 Series", task_id=new_task_3.task_id)
+    new_alt_2 = Alternative(alternative_name="Toyota Camry", task_id=new_task_1.task_id)
+    new_alt_3 = Alternative(alternative_name="BMW 3 Series", task_id=new_task_1.task_id)
 
     sql_session.add(new_alt_1)
     sql_session.add(new_alt_2)
@@ -110,20 +119,16 @@ def new_car():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Alternatives not added, error: " + str(e) + "!"}
-    else:
-        response = {
-            "result": "Alternatives added!",
-            "projectID": new_project.project_id,
-        }
+        raise InternalServerError(e)
 
     new_crit_1 = Criterion(
         criterion_name="Price",
         criterion_type="quantitative",
         min_max="min",
         alternatives_values=[39999, 24999, 41999],
+        alternatives_values_raw=[39999, 24999, 41999],
         description="Total cost of the car in USD",
-        task_id=new_task_3.task_id,
+        task_id=new_task_1.task_id,
     )
 
     new_crit_2 = Criterion(
@@ -131,8 +136,9 @@ def new_car():
         criterion_type="quantitative",
         min_max="max",
         alternatives_values=[130, 28, 30],
+        alternatives_values_raw=[130, 28, 30],
         description="Miles per gallon (MPG) or equivalent",
-        task_id=new_task_3.task_id,
+        task_id=new_task_1.task_id,
     )
 
     new_crit_3 = Criterion(
@@ -140,8 +146,9 @@ def new_car():
         criterion_type="qualitative",
         min_max="max",
         alternatives_values=[5, 5, 4],
+        alternatives_values_raw=[5, 5, 4],
         description="Safety rating from crash tests",
-        task_id=new_task_3.task_id,
+        task_id=new_task_1.task_id,
     )
 
     new_crit_4 = Criterion(
@@ -149,8 +156,9 @@ def new_car():
         criterion_type="quantitative",
         min_max="min",
         alternatives_values=[500, 1200, 1500],
+        alternatives_values_raw=[500, 1200, 1500],
         description="Estimated annual maintenance cost",
-        task_id=new_task_3.task_id,
+        task_id=new_task_1.task_id,
     )
 
     sql_session.add(new_crit_1)
@@ -163,14 +171,9 @@ def new_car():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Criterion not added, error: " + str(e) + "!"}
-    else:
-        response = {
-            "result": "Criterion added!",
-            "projectID": new_project.project_id,
-        }
+        raise InternalServerError(e)
 
-    return jsonify(response)
+    return jsonify({"projectID": new_project.project_id}), 200
 
 
 @app.route("/api/template/build-your-pc", methods=["GET"])
@@ -186,9 +189,7 @@ def build_your_pc():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Project not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
     new_task_1 = Task(task_name="Processor", project_id=new_project.project_id)
     new_task_2 = Task(task_name="Video Card", project_id=new_project.project_id)
@@ -211,11 +212,29 @@ def build_your_pc():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Tasks not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Tasks created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
-    return jsonify(response)
+    new_trade_off_1 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_1.task_id)
+    new_trade_off_2 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_2.task_id)
+    new_trade_off_3 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_3.task_id)
+    new_trade_off_4 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_4.task_id)
+    new_trade_off_5 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_5.task_id)
+    new_trade_off_6 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_6.task_id)
+
+    sql_session.add(new_trade_off_1)
+    sql_session.add(new_trade_off_2)
+    sql_session.add(new_trade_off_3)
+    sql_session.add(new_trade_off_4)
+    sql_session.add(new_trade_off_5)
+    sql_session.add(new_trade_off_6)
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        raise InternalServerError(e)
+
+    return jsonify({"projectID": new_project.project_id}), 200
 
 
 @app.route("/api/template/shopping-list", methods=["GET"])
@@ -231,9 +250,7 @@ def shopping_list():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Project not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
     new_task_1 = Task(task_name="Choose Pet Food", project_id=new_project.project_id)
     new_task_2 = Task(task_name="Best Coffee", project_id=new_project.project_id)
@@ -252,11 +269,26 @@ def shopping_list():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Tasks not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Tasks created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
-    return jsonify(response)
+    new_trade_off_1 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_1.task_id)
+    new_trade_off_2 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_2.task_id)
+    new_trade_off_3 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_3.task_id)
+    new_trade_off_4 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_4.task_id)
+    new_trade_off_5 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_5.task_id)
+    sql_session.add(new_trade_off_1)
+    sql_session.add(new_trade_off_2)
+    sql_session.add(new_trade_off_3)
+    sql_session.add(new_trade_off_4)
+    sql_session.add(new_trade_off_5)
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        raise InternalServerError(e)
+
+    return jsonify({"projectID": new_project.project_id}), 200
 
 
 @app.route("/api/template/holiday-planner", methods=["GET"])
@@ -274,9 +306,7 @@ def holiday_planner():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Project not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
     new_task_1 = Task(task_name="Choose Location", project_id=new_project.project_id)
     new_task_2 = Task(task_name="Travel Agency", project_id=new_project.project_id)
@@ -293,11 +323,22 @@ def holiday_planner():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Tasks not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Tasks created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
-    return jsonify(response)
+    new_trade_off_1 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_1.task_id)
+    new_trade_off_2 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_2.task_id)
+    new_trade_off_3 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_3.task_id)
+    sql_session.add(new_trade_off_1)
+    sql_session.add(new_trade_off_2)
+    sql_session.add(new_trade_off_3)
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        raise InternalServerError(e)
+
+    return jsonify({"projectID": new_project.project_id}), 200
 
 
 @app.route("/api/template/new-phone", methods=["GET"])
@@ -313,9 +354,7 @@ def new_phone():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Project not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
     new_task_1 = Task(task_name="Android or Apple", project_id=new_project.project_id)
     new_task_2 = Task(task_name="Choose a phone", project_id=new_project.project_id)
@@ -328,11 +367,20 @@ def new_phone():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Tasks not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Tasks created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
-    return jsonify(response)
+    new_trade_off_1 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_1.task_id)
+    new_trade_off_2 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_2.task_id)
+    sql_session.add(new_trade_off_1)
+    sql_session.add(new_trade_off_2)
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        raise InternalServerError(e)
+
+    return jsonify({"projectID": new_project.project_id}), 200
 
 
 @app.route("/api/template/new-guitar", methods=["GET"])
@@ -348,9 +396,7 @@ def new_guitar():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Project not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Project created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
     new_task_1 = Task(
         task_name="Electric or Acoustic", project_id=new_project.project_id
@@ -369,8 +415,21 @@ def new_guitar():
     except Exception as e:
         sql_session.rollback()
         sql_session.flush()
-        response = {"result": "Tasks not created, error: " + str(e) + "!"}
-    else:
-        response = {"result": "Tasks created!", "projectID": new_project.project_id}
+        raise InternalServerError(e)
 
-    return jsonify(response)
+    new_trade_off_1 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_1.task_id)
+    new_trade_off_2 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_2.task_id)
+    new_trade_off_3 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_3.task_id)
+    new_trade_off_4 = TradeOff(decision_method="topsis", normalization_method="linear", task_id=new_task_4.task_id)
+    sql_session.add(new_trade_off_1)
+    sql_session.add(new_trade_off_2)
+    sql_session.add(new_trade_off_3)
+    sql_session.add(new_trade_off_4)
+    try:
+        sql_session.commit()
+    except Exception as e:
+        sql_session.rollback()
+        sql_session.flush()
+        raise InternalServerError(e)
+
+    return jsonify({"projectID": new_project.project_id}), 200

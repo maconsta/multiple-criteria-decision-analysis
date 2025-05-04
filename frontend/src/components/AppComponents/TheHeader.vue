@@ -82,6 +82,11 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  .empty-container {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 nav {

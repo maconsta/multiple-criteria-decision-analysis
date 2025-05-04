@@ -12,6 +12,7 @@ import TaskEditNewAlternative from "@/views/App/TaskEditNewAlternative.vue";
 import Result from "@/views/App/Result.vue";
 import UserProfile from "@/views/App/UserProfile.vue";
 import TaskEditMethod from "@/views/App/TaskEditMethod.vue";
+import PageNotFound from "@/views/App/PageNotFound.vue";
 
 export default [
     {
@@ -77,4 +78,9 @@ export default [
         name: "userProfile",
         component: UserProfile,
     },
+    {
+        path: "/app/page-not-found",
+        name: "pageNotFound",
+        component: PageNotFound,
+    }
 ];
