@@ -10,7 +10,7 @@ database = env.get("DB_DATABASE")
 port = env.get("DB_PORT")
 
 url = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
-engine = create_engine(url)
+engine = create_engine(url, pool_pre_ping=True)
 
 session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
