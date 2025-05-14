@@ -9,7 +9,8 @@ EditorConfig==0.12.3
 Flask==3.0.0
 Flask-Cors==4.0.0
 Flask-JWT-Extended==4.6.0
-greenlet==3.0.3
+gevent==25.5.1
+greenlet==3.2.2
 gunicorn==23.0.0
 html-tag-names==0.1.2
 html-void-elements==0.1.0
@@ -33,3 +34,5 @@ SQLAlchemy==2.0.29
 tqdm==4.66.1
 typing_extensions==4.10.0
 Werkzeug==3.0.1
+zope.event==5.0
+zope.interface==7.2
