@@ -20,19 +20,6 @@ export default {
     HeaderHomeNew,
     HeroHome,
   },
-  beforeCreate() {
-    const axiosPromise = axiosExtended.get("/is-logged-in");
-
-    axiosPromise
-      .then((result) => {
-        if (result.data.success === true) {
-          this.$router.push({
-            name: "homeApp",
-          });
-        }
-      })
-      .catch((result) => {});
-  },
 };
 </script>
 
