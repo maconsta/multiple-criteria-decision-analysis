@@ -15,9 +15,7 @@
     </nav>
     <nav>
       <div class="dropdown">
-        <span class="profile-icon" @click="toggleDropdown">{{
-          abbreviation
-        }}</span>
+        <span class="profile-icon" @click="toggleDropdown"></span>
         <div v-if="isDropdownOpen" class="dropdown-menu">
           <span @click="navigateToProfile" class="dropdown-item">Profile</span>
           <span @click="signOut" class="dropdown-item">Sign Out</span>
@@ -64,9 +62,6 @@ export default {
     },
   },
   created() {
-    axiosExtended.get("/get-user-abbreviation").then((result) => {
-      this.abbreviation = result.data.abbreviation;
-    });
     this.isDropdownOpen = false;
   },
 };
@@ -144,19 +139,6 @@ nav {
   }
 }
 
-.profile-icon {
-  width: 35px;
-  height: 35px;
-  background-color: #ffffff;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  color: #2c64ff;
-}
-
 .dropdown {
   position: relative;
 }
@@ -200,8 +182,9 @@ nav {
   font-size: 16px;
   color: #2c64ff;
   background-position: center;
-  background-size: cover;
   background-repeat: no-repeat;
+  background-image: url("@/assets/images/user.svg");
+  background-size: 16px;
 }
 
 @keyframes fadeIn {
