@@ -135,16 +135,3 @@ def sign_out():
     response = jsonify({"result": "User signed out!", "success": True})
 
     return response
-
-
-@app.route("/api/get-user-abbreviation", methods=["GET"])
-@jwt_required()
-def get_user_abbreviation():
-    user_id = get_jwt_identity()
-    user = session.query(User).filter_by(user_id=user_id).first()
-
-    abbr = user.first_name[0] + user.last_name[0]
-
-    result = {"success": True, "abbreviation": abbr.upper()}
-
-    return result
