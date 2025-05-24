@@ -102,7 +102,7 @@ def sign_in():
     user = session.query(User).filter_by(email=email).first()
     if user and verify_password(user.password, password):
         access_token = create_access_token(
-            identity=str(user.user_id), expires_delta=timedelta(seconds=30) #todo fix later !!!
+            identity=str(user.user_id), expires_delta=timedelta(days=1)
         )
 
         response = jsonify({
