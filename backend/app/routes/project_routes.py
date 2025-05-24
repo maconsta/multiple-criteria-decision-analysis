@@ -28,12 +28,9 @@ def save_project_to_db():
         sql_session.commit()
     except Exception as e:
         sql_session.rollback()
-        sql_session.flush()
         response = {"result": "Project not saved, error: " + str(e) + "!"}
     else:
         response = {"result": "Project saved!", "projectID": new_project.project_id}
-
-        # save_project_in_session(project_id=new_project.project_id, project_name=project_name, user_id=user_id)
 
     return jsonify(response)
 
@@ -83,9 +80,6 @@ def get_projects_by_user_id():
             }
         )
 
-        # save_project_in_session(project_id=p.project_id, project_name=p.project_name, user_id=user_id,
-        #                        visibility=visibility)
-
     return jsonify(result)
 
 
@@ -102,11 +96,8 @@ def delete_project():
         sql_session.commit()
     except Exception as e:
         sql_session.rollback()
-        sql_session.flush()
         response = {"result": "Project not deleted, error: " + str(e) + "!"}
     else:
-        # delete_project_from_session(project_id=project_id)
-
         response = {"result": "success"}
 
     return jsonify(response)
@@ -127,7 +118,6 @@ def change_project_name():
         sql_session.commit()
     except Exception as e:
         sql_session.rollback()
-        sql_session.flush()
         response = {"result": "Project name not changed, error: " + str(e) + "!", "success": False}
     else:
         response = {"success": True}
@@ -195,6 +185,7 @@ def get_projects_for_user():
         return jsonify(result), 200
 
     except Exception as e:
+        sql_session.rollback()
         return jsonify({"error": f"Failed to fetch projects: {str(e)}"}), 500
 
 
