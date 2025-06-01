@@ -31,7 +31,7 @@ def dream_home():
             new_trade_off_3 = TradeOff(decision_method="topsis", normalization_method="linear",
                                        task_id=new_task_3.task_id)
             db.add_all([new_trade_off_1, new_trade_off_2, new_trade_off_3])
-        return jsonify({"projectID": new_project.project_id}), 200
+            return jsonify({"projectID": new_project.project_id}), 200
     except Exception as e:
         raise InternalServerError(e)
 
@@ -98,7 +98,7 @@ def new_car():
                 task_id=new_task_1.task_id,
             )
             db.add_all([new_crit_1, new_crit_2, new_crit_3, new_crit_4])
-        return jsonify({"projectID": new_project.project_id}), 200
+            return jsonify({"projectID": new_project.project_id}), 200
     except Exception as e:
         raise InternalServerError(e)
 
@@ -136,7 +136,7 @@ def build_your_pc():
                                        task_id=new_task_6.task_id)
             db.add_all([new_trade_off_1, new_trade_off_2, new_trade_off_3,
                         new_trade_off_4, new_trade_off_5, new_trade_off_6])
-        return jsonify({"projectID": new_project.project_id}), 200
+            return jsonify({"projectID": new_project.project_id}), 200
     except Exception as e:
         raise InternalServerError(e)
 
@@ -170,7 +170,7 @@ def shopping_list():
             new_trade_off_5 = TradeOff(decision_method="topsis", normalization_method="linear",
                                        task_id=new_task_5.task_id)
             db.add_all([new_trade_off_1, new_trade_off_2, new_trade_off_3, new_trade_off_4, new_trade_off_5])
-        return jsonify({"projectID": new_project.project_id}), 200
+            return jsonify({"projectID": new_project.project_id}), 200
     except Exception as e:
         raise InternalServerError(e)
 
@@ -198,7 +198,7 @@ def holiday_planner():
             new_trade_off_3 = TradeOff(decision_method="topsis", normalization_method="linear",
                                        task_id=new_task_3.task_id)
             db.add_all([new_trade_off_1, new_trade_off_2, new_trade_off_3])
-        return jsonify({"projectID": new_project.project_id}), 200
+            return jsonify({"projectID": new_project.project_id}), 200
     except Exception as e:
         raise InternalServerError(e)
 
@@ -223,7 +223,7 @@ def new_phone():
             new_trade_off_2 = TradeOff(decision_method="topsis", normalization_method="linear",
                                        task_id=new_task_2.task_id)
             db.add_all([new_trade_off_1, new_trade_off_2])
-        return jsonify({"projectID": new_project.project_id}), 200
+            return jsonify({"projectID": new_project.project_id}), 200
     except Exception as e:
         raise InternalServerError(e)
 
@@ -254,6 +254,6 @@ def new_guitar():
             new_trade_off_4 = TradeOff(decision_method="topsis", normalization_method="linear",
                                        task_id=new_task_4.task_id)
             db.add_all([new_trade_off_1, new_trade_off_2, new_trade_off_3, new_trade_off_4])
-        return jsonify({"projectID": new_project.project_id}), 200
+            return jsonify({"projectID": new_project.project_id}), 200
     except Exception as e:
         raise InternalServerError(e)
