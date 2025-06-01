@@ -1,137 +1,132 @@
 import os, hashlib
-
-from flask import request, jsonify, session as flask_session
 from datetime import timedelta
-
-from backend.app.db.models import session, User
+from flask import request, jsonify
 from backend.app import app
-
+from backend.app.db.models import session_scope, User
 from flask_jwt_extended import (
     create_access_token,
-    get_csrf_token,
-    get_jwt_identity,
     verify_jwt_in_request,
-    unset_jwt_cookies, jwt_required,
+    JWTManager,
 )
-from flask_jwt_extended import JWTManager
 
 jwt = JWTManager(app)
 
 
 def hash_password(password: str):
-    # Create a 16-byte salt
+    # Create a 16-byte salt.
     salt = os.urandom(16)
-
-    # Hash the password with the salt
+    # Hash the password with the salt.
     hashed_password = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 100000)
-
-    # Return the salt and hashed password combined, both encoded as hex
+    # Return the salt and hashed password combined both encoded as hex
     return salt.hex() + hashed_password.hex()
 
 
 def verify_password(stored_password: str, provided_password: str):
-    # Extract the salt from the first 32 characters (16 bytes in hex form)
+    # Extract the salt from the first 32 characters (16 bytes in hex)
     salt = bytes.fromhex(stored_password[:32])
-
-    # Extract the hashed password
+    # Extract the stored hashed password
     stored_hashed_password = stored_password[32:]
-
-    # Hash the provided password using the extracted salt
-    hashed_password = hashlib.pbkdf2_hmac(
-        "sha256", provided_password.encode(), salt, 100000
-    )
-
-    # Convert hashed password to hex for comparison
-    hashed_password_hex = hashed_password.hex()
-
-    # Compare the stored hashed password with the newly hashed password
-    return hashed_password_hex == stored_hashed_password
+    # Hash the provided password using the same salt.
+    hashed_password = hashlib.pbkdf2_hmac("sha256", provided_password.encode(), salt, 100000)
+    # Compare the stored hashed password with the computed hash.
+    return hashed_password.hex() == stored_hashed_password
 
 
 @app.route("/api/register-user", methods=["POST"])
 def register_user():
-    post_data = request.get_json()
-    firstName = post_data["firstName"]
-    lastName = post_data["lastName"]
-    email = post_data["email"]
-    password = post_data["password"]
-
-    # hash the password using hashlib
-    hashed_password = hash_password(password)
-
-    new_user = User(
-        first_name=firstName, last_name=lastName, email=email, password=hashed_password
-    )
-
-    session.add(new_user)
-
-    response = {}
-
     try:
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        session.flush()
-        response = {
-            "result": "User not registered, error: " + str(e) + "!",
-            "success": False,
-        }
-    else:
-        access_token = create_access_token(
-            identity=str(new_user.user_id), expires_delta=timedelta(days=1)
-        )
+        with session_scope() as db:
+            post_data = request.get_json()
+            firstName = post_data["firstName"]
+            lastName = post_data["lastName"]
+            email = post_data["email"]
+            password = post_data["password"]
 
-        response = jsonify(
-            {
+            # Hash the password.
+            hashed_password = hash_password(password)
+
+            # Create a new User instance.
+            new_user = User(
+                first_name=firstName,
+                last_name=lastName,
+                email=email,
+                password=hashed_password,
+            )
+
+
+            db.add(new_user)
+            db.flush()
+
+            access_token = create_access_token(
+                identity=str(new_user.user_id), expires_delta=timedelta(days=1)
+            )
+            response = jsonify({
                 "result": "User registered!",
                 "userID": new_user.user_id,
                 "success": True,
                 "accessToken": access_token,
-            }
-        )
-
+            })
+    except Exception as e:
+        response = jsonify({
+            "result": "User not registered, error: " + str(e) + "!",
+            "success": False,
+        })
     return response
 
 
 @app.route("/api/sign-in", methods=["POST"])
 def sign_in():
-    post_data = request.get_json()
-    email = post_data["email"]
-    password = post_data["password"]
+    try:
+        post_data = request.get_json()
+        email = post_data["email"]
+        password = post_data["password"]
 
-    user = session.query(User).filter_by(email=email).first()
-    if user and verify_password(user.password, password):
-        access_token = create_access_token(
-            identity=str(user.user_id), expires_delta=timedelta(days=1)
-        )
+        with session_scope() as db:
+            user = db.query(User).filter_by(email=email).first()
+            if user:
+                stored_password = user.password
+                user_id = user.user_id
+            else:
+                stored_password = None
+                user_id = None
 
+        if user and verify_password(stored_password, password):
+            access_token = create_access_token(
+                identity=str(user_id), expires_delta=timedelta(days=1)
+            )
+            response = jsonify({
+                "result": "User signed in!",
+                "userID": user_id,
+                "success": True,
+                "accessToken": access_token,
+            })
+        else:
+            response = jsonify({
+                "result": "Invalid email or password",
+                "success": False,
+            })
+    except Exception as e:
         response = jsonify({
-            "result": "User signed in!",
-            "userID": user.user_id,
-            "success": True,
-            "accessToken": access_token,
+            "result": "Sign in failed, error: " + str(e),
+            "success": False,
         })
-
-    else:
-        response = jsonify({"result": "Invalid email or password", "success": False})
-
+        return response, 500
     return response
 
 
 @app.route("/api/is-logged-in", methods=["GET"])
 def is_logged_in():
-    token = verify_jwt_in_request(optional=True)
-
-    if token:
-        response = {"success": True}
-    else:
-        response = {"success": False, "result": "Token not present"}
-
-    return response
+    try:
+        token = verify_jwt_in_request(optional=True)
+        if token:
+            return jsonify({"success": True})
+        else:
+            return jsonify({"success": False, "result": "Token not present"})
+    except Exception as e:
+        return jsonify({"success": False, "result": str(e)}), 500
 
 
 @app.route("/api/sign-out", methods=["GET"])
 def sign_out():
     response = jsonify({"result": "User signed out!", "success": True})
-
     return response
