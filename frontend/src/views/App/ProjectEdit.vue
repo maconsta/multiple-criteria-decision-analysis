@@ -92,19 +92,20 @@ export default defineComponent({
           }
         },
         preConfirm: async (email) => {
-          try {
-            const response = await axiosExtended.post("/share-project", {
-              email: email,
-              project_id: this.route.params.projectID,
-            });
-            Swal.fire("Success", response.data.message, "success");
-          } catch (error) {
-            Swal.fire(
-                "Error",
-                error.response?.data?.error || "An unexpected error occurred.",
-                "error"
-            );
-          }
+          axiosExtended.post("/share-project", {
+            email: email,
+            project_id: this.route.params.projectID,
+          })
+              .then((response) => {
+                Swal.fire("Success", response.data.message, "success");
+              })
+              .catch((error) => {
+                Swal.fire(
+                    "Error",
+                    error.response?.data?.error || "An unexpected error occurred.",
+                    "error"
+                );
+              });
         },
       });
     },
@@ -402,7 +403,7 @@ export default defineComponent({
             rgba(255, 255, 255, 0.5),
             rgba(255, 255, 255, 0.5)
     ),
-    url(http://app.localhost:8080/img/about.1f15f248.png);
+    url("../../assets/images/about.1f15f248.png");
     background-size: 300px;
     background-position: center right 20px;
     background-repeat: no-repeat;
