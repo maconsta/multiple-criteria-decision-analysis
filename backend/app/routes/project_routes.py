@@ -127,7 +127,6 @@ def change_project_name():
 
 @app.route("/api/share-project", methods=["POST"])
 @jwt_required()
-@authorize_request
 def share_project():
     data = request.get_json()
     project_id = data.get("project_id")

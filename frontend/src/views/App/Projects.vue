@@ -477,7 +477,7 @@ export default {
           rgba(255, 255, 255, 0.5),
           rgba(255, 255, 255, 0.5)
   ),
-  url(http://app.localhost:8080/img/about.1f15f248.png);
+  url("../../assets/images/about.1f15f248.png");
   background-size: 300px;
   background-position: center right 20px;
   background-repeat: no-repeat;
