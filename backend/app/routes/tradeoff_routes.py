@@ -8,13 +8,13 @@ from flask_jwt_extended import jwt_required, JWTManager
 jwt = JWTManager(app)
 
 from backend.app.routes.utils import authorize_request
-from backend.mcda.methods.ahp import AHP
-from backend.mcda.methods.electre import Electre
-from backend.mcda.methods.promethee import Promethee
-from backend.mcda.methods.topsis import Topsis
-from backend.mcda.methods.weightedSum import WeightedSum
+from mcda.methods.ahp import AHP
+from mcda.methods.electre import Electre
+from mcda.methods.promethee import Promethee
+from mcda.methods.topsis import Topsis
+from mcda.methods.weightedSum import WeightedSum
 
-from backend.mcda.core.core import (
+from mcda.core.core import (
     Criterion as Crit,
     Alternative as Alt,
     DecisionMatrix,

@@ -41,14 +41,13 @@ jobs:
           rsync -avz -e "ssh -i ~/.ssh/id_rsa" --exclude 'node_modules' ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }}:/var/www/html/multiple-criteria-decision-analysis &&
           ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} '
             cd /var/www/html/multiple-criteria-decision-analysis &&
-            echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" > .env &&
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env &&
-            echo "DB_USER=${{ secrets.DB_USER }}" >> .env &&
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env &&
-            echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env &&
-            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env &&
+            echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" > backend/.env &&
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> backend/.env &&
+            echo "DB_USER=${{ secrets.DB_USER }}" >> backend/.env &&
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> backend/.env &&
+            echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> backend/.env &&
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> backend/.env &&
             python3.11 -m venv venv &&
             source venv/bin/activate &&
-            pip install -r requirements.txt && 
-            sudo systemctl restart gunicorn
+            pip install -r backend/requirements.txt &&            sudo systemctl restart gunicorn
           '

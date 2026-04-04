@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import unittest
-from backend.mcda.methods.weightedSum import WeightedSum
-from backend.mcda.core.core import Criterion, Alternative, DecisionMatrix
+from mcda.methods.weightedSum import WeightedSum
+from mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class WeightedSumTest (unittest.TestCase):

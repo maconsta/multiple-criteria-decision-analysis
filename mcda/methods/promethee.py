@@ -1,7 +1,7 @@
 import numpy as np
 
-from backend.mcda.core import core
-from backend.mcda.core.core import Criterion, Alternative, DecisionMatrix
+from mcda.core import core
+from mcda.core.core import Criterion, Alternative, DecisionMatrix
 
 
 class Promethee:
