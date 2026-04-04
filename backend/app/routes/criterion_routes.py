@@ -2,7 +2,7 @@ from flask import request, jsonify
 from backend.app.db.models import session_scope, Criterion, TradeOff
 from backend.app import app
 from backend.app.routes.utils import authorize_request
-from backend.mcda.core.core import Pairwise
+from mcda.core.core import Pairwise
 from flask_jwt_extended import jwt_required, JWTManager
 
 jwt = JWTManager(app)

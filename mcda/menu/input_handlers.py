@@ -1,10 +1,10 @@
-from backend.mcda.core.core import Criterion, Alternative
-from backend.mcda.core.core import DecisionMatrix, Pairwise
-from backend.mcda.methods.ahp import AHP
-from backend.mcda.methods.electre import Electre
-from backend.mcda.methods.promethee import Promethee
-from backend.mcda.methods.topsis import Topsis
-from backend.mcda.methods.weightedSum import WeightedSum
+from mcda.core.core import Criterion, Alternative
+from mcda.core.core import DecisionMatrix, Pairwise
+from mcda.methods.ahp import AHP
+from mcda.methods.electre import Electre
+from mcda.methods.promethee import Promethee
+from mcda.methods.topsis import Topsis
+from mcda.methods.weightedSum import WeightedSum
 
 
 def input_criteria():

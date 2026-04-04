@@ -1,11 +1,12 @@
+import os
+from os import environ as env
 from flask import Flask
 from flask_cors import CORS
-from os import environ as env
-from dotenv import find_dotenv, load_dotenv
+from dotenv import load_dotenv
 
-ENV_FILE = find_dotenv()
-if ENV_FILE:
-    load_dotenv(ENV_FILE)
+# Load environment variables
+_env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+load_dotenv(_env_path)
 
 app = Flask(__name__)
 
